@@ -6,15 +6,21 @@ class Config{
     //If the config isn't already stored in a variable, do that so we don't have to keep asking the filesystem
     public static function setVariables(){
         if( self::$store === [] ){
-            $curr_dir = explode("/",__DIR__);
-            while( count($curr_dir) > 0 && ! file_exists("/".implode("/", $curr_dir)."/config.json") ){
-                unset($curr_dir[count($curr_dir) - 1]);
+            //separate each part of the directories into an array
+            $dir_count = count(explode(DIRECTORY_SEPARATOR, __dir__));
+            $x = 0;
+
+            //keep trying to go into a higher directory to look for the file and stop at highest directory
+            while( ! file_exists(self::$config_location) and $x < $dir_count ){
+                self::$config_location = "../".self::$config_location;
             }
-            if( ! file_exists("/".implode("/", $curr_dir)."/config.json") ){
+
+            //if after the searching the file still could not be found, echo the error and exit script execution
+            if( ! file_exists(self::$config_location) ){
                 echo "Exception: COULD NOT LOCATE 'config.json' FILE.\n";
                 exit;
             }
-            self::$store = json_decode(file_get_contents("/".implode("/", $curr_dir)."/config.json"), true);
+            self::$store = json_decode(file_get_contents(self::$config_location), true);
         }
     }
     public static function getConfig(){
