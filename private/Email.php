@@ -3,7 +3,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 class Email {
-    private $src_dir = __dir__;
+    private $src_dir = "composer"; //start by assuming that we are in the root directory of the app
     public $to= array();
     public $bcc = array();
     public $cc = array();
@@ -11,16 +11,20 @@ class Email {
     public $body = "";
 
     public function __construct(){
-        //locate where the composer directory is relative to where the class was initiated
-        $curr_dir = explode("/",__DIR__);
-        while( count($curr_dir) > 0 && ! file_exists("/".implode("/", $curr_dir)."/private/composer/") ){
-            unset($curr_dir[count($curr_dir) - 1]);
+        //count how many directory levels deep we are in right now
+        $dir_count = count(explode(DIRECTORY_SEPARATOR, __dir__));
+        $x = 0;
+
+        //keep trying to go into a higher directory to look for the file and stop at highest directory
+        while( ! file_exists($this->src_dir) and $x < $dir_count ){
+            $this->src_dir = "../".$this->src_dir;
         }
-        if( ! file_exists("/".implode("/", $curr_dir)."/private/composer") ){
+
+        //if after the searching the file still could not be found, echo the error and exit script execution
+        if( ! file_exists($this->src_dir) ){
             echo "Exception: COULD NOT LOCATE 'composer' DIRECTORY.\n";
             exit;
         }
-        $this->src_dir = "/".implode("/", $curr_dir)."/private/composer";
     }
 
     public function send() {
