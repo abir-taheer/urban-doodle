@@ -2,27 +2,14 @@
 Class User {
     public $email, $status, $u_id, $unrecognized_request;
 
-    public function __construct($email, $salt){
+    public function __construct($email, $u_id){
         $hash_e = hash("sha256", $email);
-        $u_id = hash("sha256", $email.$salt);
-        $search_e = count(self::searchUser($hash_e));
-        $search_u_id = count(self::searchUser($hash_e));
+        $search_u_id = count(self::searchUser($u_id));
 
         $this->u_id = $u_id;
         $this->email = $email;
 
-        if( ($search_e + $search_u_id) > 0 ){
-            if( $search_e > 0 ){
-                //they still have a standard hashed email as their user_id, add the salt in
-                Database::secureQuery(
-                    "UPDATE `users` SET `user_id` = :u_id WHERE `user_id` = :hash_e",
-                    array(
-                        ":u_id"=>$u_id,
-                        "hash_e"=>$hash_e
-                    ),
-                    null
-                );
-            }
+        if( ($search_u_id) > 0 ){
             //a status of 1 means that they are verified and ready to vote!
             $this->status = 1;
         } else {
@@ -36,6 +23,26 @@ Class User {
             }
         }
 
+    }
+
+    public static function readyUserId($email, $salt){
+        $hash_e = hash("sha256", $email);
+        $u_id = hash("sha256", $email.$salt);
+        $search_e = count(self::searchUser($hash_e));
+
+        if( $search_e > 0 ){
+            //they still have a standard hashed email as their user_id, add the salt in
+            Database::secureQuery(
+                "UPDATE `users` SET `user_id` = :u_id WHERE `user_id` = :hash_e",
+                array(
+                    ":u_id"=>$u_id,
+                    "hash_e"=>$hash_e
+                ),
+                null
+            );
+        }
+
+        return $u_id;
     }
 
     //function to quickly return user's info using user_id
