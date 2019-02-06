@@ -27,7 +27,7 @@
    }
 ?>
 
-<?php switch(strtolower($path[1])):
+<?php switch(strtolower(trim($path[1]))):
 case "": ?>
     <script src="https://apis.google.com/js/platform.js"></script>
     <div class="mdl-grid">

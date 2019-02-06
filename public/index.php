@@ -3,44 +3,36 @@ spl_autoload_register(function ($class_name) {
     include "../private/".$class_name . '.php';
 });
 
-header('Content-Security: nonce="hellsdicj"');
 $config = Config::getConfig();
-$user = Session::getIdInfo();
+$id = Session::getIdInfo();
 ?>
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="<?php echo $config['metadata']['description']; ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="<?php echo $config['google-signin-client_id']; ?>">
+
+    <!-- Social Media Information -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="<?php echo $config['metadata']['title']; ?>" />
+    <meta property="og:description" content="<?php echo $config['metadata']['description']; ?>" />
+    <meta property="og:image" content="<?php echo Config::getConfig()['app_icon']; ?>" />
+
     <title><?php echo $config['metadata']['title']; ?></title>
-
-    <!-- Add to homescreen for Chrome on Android -->
-    <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" sizes="192x192" href="<?php echo Config::getConfig()['metadata']['favicon']; ?>">
-
-    <!-- Add to homescreen for Safari on iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Stuyvesant Board of Election Voting Site">
-    <meta property="og:image" content="https://vote.stuysu.org/logo.png" />
 
     <link rel="stylesheet" href="/static/css/fonts.css">
     <link rel="stylesheet" href="/static/css/material.cyan-light_blue.min.css">
     <link rel="stylesheet" href="/static/css/global.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119929576-1"></script>
     <script src="/static/js/material.min.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119929576-1"></script>
     <script async src="/static/js/gtag.js"></script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    <meta property="og:type"          content="website" />
-    <meta property="og:title"         content="<?php echo $config['metadata']['title']; ?>" />
-    <meta property="og:description"   content="<?php echo $config['metadata']['description']; ?>" />
-    <meta property="og:image"         content="https://vote.stuysu.org/logo.png" />
+    <script async src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
 <div class="material-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
@@ -51,9 +43,9 @@ $user = Session::getIdInfo();
     </header>
     <div class="material-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="material-drawer-header">
-            <img src="<?php echo (Session::hasSession()) ? $user['picture'] : Config::getConfig()['app_icon'];?>" class="material-avatar">
+            <img src="<?php echo (Session::hasSession()) ? $id['picture'] : Config::getConfig()['app_icon'];?>" class="material-avatar">
             <div class="material-avatar-dropdown">
-                <span><?php echo (Session::hasSession()) ? $user['email'] : "Not Signed In";  ?></span>
+                <span><?php echo (Session::hasSession()) ? $id['email'] : "Not Signed In";  ?></span>
                 <div class="mdl-layout-spacer"></div>
 
             </div>
