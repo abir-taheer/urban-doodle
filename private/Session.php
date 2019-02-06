@@ -43,8 +43,7 @@ class Session{
         return self::getVoterInfo()['email_hash'];
     }
 
-
-
+    //creates a record in the database with given data and creates a voting session cookie to reference the data
     public static function createVotingSession($email_hash, $expires){
         $track = bin2hex(random_bytes(64));
         $string_expires = date("Y-m-d H:i:s", $expires);
@@ -60,6 +59,7 @@ class Session{
         setcookie(Config::getConfig()['voting_cookie_name'], $track, $expires, "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
     }
 
+    //creates a record in the database with given data and creates a identity session cookie to reference the data
     public static function createIdSession($first, $last, $email, $picture, $expires){
         $track = bin2hex(random_bytes(64));
         $string_expires = date("Y-m-d H:i:s", $expires);

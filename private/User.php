@@ -1,5 +1,12 @@
 <?php
 Class User {
+    /*** TODO ADD THESE FEATURES
+     * CHECKING FOR USER ROLES
+     * CHECKING FOR ANY CONTACT THREADS THAT THIS USER STARTED
+     * GETTING THE AVAILABLE ELECTIONS FOR A USER
+     * CHECKING TO SEE IF A USER HAS VOTED FOR AN ELECTION ALREADY
+     */
+
     public $email, $status, $u_id, $unrecognized_request;
 
     public function __construct($email, $u_id){

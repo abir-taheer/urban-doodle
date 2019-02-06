@@ -3,6 +3,7 @@
 function onSignIn(googleUser) {
     let token = googleUser.getAuthResponse().id_token;
     //let profile = googleUser.getBasicProfile();
+
     $.post("/requests.php", {"request":"auth", "token":token} ,
         function(response){
             let decoded_resp = JSON.parse(response);
@@ -13,7 +14,11 @@ function onSignIn(googleUser) {
                 window.location.reload();
             } else {
                 //there was an error, read out the error in a snackbar
-                showSnackbar(decoded_resp.message, 3000, false, false, "");
+                let x = 0;
+                while( x < decoded_resp.message.length ){
+                    showSnackbar(decoded_resp.message[x] , 2000);
+                    x++;
+                }
             }
     });
 

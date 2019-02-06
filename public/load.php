@@ -36,10 +36,14 @@ case "": ?>
             <h3 class="sumana text-center card-heading">Welcome</h3>
             <div class="sub-container">
                 <!-- TODO small message here -->
-                <div class="center-flex">
-                    <div class="g-signin2 notranslate" data-onsuccess="onSignIn" data-theme="light" data-longtitle="true"></div>
-                </div>
-                <br>
+                <?php if( ! Session::hasSession() ): ?>
+
+                    <div class="center-flex">
+                        <div class="g-signin2 notranslate" data-onsuccess="onSignIn" data-theme="light" data-longtitle="true"></div>
+                    </div>
+                    <br>
+
+                <?php endif; ?>
             </div>
         </div>
     </div>

@@ -5,7 +5,7 @@ spl_autoload_register(function ($class_name) {
 
 header('Content-Security: nonce="hellsdicj"');
 $config = Config::getConfig();
-
+$user = Session::getIdInfo();
 ?>
 <!doctype html>
 <html lang="en">
@@ -20,7 +20,7 @@ $config = Config::getConfig();
 
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" sizes="192x192" href="/resources/images/boe_logo.png">
+    <link rel="icon" sizes="192x192" href="<?php echo Config::getConfig()['metadata']['favicon']; ?>">
 
     <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -51,9 +51,9 @@ $config = Config::getConfig();
     </header>
     <div class="material-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="material-drawer-header">
-            <img src="//vote.stuysu.org/resources/images/boe_logo_invert.png" class="material-avatar">
+            <img src="<?php echo (Session::hasSession()) ? $user['picture'] : Config::getConfig()['app_icon'];?>" class="material-avatar">
             <div class="material-avatar-dropdown">
-                <span>Not Signed In</span>
+                <span><?php echo (Session::hasSession()) ? $user['email'] : "Not Signed In";  ?></span>
                 <div class="mdl-layout-spacer"></div>
 
             </div>
