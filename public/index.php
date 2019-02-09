@@ -18,10 +18,10 @@ $id = Session::getIdInfo();
     <!-- Social Media Information -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="<?php echo $config['metadata']['title']; ?>" />
-    <meta property="og:description" content="<?php echo $config['metadata']['description']; ?>" />
+    <meta property="og:description" content="<?php echo addslashes($config['metadata']['description']); ?>" />
     <meta property="og:image" content="<?php echo Config::getConfig()['app_icon']; ?>" />
 
-    <title><?php echo $config['metadata']['title']; ?></title>
+    <title><?php echo htmlspecialchars($config['metadata']['title']); ?></title>
     <link rel="icon" sizes="192x192" href="<?php echo Config::getConfig()['metadata']['favicon']; ?>">
 
     <link rel="stylesheet" href="/static/css/fonts.css">
@@ -29,51 +29,61 @@ $id = Session::getIdInfo();
     <link rel="stylesheet" href="/static/css/global.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/static/js/material.min.js"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119929576-1"></script>
-    <script async src="/static/js/gtag.js"></script>
     <script async src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <?php if( Config::getConfig()['google_analytics']['use'] ): ?>
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>"></script>
+    <script async src="/static/js/gtag.js"></script>
+    <?php endif; ?>
+
 </head>
 <body>
 <div class="material-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
     <header class="material-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
         <div class="mdl-layout__header-row">
-            <span class="mdl-layout-title sumana"><?php echo $config['org_name']; ?></span>
+            <span class="mdl-layout-title sumana"><?php echo htmlspecialchars($config['org_name']); ?></span>
         </div>
     </header>
     <div class="material-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
         <header class="material-drawer-header">
-            <img src="<?php echo (Session::hasSession()) ? $id['picture'] : Config::getConfig()['app_icon'];?>" class="material-avatar">
+            <img src="<?php echo (Session::hasSession()) ? htmlspecialchars($id['picture']) : Config::getConfig()['app_icon'];?>" class="material-avatar">
             <div class="material-avatar-dropdown">
-                <span><?php echo (Session::hasSession()) ? $id['email'] : "Not Signed In";  ?></span>
+                <span><?php echo (Session::hasSession()) ? htmlspecialchars($id['email']) : "Not Signed In";  ?></span>
                 <div class="mdl-layout-spacer"></div>
 
             </div>
         </header>
         <nav class="material-navigation mdl-navigation mdl-color--blue-grey-800">
-            <a class="mdl-navigation__link change-page clickable" data-page="/">
-                <i class="mdl-color-text--blue-grey-400 material-icons " role="presentation">home</i>Home
+            <a class="unready" data-type="menu-item" data-page="/">
+                <i class="unready" data-type="menu-txt">home</i>Home
             </a>
-            <a class="mdl-navigation__link clickable change-page clickable" data-page="/dashboard">
-                <i class="mdl-color-text--blue-grey-400 material-icons mdl-badge mdl-badge--overlap " id="elections_icon" role="presentation">how_to_vote</i>My Elections
+            <a class="unready" data-type="menu-item" data-page="/dashboard">
+                <i class="unready mdl-badge mdl-badge--overlap" data-type="menu-txt" id="elections_icon">how_to_vote</i>My Elections
             </a>
-            <a class="mdl-navigation__link change-page clickable" data-page="/results">
-                <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">ballot</i>Results
+            <a class="unready" data-type="menu-item" data-page="/results">
+                <i class="unready" data-type="menu-txt">ballot</i>Results
             </a>
-            <a class="mdl-navigation__link change-page clickable" data-page="/candidates">
-                <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">people</i>Candidates
+            <a class="unready" data-type="menu-item" data-page="/candidates">
+                <i class="unready" data-type="menu-txt">people</i>Candidates
             </a>
-            <a class="mdl-navigation__link change-page clickable" data-page="/contact">
-                <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">contact_support</i>Contact Us
-            </a>
+            <a class="unready" data-type="menu-item" data-page="/contact">
+                <i class="unready" data-type="menu-txt">contact_support</i>Contact Us
+            </a><?php if(Session::hasSession()): ?>
+
+                <a class="unready ignore-page sign-out" data-type="menu-item">
+                    <i class="unready" data-type="menu-txt">power_settings_new</i>Sign Out
+                </a>
+            <?php endif; ?>
+
             <a class="mdl-navigation__link">
-                <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">g_translate</i>
+                <i class="unready" data-type="menu-txt">g_translate</i>
                 <div id="google_translate_element" class=""></div>
             </a>
             <div class="mdl-layout-spacer"></div>
-            <a class="mdl-navigation__link change-page clickable" data-page="faqs">
-                <i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i>
-                <span class="visuallyhidden">Help</span>
+            <a class="unready" data-type="menu-item" data-page="faqs">
+                <i class="unready" data-type="menu-txt">help_outline</i>
+                <span>Faqs</span>
             </a>
         </nav>
     </div>
@@ -84,8 +94,23 @@ $id = Session::getIdInfo();
             <div class="mdl-snackbar__text"></div>
             <button class="mdl-snackbar__action" id="snackbar-button" type="button"></button>
         </div>
+        <div id="network-error" class="fear">
+            <div class="mdl-grid">
+                <div class="unready" data-type="std-card-cont">
+                    <div class="unready" data-type="std-expand"></div>
+                    <h3 class="sumana text-center card-heading">Network Error:</h3>
+                    <div class="sub-container">
+                        <p class="text-center">The requested page could not be served. Please check your internet connection.</p>
+                        <div class="center-flex">
+                            <img src="/static/img/sad-cat.png" class="cat-404">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </div>
+<script src="/static/js/material.min.js"></script>
 <script src="/static/js/global.js"></script>
 </body>
 </html>

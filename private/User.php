@@ -1,6 +1,7 @@
 <?php
 Class User {
     /*** TODO ADD THESE FEATURES
+     * MAKE A DATABASE TABLE FOR THE UNRECOGNIZED EMAILS
      * CHECKING FOR USER ROLES
      * CHECKING FOR ANY CONTACT THREADS THAT THIS USER STARTED
      * GETTING THE AVAILABLE ELECTIONS FOR A USER
@@ -8,20 +9,20 @@ Class User {
      */
 
     public $email, $status, $u_id, $unrecognized_request;
+    private $elections;
 
     public function __construct($email, $u_id){
-        $hash_e = hash("sha256", $email);
         $search_u_id = count(self::searchUser($u_id));
 
         $this->u_id = $u_id;
         $this->email = $email;
 
-        if( ($search_u_id) > 0 ){
+        if( ($search_u_id) > 1 ){
             //a status of 1 means that they are verified and ready to vote!
             $this->status = 1;
         } else {
             $this->unrecognized_request = self::searchUnrecognized($this->email);
-            if( count($this->unrecognized_request) > 0 ){
+            if( count($this->unrecognized_request) > 1 ){
                 //a status of 0 means that they submitted a request to have their data
                 $this->status = 0;
             } else {
@@ -79,5 +80,15 @@ Class User {
             array(":email"=>$email),
             'fetch'
         );
+    }
+    public function getElections(){
+        if( ! isset($this->elections) ){
+            $this->elections = Database::secureQuery(
+                "SELECT * FROM `elections` WHERE `grade` LIKE :grade",
+                array(":grade"=>"%".$this->grade."%"),
+                null
+            );
+        }
+        return $this->elections;
     }
 }

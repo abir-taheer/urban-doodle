@@ -1,6 +1,6 @@
 <?php
 class Session{
-
+    private static $voter_info, $id_info;
     public static function hasSession(){
         $checkID = self::getIdInfo();
         $checkVoter = self::getVoterInfo();
@@ -29,18 +29,27 @@ class Session{
 
     public static function getIdInfo(){
         /** @return array */
-        return Database::secureQuery(
-            "SELECT * FROM `id_tokens` WHERE `cookie_id` = :cookie ",
-            array(
-                ":cookie"=>$_COOKIE[Config::getConfig()['id_cookie_name']]
-            ),
-            "assoc"
-        );
+
+        //store in a variable to reduce number of queries made
+        if( !isset(self::$id_info) ){
+            self::$id_info = Database::secureQuery(
+                "SELECT * FROM `id_tokens` WHERE `cookie_id` = :cookie ",
+                array(
+                    ":cookie"=>$_COOKIE[Config::getConfig()['id_cookie_name']]
+                ),
+                "assoc"
+            );
+        }
+        return self::$id_info;
     }
 
-    public static function getEmailHash(){
+    public static function getUserId(){
         /** @return string */
-        return self::getVoterInfo()['email_hash'];
+        return self::getVoterInfo()['user_id'];
+    }
+
+    public static function getEmail(){
+        return self::getIdInfo()['email'];
     }
 
     //creates a record in the database with given data and creates a voting session cookie to reference the data
@@ -48,7 +57,7 @@ class Session{
         $track = bin2hex(random_bytes(64));
         $string_expires = date("Y-m-d H:i:s", $expires);
         Database::secureQuery(
-            "INSERT INTO `voter_tokens`(`cookie_id`, `email_hash`, `expires`) VALUES (:cookie, :hsh, :exp)",
+            "INSERT INTO `voter_tokens`(`cookie_id`, `user_id`, `expires`) VALUES (:cookie, :hsh, :exp)",
             array(
                 ":cookie"=>$track,
                 ":hsh"=>$email_hash,

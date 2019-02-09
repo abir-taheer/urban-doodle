@@ -218,3 +218,8 @@ body {
     display: flex;
     justify-content: center;
 }
+.cat-404 {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 10px;
+}
