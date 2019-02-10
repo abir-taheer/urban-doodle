@@ -86,4 +86,12 @@ class Session{
         );
         setcookie(Config::getConfig()['id_cookie_name'], $track, $expires, "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
     }
+
+    public static function deleteSession(){
+        Database::secureQuery("DELETE FROM `id_tokens` WHERE `cookie_id` = :cookie", array(":cookie"=>$_COOKIE[Config::getConfig()['id_cookie_name']]), null);
+        Database::secureQuery("DELETE FROM `voter_tokens` WHERE `cookie_id` = :cookie", array(":cookie"=>$_COOKIE[Config::getConfig()['voting_cookie_name']]), null);
+        setcookie(Config::getConfig()['id_cookie_name'], "", strtotime("- 30 years"), "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
+        setcookie(Config::getConfig()['voting_cookie_name'], "", strtotime("- 30 years"), "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
+
+    }
 }

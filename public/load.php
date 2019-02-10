@@ -11,7 +11,7 @@
    function signInRequired(){
        if( ! Session::hasSession() ){
            echo "
-               <script src='https://apis.google.com/js/platform.js'></script>
+               <script nonce=".Nonce::getNonce()." src='https://apis.google.com/js/platform.js'></script>
                <div class='mdl-grid'>
                     <div class='unready' data-type='std-card-cont'>
                         <div class='unready' data-type='std-expand'></div>

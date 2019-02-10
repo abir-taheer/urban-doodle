@@ -1,4 +1,4 @@
-<script src="https://apis.google.com/js/platform.js"></script>
+<script nonce="<?php echo Nonce::getNonce();?>" src="https://apis.google.com/js/platform.js"></script>
 <div class="mdl-grid">
     <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
         <div class="mdl-card__title mdl-card--expand mdl-color--teal-300"></div>

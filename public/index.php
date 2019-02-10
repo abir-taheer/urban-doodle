@@ -2,6 +2,7 @@
 spl_autoload_register(function ($class_name) {
     include "../private/".$class_name . '.php';
 });
+header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'nonce-".Nonce::getNonce()."';");
 
 $config = Config::getConfig();
 $id = Session::getIdInfo();
@@ -24,17 +25,17 @@ $id = Session::getIdInfo();
     <title><?php echo htmlspecialchars($config['metadata']['title']); ?></title>
     <link rel="icon" sizes="192x192" href="<?php echo Config::getConfig()['metadata']['favicon']; ?>">
 
-    <link rel="stylesheet" href="/static/css/fonts.css">
-    <link rel="stylesheet" href="/static/css/material.cyan-light_blue.min.css">
-    <link rel="stylesheet" href="/static/css/global.css">
+    <link nonce="<?php echo Nonce::getNonce(); ?>" rel="stylesheet" href="/static/css/fonts.css">
+    <link nonce="<?php echo Nonce::getNonce(); ?>" rel="stylesheet" href="/static/css/material.cyan-light_blue.min.css">
+    <link nonce="<?php echo Nonce::getNonce(); ?>" rel="stylesheet" href="/static/css/global.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script async src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script nonce="<?php echo Nonce::getNonce(); ?>" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script nonce="<?php echo Nonce::getNonce(); ?>" async src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <?php if( Config::getConfig()['google_analytics']['use'] ): ?>
 
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>"></script>
-    <script async src="/static/js/gtag.js"></script>
+    <script nonce="<?php echo Nonce::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>"></script>
+    <script nonce="<?php echo Nonce::getNonce(); ?>" async src="/static/js/gtag.js"></script>
     <?php endif; ?>
 
 </head>
@@ -110,7 +111,7 @@ $id = Session::getIdInfo();
         </div>
     </main>
 </div>
-<script src="/static/js/material.min.js"></script>
-<script src="/static/js/global.js"></script>
+<script nonce="<?php echo Nonce::getNonce(); ?>" src="/static/js/material.min.js"></script>
+<script nonce="<?php echo Nonce::getNonce(); ?>" src="/static/js/global.js"></script>
 </body>
 </html>

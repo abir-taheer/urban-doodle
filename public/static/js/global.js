@@ -87,6 +87,12 @@ function stdSetup(){
                 new_classes.push("mdl-color-text--blue-grey-400", "material-icons");
                 $(curr).attr("role", "presentation");
                 break;
+            case "f-txt-input":
+                new_classes.push("mdl-textfield", "mdl-js-textfield", "mdl-textfield--floating-label");
+                break;
+            case "btn-rpl-act":
+                new_classes.push("mdl-button", "mdl-js-button mdl-button--raised", "mdl-js-ripple-effect", "mdl-button--accent", "mdl-color-text--white");
+                break;
         }
         let y = 0;
         while( y < new_classes.length ){
@@ -96,6 +102,7 @@ function stdSetup(){
         $(curr).removeClass("unready");
         x++;
     }
+    componentHandler.upgradeAllRegistered();
 }
 
 function playSnackbarQueue(attempt){
