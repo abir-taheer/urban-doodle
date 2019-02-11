@@ -7,6 +7,7 @@ header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'no
 $config = Config::getConfig();
 $id = Session::getIdInfo();
 ?>
+<!-- Check this out on GitHub! https://github.com/abir-taheer/urban-doodle -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -29,7 +30,7 @@ $id = Session::getIdInfo();
     <link nonce="<?php echo Nonce::getNonce(); ?>" rel="stylesheet" href="/static/css/material.cyan-light_blue.min.css">
     <link nonce="<?php echo Nonce::getNonce(); ?>" rel="stylesheet" href="/static/css/global.css">
 
-    <script nonce="<?php echo Nonce::getNonce(); ?>" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script nonce="<?php echo Nonce::getNonce(); ?>" src="/static/js/jquery-3.3.1.min.js"></script>
     <script nonce="<?php echo Nonce::getNonce(); ?>" async src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <?php if( Config::getConfig()['google_analytics']['use'] ): ?>
 

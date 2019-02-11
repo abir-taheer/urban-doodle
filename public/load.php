@@ -5,14 +5,14 @@
     });
 
     //split the pathName sent to us, using the / as a delimiter, into an array
-   $path = explode("/", $_GET['page']);
+    $path = explode("/", $_GET['page']);
 
    //in the case that a page requires sign in, respond with the following html and stop script execution
-   function signInRequired(){
-       if( ! Session::hasSession() ){
-           echo "
-               <script nonce=".Nonce::getNonce()." src='https://apis.google.com/js/platform.js'></script>
-               <div class='mdl-grid'>
+    function signInRequired(){
+        if( ! Session::hasSession() ){
+            echo "
+                <script nonce=".Nonce::getNonce()." src='https://apis.google.com/js/platform.js'></script>
+                <div class='mdl-grid'>
                     <div class='unready' data-type='std-card-cont'>
                         <div class='unready' data-type='std-expand'></div>
                         <h3 class='sumana text-center card-heading'>Sign In Required</h3>
@@ -24,17 +24,17 @@
                             <br>
                         </div>
                     </div>
-               </div>
-           ";
-           exit;
-       }
-   }
+                </div>
+            ";
+            exit;
+        }
+    }
 
-   //convert the file request into lowercase and get rid of trailing whitespace
-   $page = strtolower(trim($path[1]));
+    //convert the file request into lowercase and get rid of trailing whitespace
+    $page = strtolower(trim($path[1]));
 
-   //Get a list of all of the available pages
-   $available_pages = scandir("../private/pages");
+    //Get a list of all of the available pages
+    $available_pages = scandir("../private/pages");
 
     if(in_array($page.".php", $available_pages)){
         //the page that the user requested does exist, include it in the response

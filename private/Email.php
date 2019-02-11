@@ -18,6 +18,7 @@ class Email {
         //keep trying to go into a higher directory to look for the file and stop at highest directory
         while( ! file_exists($this->src_dir) and $x < $dir_count ){
             $this->src_dir = "../".$this->src_dir;
+            $x++;
         }
 
         //if after the searching the file still could not be found, echo the error and exit script execution

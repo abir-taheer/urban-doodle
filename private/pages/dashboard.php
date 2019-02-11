@@ -37,6 +37,9 @@ case -1: ?>
                     Submit
                 </button>
             </form>
+            <script nonce="<?php echo Nonce::getNonce(); ?>">
+                alert("cool");
+            </script>
             <br>
         </div>
     </div>

@@ -13,6 +13,7 @@ class Config{
             //keep trying to go into a higher directory to look for the file and stop at highest directory
             while( ! file_exists(self::$config_location) and $x < $dir_count ){
                 self::$config_location = "../".self::$config_location;
+                $x++;
             }
 
             //if after the searching the file still could not be found, echo the error and exit script execution
