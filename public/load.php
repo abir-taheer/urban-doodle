@@ -11,7 +11,8 @@
     function signInRequired(){
         if( ! Session::hasSession() ){
             echo "
-                <script nonce=".Nonce::getNonce()." src='https://apis.google.com/js/platform.js'></script>
+                <!-- Script tag doesn't need nonce because apis.google.com is a trusted whitelisted source -->
+                <script src='https://apis.google.com/js/platform.js'></script>
                 <div class='mdl-grid'>
                     <div class='unready' data-type='std-card-cont'>
                         <div class='unready' data-type='std-expand'></div>
@@ -40,6 +41,7 @@
         //the page that the user requested does exist, include it in the response
         include("../private/pages/".$page.".php");
         //We included the page that the user request, stop executing this script
+        Web::sendDependencies();
         exit;
     }
 

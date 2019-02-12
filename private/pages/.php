@@ -1,7 +1,8 @@
-<script nonce="<?php echo Nonce::getNonce();?>" src="https://apis.google.com/js/platform.js"></script>
+<!-- Script tag doesn't need nonce because apis.google.com is a trusted whitelisted source -->
+<script src="https://apis.google.com/js/platform.js"></script>
 <div class="mdl-grid">
-    <div class="mdl-color--white mdl-shadow--2dp mdl-cell mdl-cell--12-col">
-        <div class="mdl-card__title mdl-card--expand mdl-color--teal-300"></div>
+    <div class="unready" data-type="std-card-cont">
+        <div class="unready" data-type="std-expand"></div>
         <h3 class="sumana text-center card-heading">Welcome</h3>
         <div class="sub-container">
             <!-- TODO small message here -->

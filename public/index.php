@@ -2,7 +2,7 @@
 spl_autoload_register(function ($class_name) {
     include "../private/".$class_name . '.php';
 });
-header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'nonce-".Nonce::getNonce()."';");
+header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'nonce-".Web::getNonce()."';");
 
 $config = Config::getConfig();
 $id = Session::getIdInfo();
@@ -26,17 +26,17 @@ $id = Session::getIdInfo();
     <title><?php echo htmlspecialchars($config['metadata']['title']); ?></title>
     <link rel="icon" sizes="192x192" href="<?php echo Config::getConfig()['metadata']['favicon']; ?>">
 
-    <link nonce="<?php echo Nonce::getNonce(); ?>" rel="stylesheet" href="/static/css/fonts.css">
-    <link nonce="<?php echo Nonce::getNonce(); ?>" rel="stylesheet" href="/static/css/material.cyan-light_blue.min.css">
-    <link nonce="<?php echo Nonce::getNonce(); ?>" rel="stylesheet" href="/static/css/global.css">
+    <link nonce="<?php echo Web::getNonce(); ?>" rel="stylesheet" href="/static/css/fonts.css">
+    <link nonce="<?php echo Web::getNonce(); ?>" rel="stylesheet" href="/static/css/material.cyan-light_blue.min.css">
+    <link nonce="<?php echo Web::getNonce(); ?>" rel="stylesheet" href="/static/css/global.css">
 
-    <script nonce="<?php echo Nonce::getNonce(); ?>" src="/static/js/jquery-3.3.1.min.js"></script>
-    <script nonce="<?php echo Nonce::getNonce(); ?>" async src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script nonce="<?php echo Web::getNonce(); ?>" src="/static/js/jquery-3.3.1.min.js"></script>
+    <script nonce="<?php echo Web::getNonce(); ?>" async src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <?php if( Config::getConfig()['google_analytics']['use'] ): ?>
 
     <!-- Google Analytics -->
-    <script nonce="<?php echo Nonce::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>"></script>
-    <script nonce="<?php echo Nonce::getNonce(); ?>" async src="/static/js/gtag.js"></script>
+    <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>"></script>
+    <script nonce="<?php echo Web::getNonce(); ?>" async src="/static/js/gtag.js"></script>
     <?php endif; ?>
 
 </head>
@@ -112,7 +112,7 @@ $id = Session::getIdInfo();
         </div>
     </main>
 </div>
-<script nonce="<?php echo Nonce::getNonce(); ?>" src="/static/js/material.min.js"></script>
-<script nonce="<?php echo Nonce::getNonce(); ?>" src="/static/js/global.js"></script>
+<script nonce="<?php echo Web::getNonce(); ?>" src="/static/js/material.min.js"></script>
+<script nonce="<?php echo Web::getNonce(); ?>" src="/static/js/global.js"></script>
 </body>
 </html>

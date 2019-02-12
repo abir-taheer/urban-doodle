@@ -2,6 +2,7 @@
 //TODO FINISH THIS PAGE
 signInRequired();
 $user = new User(Session::getEmail(), Session::getUserId());
+Web::addScript("/static/js/dashboard.js");
 ?>
 <div class="mdl-grid">
 
@@ -37,9 +38,6 @@ case -1: ?>
                     Submit
                 </button>
             </form>
-            <script nonce="<?php echo Nonce::getNonce(); ?>">
-                alert("cool");
-            </script>
             <br>
         </div>
     </div>

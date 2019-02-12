@@ -221,8 +221,26 @@ function changePage(path, showError){
     if(path !== null){
         history.pushState({}, null, path);
     }
-    $.get("/load.php?page=" + window.location.pathname, function(response){
-        $("#variable-region").html(response);
+    $.get("/load.php?page=" + window.location.pathname, function(a, b, c){
+        $("#variable-region").html(a);
+
+        if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
+            let x,y;
+            let new_src = JSON.parse(c.getResponseHeader("X-New-Sources"));
+            for(x in new_script.script){
+                let node = document.createElement("script");
+                node.setAttribute("nonce", c.getResponseHeader("X-Nonce"));
+                node.setAttribute("src", new_src.script[x]);
+                document.getElementById("variable-region").appendChild(node);
+            }
+            for(y in new_src.css){
+                let node = document.createElement("link");
+                node.setAttribute("nonce", c.getResponseHeader("X-Nonce"));
+                node.setAttribute("rel", "stylesheet");
+                node.setAttribute("href", new_src.script[x]);
+                document.getElementById("variable-region").appendChild(node);
+            }
+        }
     }).fail(function(){
         $('#variable-region').html($('#network-error').html());
         $('#variable-region').fadeIn();
