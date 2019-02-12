@@ -227,7 +227,7 @@ function changePage(path, showError){
         if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
             let x,y;
             let new_src = JSON.parse(c.getResponseHeader("X-New-Sources"));
-            for(x in new_script.script){
+            for(x in new_src.script){
                 let node = document.createElement("script");
                 node.setAttribute("nonce", c.getResponseHeader("X-Nonce"));
                 node.setAttribute("src", new_src.script[x]);
@@ -237,7 +237,7 @@ function changePage(path, showError){
                 let node = document.createElement("link");
                 node.setAttribute("nonce", c.getResponseHeader("X-Nonce"));
                 node.setAttribute("rel", "stylesheet");
-                node.setAttribute("href", new_src.script[x]);
+                node.setAttribute("href", new_src.css[x]);
                 document.getElementById("variable-region").appendChild(node);
             }
         }
