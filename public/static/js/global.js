@@ -26,11 +26,8 @@ function onSignIn(googleUser) {
 
 function showSnackbar(message, timeout, actionButton, handler, buttonText){
     let snackbarContainer = document.querySelector('#snackbar');
-    if( ! actionButton ){
-        $('#snackbar-button').addClass('fear');
-    } else {
-        $('#snackbar-button').removeClass('fear');
-    }
+    let sb = $('#snackbar-button');
+    void( ! actionButton ) ? sb.addClass('fear'): sb.removeClass('fear');
     let data = {
         message: message,
         timeout: timeout,
@@ -196,62 +193,61 @@ $(document).ready(function(){
         let el = ev.currentTarget;
         if( $(el).hasClass("ignore-page") ){return;}
         let path = $(el).data("page");
-        if( ev.ctrlKey ){
-            window.open(path, '_blank');
-        } else {
-            changePage(path);
-        }
+        void( ev.ctrlKey ) ? window.open(path, '_blank') : changePage(path);
     });
 });
 
+//if the mdl obfuscator is open, close it by triggering a click event
 function closeObfuscator(){
     if($('.mdl-layout__obfuscator').first().hasClass("is-visible")){
         $('div > .mdl-layout__obfuscator').trigger('click');
     }
 }
 
+//every time that the variable region changes, call our function to setup everything that is unready
 $('#variable-region').bind("DOMSubtreeModified",function(){
     stdSetup();
 });
 
 function changePage(path, showError){
-    $('.page-loader').fadeIn();
-    // language=JQuery-CSS
-    $('#variable-region').fadeOut(1);
+    let vr = $("#variable-region");
+    let pld = $(".page-loader");
+    pld.fadeIn();
+    vr.fadeOut(1);
     if(path !== null){
         history.pushState({}, null, path);
     }
     $.get("/load.php?page=" + window.location.pathname, function(a, b, c){
-        $("#variable-region").html(a);
-
+        vr.html(a);
         if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
             let x,y;
             let new_src = JSON.parse(c.getResponseHeader("X-New-Sources"));
+            let nce = c.getResponseHeader("X-Nonce");
             for(x in new_src.script){
                 let node = document.createElement("script");
-                node.setAttribute("nonce", c.getResponseHeader("X-Nonce"));
+                node.setAttribute("nonce", nce);
                 node.setAttribute("src", new_src.script[x]);
-                document.getElementById("variable-region").appendChild(node);
+                vr.appendChild(node);
             }
             for(y in new_src.css){
                 let node = document.createElement("link");
-                node.setAttribute("nonce", c.getResponseHeader("X-Nonce"));
+                node.setAttribute("nonce", nce);
                 node.setAttribute("rel", "stylesheet");
                 node.setAttribute("href", new_src.css[x]);
-                document.getElementById("variable-region").appendChild(node);
+                vr.appendChild(node);
             }
         }
     }).fail(function(){
-        $('#variable-region').html($('#network-error').html());
-        $('#variable-region').fadeIn();
+        vr.html($('#network-error').html());
+        vr.fadeIn();
         $('.page-loader').fadeOut();
         showSnackbar("There was an error serving the page. Please check your internet connection!", 2000);
         closeObfuscator();
     }).then(function(){
         closeObfuscator();
-        $("#variable-region").ready(function(){
-            $('.page-loader').fadeOut();
-            $("#variable-region").fadeIn();
+        vr.ready(function(){
+            pld.fadeOut();
+            vr.fadeIn();
         });
     });
 }
