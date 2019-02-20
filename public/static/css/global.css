@@ -223,3 +223,9 @@ body {
     height: 200px;
     margin-bottom: 10px;
 }
+.button-spinner {
+    vertical-align: middle;
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+}

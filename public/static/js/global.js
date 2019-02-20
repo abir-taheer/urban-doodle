@@ -88,8 +88,10 @@ function stdSetup(){
                 new_classes.push("mdl-textfield", "mdl-js-textfield", "mdl-textfield--floating-label");
                 break;
             case "btn-rpl-act":
-                new_classes.push("mdl-button", "mdl-js-button mdl-button--raised", "mdl-js-ripple-effect", "mdl-button--accent", "mdl-color-text--white");
+                new_classes.push("mdl-button", "mdl-js-button", "mdl-button--raised", "mdl-button--accent", "mdl-color-text--white");
                 break;
+            case "spinner":
+                new_classes.push("mdl-spinner", "mdl-js-spinner","is-active");
         }
         let y = 0;
         while( y < new_classes.length ){
@@ -210,15 +212,16 @@ $('#variable-region').bind("DOMSubtreeModified",function(){
 });
 
 function changePage(path, showError){
-    let vr = $("#variable-region");
-    let pld = $(".page-loader");
-    pld.fadeIn();
-    vr.fadeOut(1);
+    let vr = document.getElementById("variable-region");
+    let vs = document.getElementById("variable-scripts");
+    let pld = document.querySelector(".page-loader");
+    $(pld).fadeIn();
+    $(vr).fadeOut(1);
     if(path !== null){
         history.pushState({}, null, path);
     }
     $.get("/load.php?page=" + window.location.pathname, function(a, b, c){
-        vr.html(a);
+        $(vr).html(a);
         if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
             let x,y;
             let new_src = JSON.parse(c.getResponseHeader("X-New-Sources"));
@@ -227,27 +230,71 @@ function changePage(path, showError){
                 let node = document.createElement("script");
                 node.setAttribute("nonce", nce);
                 node.setAttribute("src", new_src.script[x]);
-                vr.appendChild(node);
+                vs.appendChild(node);
             }
             for(y in new_src.css){
                 let node = document.createElement("link");
                 node.setAttribute("nonce", nce);
                 node.setAttribute("rel", "stylesheet");
                 node.setAttribute("href", new_src.css[x]);
-                vr.appendChild(node);
+                vs.appendChild(node);
             }
         }
     }).fail(function(){
-        vr.html($('#network-error').html());
-        vr.fadeIn();
-        $('.page-loader').fadeOut();
+        $(vr).html($('#network-error').html());
+        $(vr).fadeIn();
+        $(pld).fadeOut();
         showSnackbar("There was an error serving the page. Please check your internet connection!", 2000);
         closeObfuscator();
     }).then(function(){
         closeObfuscator();
-        vr.ready(function(){
-            pld.fadeOut();
-            vr.fadeIn();
+        $(vr).ready(function(){
+            $(pld).fadeOut();
+            $(vr).fadeIn();
         });
     });
+}
+$("#variable-region").on("click", ".form-submit", function (ev) {
+    //since the button is outside of the form, it won't trigger the form submit  event
+    let b = ev.currentTarget;
+    //disable the button and show the spinner
+    $(b).attr("disabled", true);
+    $(b.parentNode).find(".button-spinner").removeClass("fear");
+
+    //next obtain the form element
+    let form = $(b.parentNode.parentNode).find("form")[0];
+    console.log(form.elements);
+
+    let check = validateForm(form.elements);
+    console.log(check);
+    // if( check.status === "ok" ){
+    //     //send out the form to its intended target
+    // } else {
+    //     //don't send the form and show the error
+    // }
+    // console.log(form);
+});
+
+function validateForm(form_elements){
+    let response = {"status": "ok", "messages":[]};
+    for(let x=0; x < form_elements.length ; x++ ){
+        let e = form_elements[x];
+        let errors = {};
+        if( $(e).hasClass("validate") ){
+            let v = $(e).data("validation");
+            if( v.includes("r") && v.value == "" ){
+                let errors.r = true;
+            }
+        }
+        if( errors.length > 0){
+            response.status = "error";
+            let y;
+            for(y in errors){
+                switch(y){
+                    //add the appropriate error messages to the client
+                }
+            }
+        }
+    }
+    return response;
 }

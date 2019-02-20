@@ -92,6 +92,7 @@ $id = Session::getIdInfo();
     <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate page-loader"></div>
         <div id="variable-region"></div>
+        <div id="variable-scripts"></div>
         <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
             <div class="mdl-snackbar__text"></div>
             <button class="mdl-snackbar__action" id="snackbar-button" type="button"></button>
@@ -112,7 +113,7 @@ $id = Session::getIdInfo();
         </div>
     </main>
 </div>
-<script nonce="<?php echo Web::getNonce(); ?>" src="/static/js/material.min.js"></script>
 <script nonce="<?php echo Web::getNonce(); ?>" src="/static/js/global.js"></script>
+<script nonce="<?php echo Web::getNonce(); ?>" src="/static/js/material.min.js"></script>
 </body>
 </html>
