@@ -3,7 +3,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 class Email {
-    private $src_dir = "composer"; //start by assuming that we are in the root directory of the app
+    private $src_dir = "private/composer"; //start by assuming that we are in the root directory of the app
     public $to= array();
     public $bcc = array();
     public $cc = array();

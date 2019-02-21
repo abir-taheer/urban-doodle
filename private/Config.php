@@ -1,7 +1,7 @@
 <?php
 class Config{
     public static $store = [];
-    public static $config_location = "../config.json";
+    public static $config_location = "config.json";
 
     //If the config isn't already stored in a variable, do that so we don't have to keep asking the filesystem
     public static function setVariables(){

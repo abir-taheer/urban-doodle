@@ -21,7 +21,6 @@ function onSignIn(googleUser) {
                 }
             }
     });
-
 }
 
 function showSnackbar(message, timeout, actionButton, handler, buttonText){
@@ -213,7 +212,7 @@ $('#variable-region').bind("DOMSubtreeModified",function(){
 
 function changePage(path, showError){
     let vr = document.getElementById("variable-region");
-    let vs = document.getElementById("variable-scripts");
+    let vs = document.getElementById("variable-sources");
     let pld = document.querySelector(".page-loader");
     $(pld).fadeIn();
     $(vr).fadeOut(1);
@@ -223,22 +222,7 @@ function changePage(path, showError){
     $.get("/load.php?page=" + window.location.pathname, function(a, b, c){
         $(vr).html(a);
         if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
-            let x,y;
-            let new_src = JSON.parse(c.getResponseHeader("X-New-Sources"));
-            let nce = c.getResponseHeader("X-Nonce");
-            for(x in new_src.script){
-                let node = document.createElement("script");
-                node.setAttribute("nonce", nce);
-                node.setAttribute("src", new_src.script[x]);
-                vs.appendChild(node);
-            }
-            for(y in new_src.css){
-                let node = document.createElement("link");
-                node.setAttribute("nonce", nce);
-                node.setAttribute("rel", "stylesheet");
-                node.setAttribute("href", new_src.css[x]);
-                vs.appendChild(node);
-            }
+            addSources(c);
         }
     }).fail(function(){
         $(vr).html($('#network-error').html());
@@ -254,6 +238,27 @@ function changePage(path, showError){
         });
     });
 }
+
+function addSources(c){
+    let vr = document.getElementById("variable-region");
+    let vs = document.getElementById("variable-sources");
+    let x,y;
+    let new_src = JSON.parse(c.getResponseHeader("X-New-Sources"));
+    let nce = c.getResponseHeader("X-Nonce");
+    for(x in new_src.script){
+        let node = document.createElement("script");
+        node.setAttribute("nonce", nce);
+        node.setAttribute("src", new_src.script[x]);
+        vs.appendChild(node);
+    }
+    for(y in new_src.css){
+        let node = document.createElement("link");
+        node.setAttribute("nonce", nce);
+        node.setAttribute("rel", "stylesheet");
+        node.setAttribute("href", new_src.css[x]);
+        vs.appendChild(node);
+    }
+}
 $("#variable-region").on("click", ".form-submit", function (ev) {
     //since the button is outside of the form, it won't trigger the form submit  event
     let b = ev.currentTarget;
@@ -263,36 +268,52 @@ $("#variable-region").on("click", ".form-submit", function (ev) {
 
     //next obtain the form element
     let form = $(b.parentNode.parentNode).find("form")[0];
-    console.log(form.elements);
+    $(form).find(".error-text").addClass("fear");
 
     let check = validateForm(form.elements);
-    console.log(check);
-    // if( check.status === "ok" ){
-    //     //send out the form to its intended target
-    // } else {
-    //     //don't send the form and show the error
-    // }
-    // console.log(form);
+    if( check.status === "ok" ){
+        //send out the form to its intended target
+        $.post( $(form).data("action") , $(form).serialize(), function(a, b, c){
+           switch($(form).data("callback")){
+               case "reload":
+                   let x;
+                   a = JSON.parse(a);
+                   if( a.status === "success" ){
+                       for( x in a.message ){
+                           addSnackbarQueue(a.message[x], 5000);
+                       }
+                       window.location.reload();
+                   } else {
+                       for(x in a.message){
+                           showSnackbar(a.message[x], 4000, false,null, null);
+                       }
+                   }
+                   break;
+           }
+        });
+    }
+    //don't send the form and show the error
+    setTimeout(function(){
+            $(b).attr("disabled", false);
+            $(b.parentNode).find(".button-spinner").addClass("fear");
+            $(form).find(".error-text").removeClass("fear");
+        }, 1000);
 });
 
 function validateForm(form_elements){
-    let response = {"status": "ok", "messages":[]};
+    let response = {"status": "ok"};
     for(let x=0; x < form_elements.length ; x++ ){
         let e = form_elements[x];
-        let errors = {};
+        let val = e.value;
         if( $(e).hasClass("validate") ){
             let v = $(e).data("validation");
-            if( v.includes("r") && v.value == "" ){
-                let errors.r = true;
+            if( v.includes("r") && val == "" ){;
+                response.status = "error";
+                $(e.parentNode).addClass("is-invalid");
             }
-        }
-        if( errors.length > 0){
-            response.status = "error";
-            let y;
-            for(y in errors){
-                switch(y){
-                    //add the appropriate error messages to the client
-                }
+            if( v.includes("p") && val.match($(e).attr("pattern")) == null){
+                response.status = "error";
+                $(e.parentNode).addClass("is-invalid");
             }
         }
     }

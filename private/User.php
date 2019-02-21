@@ -91,4 +91,15 @@ Class User {
         }
         return $this->elections;
     }
+    public static function getAdminEmails($permission){
+        $e = Database::secureQuery("SELECT `email` FROM `roles` WHERE (`association` = 'admin') AND (`privileges` = '*' OR `privileges` LIKE :p)", array(":p"=>"%".$permission."%"), null);
+        foreach( $e as $i ){
+            $response[] = $i['email'];
+        }
+        return $response;
+
+    }
+    public static function adminPermissions(){
+        return array("u_e"=>"Unrecognized Email Approval");
+    }
 }

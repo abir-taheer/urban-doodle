@@ -16,7 +16,8 @@ try{
 
     //execute some ssl to set up the database
     $e = new Email();
-    $e->to = array(Config::getConfig()['smtp_config']['from_email']);
+    $e->to = array("ataheer10@stuy.edu");
+    //$e->cc = User::getAdminEmails("u_e");
     $e->subject = "Test Email";
     $e->body = "This is to test that the email configuration information that was given is correct. Please disregard this email.";
     if(! $e->send()){

@@ -1,6 +1,6 @@
 <?php
 class Session{
-    private static $voter_info, $id_info;
+    private static $voter_info, $id_info, $user;
     public static function hasSession(){
         $checkID = self::getIdInfo();
         $checkVoter = self::getVoterInfo();
@@ -50,6 +50,13 @@ class Session{
 
     public static function getEmail(){
         return self::getIdInfo()['email'];
+    }
+
+    public static function getUser(){
+        if( ! isset(self::$user) ){
+            self::$user = new User(Session::getEmail(), Session::getUserId());
+        }
+        return self::$user;
     }
 
     //creates a record in the database with given data and creates a voting session cookie to reference the data
