@@ -1,11 +1,8 @@
 <?php
-if( ! Session::hasSession() ){
-    exit;
-}
 date_default_timezone_set ( "America/New_York");
 $user = Session::getUser();
 $id = Session::getIdInfo();
-switch($_POST['do']){
+switch($form['extra']){
     case "submit":
         //This is the only case in which the user is allowed to submit the form
         if( $user->status === -1 ){

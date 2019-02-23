@@ -3,9 +3,16 @@ spl_autoload_register(function ($class_name) {
     include "../private/".$class_name . '.php';
 });
 
-$request = (isset($_POST['request'])) ? $_POST["request"] : $_GET['request'];
-$request_location = "../private/requests/".$request.".php";
+if( ! isset($_POST['token']) || ! Session::hasSession()){
+    exit;
+}
 
-file_exists($request_location) ? include $request_location : exit;
+$user = Session::getUser();
+$form = $user->getFormTokenData($_POST['token']);
+
+if( count($form) > 1 ){
+    //retrieve the file associated with the form function
+    include "../private/requests/".$form['request'].".php";
+}
 
 echo json_encode($response);

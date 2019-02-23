@@ -32,7 +32,7 @@
     }
 
     //convert the file request into lowercase and get rid of trailing whitespace
-    $page = strtolower(trim($path[1]));
+    $page = (strtolower(trim($path[1])) === "") ? "index" : strtolower(trim($path[1]));
 
     //Get a list of all of the available pages
     $available_pages = scandir("../private/pages");
@@ -47,10 +47,11 @@
 
     //this statement is only reached in the case that the file requested by the user does not exist
 
+    $auto_correct_exceptions = array("..", ".", "index.php", "vote");
     //since the requested file does not exist check our array of files to see if there is a file with a similar name that does exist
     foreach($available_pages as $p ){
         //if the current page being compared is the index, skip it since it does not have an actual name
-        if( $p === ".php" ) {
+        if( in_array($p, $auto_correct_exceptions) ) {
             continue;
         }
 

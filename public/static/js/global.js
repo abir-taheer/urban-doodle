@@ -4,7 +4,7 @@ function onSignIn(googleUser) {
     let token = googleUser.getAuthResponse().id_token;
     //let profile = googleUser.getBasicProfile();
 
-    $.post("/requests.php", {"request":"auth", "token":token} ,
+    $.post("/auth.php", {"token":token} ,
         function(response){
             let decoded_resp = JSON.parse(response);
             if( decoded_resp.status === "success" ){
@@ -91,6 +91,9 @@ function stdSetup(){
                 break;
             case "spinner":
                 new_classes.push("mdl-spinner", "mdl-js-spinner","is-active");
+                break;
+            case "small-card-cont":
+                new_classes.push("mdl-card", "mdl-shadow--2dp", "mdl-cell", "mdl-cell--4-col", "mdl-cell--4-col-tablet","mdl-cell--4-col-desktop");
         }
         let y = 0;
         while( y < new_classes.length ){
@@ -179,7 +182,7 @@ $(document).ready(function(){
 
     //make a jquery get request to a signout page on the click of a signout button
     $('.sign-out').click(function(){
-        $.post('/requests.php', {request:"signout"}).done(function() {
+        $.post('/signout.php').done(function() {
             addSnackbarQueue("You have been sucessfully signed out!", 2000);
             window.location.reload();
         }).fail(function(er){
@@ -241,7 +244,6 @@ function changePage(path, showError){
 
 function addSources(c){
     let vr = document.getElementById("variable-region");
-    let vs = document.getElementById("variable-sources");
     let x,y;
     let new_src = JSON.parse(c.getResponseHeader("X-New-Sources"));
     let nce = c.getResponseHeader("X-Nonce");
@@ -249,14 +251,14 @@ function addSources(c){
         let node = document.createElement("script");
         node.setAttribute("nonce", nce);
         node.setAttribute("src", new_src.script[x]);
-        vs.appendChild(node);
+        vr.appendChild(node);
     }
     for(y in new_src.css){
         let node = document.createElement("link");
         node.setAttribute("nonce", nce);
         node.setAttribute("rel", "stylesheet");
         node.setAttribute("href", new_src.css[x]);
-        vs.appendChild(node);
+        vr.appendChild(node);
     }
 }
 $("#variable-region").on("click", ".form-submit", function (ev) {
@@ -279,14 +281,23 @@ $("#variable-region").on("click", ".form-submit", function (ev) {
                    let x;
                    a = JSON.parse(a);
                    if( a.status === "success" ){
-                       for( x in a.message ){
-                           addSnackbarQueue(a.message[x], 5000);
-                       }
-                       window.location.reload();
-                   } else {
-                       for(x in a.message){
-                           showSnackbar(a.message[x], 4000, false,null, null);
-                       }
+                       changePage();
+                   }
+                   for(x in a.message){
+                       showSnackbar(a.message[x], 4000, false,null, null);
+                   }
+                   break;
+               case "page":
+                   $("#variable-region").html(a);
+                   if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
+                       addSources(c);
+                   }
+                   break;
+               case "page-url":
+                   $("#variable-region").html(a);
+                   history.pushState({}, null, $(form).data("page"));
+                   if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
+                       addSources(c);
                    }
                    break;
            }

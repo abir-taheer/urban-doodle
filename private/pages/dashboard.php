@@ -13,8 +13,8 @@ case -1: ?>
         <h3 class="sumana text-center card-heading">Email Not Recognized</h3>
         <div class="sub-container">
             <p class="text-center "><a>We could not locate a user with the provided email address. Please fill out the form below to request the ability to vote and you will be notified by email when your request has been approved.</a></p>
-            <form id="unrecognized" data-action="/requests.php?request=unrecognized" data-callback="reload">
-                <input name="do" type="hidden" value="submit">
+            <form id="unrecognized" data-action="/requests.php" data-callback="reload">
+                <input name="token" type="hidden" value="<?php echo $user->makeFormToken("unrecognized", "submit", strtotime("+ 1 hour")); ?>">
                 <div class="unready" data-type="f-txt-input">
                     <input class="mdl-textfield__input validate" name="full_name" type="text" data-validation="r">
                         <label class="mdl-textfield__label">Full Name*</label>
@@ -80,6 +80,22 @@ case -1: ?>
     </div>
     <?php break; ?>
 <?php case 1: ?>
+    <?php print_r($user->getElections()); foreach( $user->getElections() as $e ): ?>
+        <div class="unready election-card" data-type="small-card-cont">
+            <div class="mdl-card__title mdl-card--expand mdl-color--teal-300 mdl-color-text--white">
+                <h2 class="mdl-card__title-text"><?php echo htmlentities($e->name); ?></h2>
+            </div>
+            <div class="mdl-card__supporting-text mdl-color-text--grey-600">
+                Non dolore elit adipisicing ea reprehenderit consectetur culpa.
+            </div>
+            <form data-action="/requests.php" data-callback="page-url" data-page="/vote/<?php echo urlencode($e->db_code); ?>"></form>
+            <div class="mdl-card__actions mdl-card--border">
+                <a class="mdl-button form-submit mdl-js-button">Vote</a>
+                <div class="unready button-spinner fear" data-type="spinner"></div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+
     <?php break; ?>
 <?php endswitch; ?>
 

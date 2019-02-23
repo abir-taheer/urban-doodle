@@ -1,4 +1,8 @@
 <?php
+spl_autoload_register(function ($class_name) {
+    include "../private/".$class_name . '.php';
+});
+
 $e = new GoogleAuth($_POST['token']);
 if( $e->status ){
     //their sign in attempt has been verified. Make sessions for them
@@ -11,3 +15,4 @@ if( $e->status ){
     $response['status'] = "error";
     $response['message'] = $e->error;
 }
+echo json_encode($response);

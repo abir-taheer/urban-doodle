@@ -24,6 +24,7 @@ class GoogleAuth {
             $this->domain = $data['hd'];
             $this->name = $data['name'];
             $this->pic = $data['picture'];
+            $this->sub = $data['sub'];
             $this->first_name = $data['given_name'];
             $this->last_name = $data['family_name'];
         } else {

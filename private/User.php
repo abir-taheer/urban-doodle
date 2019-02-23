@@ -18,13 +18,33 @@ Class User {
         $this->email = $email;
 
         if( ($search_u_id) > 1 ){
+            //before we end everything, do another check to make sure that their voting hash isn't ONLY a hash of their email address
+            if( $u_id == hash('sha256', $email) ){
+                //their u_id hasn't been readied yet, kill the session and have them sign in again
+                Session::deleteSession();
+                echo "<p class='text-center'>Please reload the page and sign in again</p>";
+                exit;
+            }
+
             //a status of 1 means that they are verified and ready to vote!
             $this->status = 1;
+
         } else {
             $this->unrecognized_request = self::searchUnrecognized($this->email);
             if( count($this->unrecognized_request) > 1 ){
                 //a status of 0 means that they submitted a request to have their data
                 $this->status = 0;
+                if( intval($this->unrecognized_request['approval']) > -1 ){
+                    //check to see if they were added into the database
+                    if( count(self::searchUser(hash("sha256", $this->unrecognized_request['email']))) < 2 ){
+                        self::createUser($this->unrecognized_request['email'], $this->unrecognized_request['grade']);
+                    }
+
+                    //their request was approved, sign them out
+                    Session::deleteSession();
+                    echo "<p class='text-center'>Please reload the page and sign in again</p>";
+                    exit;
+                }
             } else {
                 //a status of -1 means that they are completely new and we have no record of them, they can't vote yet
                 $this->status = -1;
@@ -83,11 +103,14 @@ Class User {
     }
     public function getElections(){
         if( ! isset($this->elections) ){
-            $this->elections = Database::secureQuery(
+            $data = Database::secureQuery(
                 "SELECT * FROM `elections` WHERE `grade` LIKE :grade",
                 array(":grade"=>"%".$this->grade."%"),
                 null
             );
+            foreach( $data as $i ){
+                $this->elections[] = new Election($i['db_code']);
+            }
         }
         return $this->elections;
     }
@@ -98,6 +121,45 @@ Class User {
         }
         return $response;
 
+    }
+    public function makeFormToken($request, $extra, $expiration){
+        $expiration = date("Y-m-d H:i:s", $expiration);
+        $token = bin2hex(random_bytes(64));
+        $data = Database::secureQuery(
+            "SELECT * FROM `form_tokens` WHERE `user_id` = :u AND `request` = :r AND `extra` = :e",
+            array(
+                ":u"=>$this->u_id,
+                ":r"=>$request,
+                ":e"=>$extra,
+                ),
+            'fetch');
+        if( count($data) > 1 ){
+            //they already have a token previously generated, check if it has been used or expired yet
+            if( strtotime($data['expires']) > time() ){
+                return $data['token'];
+            }
+            Database::secureQuery("DELETE FROM `form_tokens` WHERE `token` = :t", array(":t"=>$data['token']), null);
+        }
+        Database::secureQuery(
+            "INSERT INTO `form_tokens`(`token`, `user_id`, `request`, `extra`, `expires`) VALUES (:t, :u, :r, :ext, :exp)",
+            array(
+                ":t"=>$token,
+                ":u"=>$this->u_id,
+                ":r"=>$request,
+                ":ext"=>$extra,
+                ":exp"=>$expiration
+            ), null
+        );
+        return $token;
+    }
+
+    public function getFormTokenData($token){
+        $now = date("Y-m-d H:i:s");
+        return Database::secureQuery("SELECT * FROM `form_tokens` WHERE `token` = :t AND `user_id` = :u AND `expires` > :n", array(":t"=>$token, ":u"=>$this->u_id, ":n"=>$now), 'fetch');
+    }
+
+    public static function useFormToken($token){
+        Database::secureQuery("DELETE FROM `form_tokens` WHERE `token` = :t", array(":t"=>$token), null);
     }
     public static function adminPermissions(){
         return array("u_e"=>"Unrecognized Email Approval");

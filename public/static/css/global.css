@@ -125,12 +125,6 @@ _:-ms-input-placeholder, :root .material-graph {
 .material-cards h3 {
     font-size: 1em;
 }
-.material-updates .mdl-card__title {
-    min-height: 200px;
-    background-image: url('/resources/images/vote.png');
-    background-position: 90% 100%;
-    background-repeat: no-repeat;
-}
 .material-cards .mdl-card__actions a {
     color: #00BCD4;
     text-decoration: none;
@@ -228,4 +222,10 @@ body {
     margin-left: 10px;
     width: 20px;
     height: 20px;
+}
+.election-card .mdl-card__title{
+    min-height: 200px;
+    background-image: url('/static/img/vote.png');
+    background-position: 90% 100%;
+    background-repeat: no-repeat;
 }
