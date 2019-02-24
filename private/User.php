@@ -87,7 +87,10 @@ Class User {
         //insert the new user into the database
         try{
             $u_id = hash("sha256", $email);
-            Database::secureQuery("INSERT INTO `users`(`user_id`, `grade`) VALUES (:u_id, :grade)",array(":u_id"=>$u_id, ":grade"=>$grade), 'null');
+            Database::secureQuery(
+                "INSERT INTO `users`(`user_id`, `grade`) VALUES (:u_id, :grade)",
+                array(":u_id"=>$u_id, ":grade"=>$grade),
+                null);
             return true;
         } catch(Exception $e){
             return false;
@@ -115,7 +118,10 @@ Class User {
         return $this->elections;
     }
     public static function getAdminEmails($permission){
-        $e = Database::secureQuery("SELECT `email` FROM `roles` WHERE (`association` = 'admin') AND (`privileges` = '*' OR `privileges` LIKE :p)", array(":p"=>"%".$permission."%"), null);
+        $e = Database::secureQuery(
+            "SELECT `email` FROM `roles` WHERE (`association` = 'admin') AND (`privileges` = '*' OR `privileges` LIKE :p)",
+            array(":p"=>"%".$permission."%"),
+            null);
         foreach( $e as $i ){
             $response[] = $i['email'];
         }
@@ -138,7 +144,10 @@ Class User {
             if( strtotime($data['expires']) > time() ){
                 return $data['token'];
             }
-            Database::secureQuery("DELETE FROM `form_tokens` WHERE `token` = :t", array(":t"=>$data['token']), null);
+            Database::secureQuery(
+                "DELETE FROM `form_tokens` WHERE `token` = :t",
+                array(":t"=>$data['token']),
+                null);
         }
         Database::secureQuery(
             "INSERT INTO `form_tokens`(`token`, `user_id`, `request`, `extra`, `expires`) VALUES (:t, :u, :r, :ext, :exp)",
@@ -155,11 +164,17 @@ Class User {
 
     public function getFormTokenData($token){
         $now = date("Y-m-d H:i:s");
-        return Database::secureQuery("SELECT * FROM `form_tokens` WHERE `token` = :t AND `user_id` = :u AND `expires` > :n", array(":t"=>$token, ":u"=>$this->u_id, ":n"=>$now), 'fetch');
+        return Database::secureQuery(
+            "SELECT * FROM `form_tokens` WHERE `token` = :t AND `user_id` = :u AND `expires` > :n",
+            array(":t"=>$token, ":u"=>$this->u_id, ":n"=>$now),
+            'fetch');
     }
 
     public static function useFormToken($token){
-        Database::secureQuery("DELETE FROM `form_tokens` WHERE `token` = :t", array(":t"=>$token), null);
+        Database::secureQuery(
+            "DELETE FROM `form_tokens` WHERE `token` = :t",
+            array(":t"=>$token),
+            null);
     }
     public static function adminPermissions(){
         return array("u_e"=>"Unrecognized Email Approval");

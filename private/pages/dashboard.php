@@ -88,7 +88,7 @@ case -1: ?>
             <div class="mdl-card__supporting-text mdl-color-text--grey-600">
                 Non dolore elit adipisicing ea reprehenderit consectetur culpa.
             </div>
-            <form data-action="/requests.php" data-callback="page-url" data-page="/vote/<?php echo urlencode($e->db_code); ?>"></form>
+            <form data-action="/requests.php" data-callback="page-url" data-page="/vote/<?php echo urlencode($e->db_code)."/".urlencode(ucwords($e->name)); ?>"></form>
             <div class="mdl-card__actions mdl-card--border">
                 <a class="mdl-button form-submit mdl-js-button">Vote</a>
                 <div class="unready button-spinner fear" data-type="spinner"></div>
