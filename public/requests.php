@@ -8,6 +8,7 @@ if( ! isset($_POST['token']) || ! Session::hasSession()){
 }
 
 $user = Session::getUser();
+//the getFormTokenData function already verifies the token, so we don't need to worry about validation in our scripts
 $form = $user->getFormTokenData($_POST['token']);
 
 if($form['request'] === "vote"){

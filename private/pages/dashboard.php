@@ -80,7 +80,7 @@ case -1: ?>
     </div>
     <?php break; ?>
 <?php case 1: ?>
-    <?php print_r($user->getElections()); foreach( $user->getElections() as $e ): ?>
+    <?php foreach( $user->getElections() as $e ): ?>
         <div class="unready election-card" data-type="small-card-cont">
             <div class="mdl-card__title mdl-card--expand mdl-color--teal-300 mdl-color-text--white">
                 <h2 class="mdl-card__title-text"><?php echo htmlentities($e->name); ?></h2>
@@ -88,7 +88,9 @@ case -1: ?>
             <div class="mdl-card__supporting-text mdl-color-text--grey-600">
                 Non dolore elit adipisicing ea reprehenderit consectetur culpa.
             </div>
-            <form data-action="/requests.php" data-callback="page-url" data-page="/vote/<?php echo urlencode($e->db_code)."/".urlencode(ucwords($e->name)); ?>"></form>
+            <form data-action="/load.php?page=/vote" data-callback="page-url" data-page="/vote/<?php echo urlencode($e->db_code); ?>">
+                <input type="hidden" name="token" value="<?php echo $user->makeFormToken("vote", $e->db_code, strtotime("+ 10 min")); ?>">
+            </form>
             <div class="mdl-card__actions mdl-card--border">
                 <a class="mdl-button form-submit mdl-js-button">Vote</a>
                 <div class="unready button-spinner fear" data-type="spinner"></div>
