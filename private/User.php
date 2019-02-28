@@ -162,6 +162,7 @@ Class User {
             "SELECT `email` FROM `roles` WHERE (`association` = 'admin') AND (`privileges` = '*' OR `privileges` LIKE :p)",
             array(":p"=>"%".$permission."%"),
             null);
+        $response = array();
         foreach( $e as $i ){
             $response[] = $i['email'];
         }
@@ -170,6 +171,7 @@ Class User {
     }
 
     /**
+     * Makes a form token to be sent with forms that tells the site which script files to hand the form data off to
      * @param string $request The name of the file associated with performing the request
      * @param string $extra Extra information to be used by the file processing the request
      * @param false|int $expiration Date object of the expiration time for the token
@@ -218,7 +220,11 @@ Class User {
             'fetch');
     }
 
-    public static function useFormToken($token){
+    /**
+     * Deletes the form token with the `token` equal to $token
+     * @param $token
+     */
+    public static function deleteFormToken($token){
         Database::secureQuery(
             "DELETE FROM `form_tokens` WHERE `token` = :t",
             array(":t"=>$token),
