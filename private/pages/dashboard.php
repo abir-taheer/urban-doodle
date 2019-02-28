@@ -39,7 +39,7 @@ case -1: ?>
                 <p class="mdl-color-text--red-500 error-text fear">There were errors with your submission:</p>
             </form>
             <div>
-                <button class="unready form-submit" data-type="btn-rpl-act">
+                <button class="unready form-submit" data-type="btn">
                     Submit
                 </button>
                 <div class="unready button-spinner fear" data-type="spinner"></div>

@@ -8,18 +8,23 @@ Class User {
      * CHECKING TO SEE IF A USER HAS VOTED FOR AN ELECTION ALREADY
      */
 
-    public $email, $status, $u_id, $unrecognized_request;
+    public $email, $status, $u_id, $grade, $unrecognized_request;
     private $elections;
 
+    /**
+     * User constructor.
+     * @param string $email The email address of the user. Used to check for unrecognized emails in such cases
+     * @param string $u_id The user ID of the user, if this is not salted, the session will be destroyed
+     */
     public function __construct($email, $u_id){
-        $search_u_id = count(self::searchUser($u_id));
+        $search_u_id = self::searchUser($u_id);
 
         $this->u_id = $u_id;
         $this->email = $email;
 
-        if( ($search_u_id) > 1 ){
+        if( count($search_u_id) > 1 ){
             //before we end everything, do another check to make sure that their voting hash isn't ONLY a hash of their email address
-            if( $u_id == hash('sha256', $email) ){
+            if( $u_id === hash('sha256', $email) ){
                 //their u_id hasn't been readied yet, kill the session and have them sign in again
                 Session::deleteSession();
                 echo "<p class='text-center'>Please reload the page and sign in again</p>";
@@ -28,6 +33,7 @@ Class User {
 
             //a status of 1 means that they are verified and ready to vote!
             $this->status = 1;
+            $this->grade = $search_u_id['grade'];
 
         } else {
             $this->unrecognized_request = self::searchUnrecognized($this->email);
@@ -53,6 +59,12 @@ Class User {
 
     }
 
+    /**
+     * Return the salted hash of the user's email and also update their hash to such if their hash is still only a hash of their email address
+     * @param string $email The email address to check
+     * @param string $salt The sub value from Google
+     * @return string
+     */
     public static function readyUserId($email, $salt){
         $hash_e = hash("sha256", $email);
         $u_id = hash("sha256", $email.$salt);
@@ -73,7 +85,11 @@ Class User {
         return $u_id;
     }
 
-    //function to quickly return user's info using user_id
+    /**
+     * Query the users table for $u_id and returns associative array
+     * @param string $u_id The user ID to check
+     * @return array
+     */
     public static function searchUser($u_id){
         return Database::secureQuery(
             "SELECT * FROM `users` WHERE `user_id` = :u_id ",
@@ -83,6 +99,13 @@ Class User {
             'fetch'
         );
     }
+
+    /**
+     * Add an entry to the database of users. Returns true on success, false on error
+     * @param string $email The email address of the user
+     * @param string $grade The grade of the user to add
+     * @return bool
+     */
     public static function createUser($email, $grade){
         //insert the new user into the database
         try{
@@ -97,6 +120,12 @@ Class User {
         }
 
     }
+
+    /**
+     * Queries the Unrecognized Emails table for the given email
+     * @param string $email The email address to check
+     * @return array
+     */
     public static function searchUnrecognized($email){
         return Database::secureQuery(
             "SELECT * FROM `unrecognized_emails` WHERE `email` =:email ",
@@ -104,6 +133,11 @@ Class User {
             'fetch'
         );
     }
+
+    /**
+     * Get an array of Election objects that the user is allowed to vote for
+     * @return Election[]
+     */
     public function getElections(){
         if( ! isset($this->elections) ){
             $data = Database::secureQuery(
@@ -117,6 +151,12 @@ Class User {
         }
         return $this->elections;
     }
+
+    /**
+     * Returns a list of the emails of admins who have the permissions specified in $permission
+     * @param string $permission The permissions code that the admins must have
+     * @return array
+     */
     public static function getAdminEmails($permission){
         $e = Database::secureQuery(
             "SELECT `email` FROM `roles` WHERE (`association` = 'admin') AND (`privileges` = '*' OR `privileges` LIKE :p)",
@@ -128,6 +168,14 @@ Class User {
         return $response;
 
     }
+
+    /**
+     * @param string $request The name of the file associated with performing the request
+     * @param string $extra Extra information to be used by the file processing the request
+     * @param false|int $expiration Date object of the expiration time for the token
+     * @return string
+     * @throws
+     */
     public function makeFormToken($request, $extra, $expiration){
         $expiration = date("Y-m-d H:i:s", $expiration);
         $token = bin2hex(random_bytes(64));

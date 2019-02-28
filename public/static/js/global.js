@@ -86,7 +86,7 @@ function stdSetup(){
             case "f-txt-input":
                 new_classes.push("mdl-textfield", "mdl-js-textfield", "mdl-textfield--floating-label");
                 break;
-            case "btn-rpl-act":
+            case "btn":
                 new_classes.push("mdl-button", "mdl-js-button", "mdl-button--raised", "mdl-button--accent", "mdl-color-text--white");
                 break;
             case "spinner":
@@ -181,7 +181,7 @@ $(document).ready(function(){
     //add all event listeners to below here to prevent mismatch based on mdl classes
 
     //make a jquery get request to a signout page on the click of a signout button
-    $('.sign-out').click(function(){
+    $(document.body).on("click", ".sign-out", function(){
         $.post('/signout.php').done(function() {
             addSnackbarQueue("You have been sucessfully signed out!", 2000);
             window.location.reload();
@@ -193,7 +193,7 @@ $(document).ready(function(){
 
     //load the requested page here:
     changePage(null);
-    $('.change-page').click(function(ev){
+    $(document.body).on("click", ".change-page", function(ev){
         let el = ev.currentTarget;
         if( $(el).hasClass("ignore-page") ){return;}
         let path = $(el).data("page");
