@@ -13,18 +13,13 @@
             echo "
                 <!-- Script tag doesn't need nonce because apis.google.com is a trusted whitelisted source -->
                 <script src='https://apis.google.com/js/platform.js'></script>
-                <div class='mdl-grid'>
-                    <div class='unready' data-type='std-card-cont'>
-                        <div class='unready' data-type='std-expand'></div>
-                        <h3 class='sumana text-center card-heading'>Sign In Required</h3>
-                        <div class='sub-container'>
-                            <p class='text-center'>You need to be signed in to access this page!</p>
-                            <div class='center-flex'>
-                                <div class='g-signin2 notranslate' data-onsuccess='onSignIn' data-longtitle='true'></div>
-                            </div>
-                            <br>
-                        </div>
-                    </div>
+                <div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12\">
+                    <div class=\"card-expand-default\"></div>
+                    <h2 class=\"txt-ctr\">Sign In Required</h2>
+                    <p class='txt-ctr'>You need to be signed in to access this page!</p>
+                    <div class=\"flx-ctr\">
+                        <div class=\"g-signin2 notranslate\" data-onsuccess=\"onSignIn\" data-theme=\"light\" data-longtitle=\"true\"></div>
+                    </div><br>
                 </div>
             ";
             exit;

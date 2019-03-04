@@ -141,10 +141,17 @@ $id = Session::getIdInfo();
         $(pld).removeClass("mdc-linear-progress--closed");
         $(vr).fadeOut(1);
         $(vr).find("link").prop("disabled", true);
+        $(vr).empty();
         if(path !== null){
             history.pushState({}, null, path);
         }
 
+        let menuItems = document.querySelector(".drawer-pages-list").childNodes;
+        let pg = window.location.pathname.split("/")[1];
+        for(let x = 0 ; x < menuItems.length ; x++ ){
+            let i = menuItems[x];
+            ( $(i).data("page") === "/" + pg ) ? $(i).addClass("mdc-list-item--activated") : $(i).removeClass("mdc-list-item--activated");
+        }
         $.get("/load.php?page=" + window.location.pathname, function(a, b, c){
             $(vr).html(a);
             if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
@@ -202,6 +209,8 @@ $id = Session::getIdInfo();
             a.appendChild(span);
             pageList.appendChild(a);
         }
+        // Now load the first page
+        changePage();
     });
     // Automatically instantiate the mdc elements on the page
     mdc.autoInit();
@@ -221,14 +230,15 @@ $id = Session::getIdInfo();
         drawer.open = !drawer.open;
     });
 
-    // Now load the first page
-    changePage();
     window.onpopstate = function (){changePage()};
     $(document.body).on("click", ".change-page", function (ev) {
         changePage($(ev.currentTarget).data("page"));
         if(window.innerWidth <= 800){
             drawer.open = false;
         }
+    });
+    $('#variable-region').bind("DOMSubtreeModified",function(){
+        window.mdc.autoInit(document, () => {});
     });
 </script>
 </body>

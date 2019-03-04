@@ -7,8 +7,7 @@ header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'no
 $config = Config::getConfig();
 $id = Session::getIdInfo();
 ?>
-<!-- Check this out on GitHub! https://github.com/abir-taheer/urban-doodle -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -26,94 +25,69 @@ $id = Session::getIdInfo();
     <title><?php echo htmlspecialchars($config['metadata']['title']); ?></title>
     <link rel="icon" sizes="192x192" href="<?php echo Config::getConfig()['metadata']['favicon']; ?>">
 
-    <link nonce="<?php echo Web::getNonce(); ?>" rel="stylesheet" href="/static/css/fonts.css">
-    <link nonce="<?php echo Web::getNonce(); ?>" rel="stylesheet" href="/static/css/material.cyan-light_blue.min.css">
-    <link nonce="<?php echo Web::getNonce(); ?>" rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+    <link rel="stylesheet" href="static/css/fonts.css">
+    <link rel="stylesheet" href="static/css/global.css">
 
-    <script nonce="<?php echo Web::getNonce(); ?>" src="/static/js/jquery-3.3.1.min.js"></script>
-    <script nonce="<?php echo Web::getNonce(); ?>" async src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script nonce="<?php echo Web::getNonce(); ?>" src="static/js/jquery-3.3.1.min.js"></script>
+    <script nonce="<?php echo Web::getNonce(); ?>" src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <?php if( Config::getConfig()['google_analytics']['use'] ): ?>
-
-    <!-- Google Analytics -->
-    <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>"></script>
-    <script nonce="<?php echo Web::getNonce(); ?>" async src="/static/js/gtag.js"></script>
+        <!-- Google Analytics -->
+        <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js"></script>
+        <script nonce="<?php echo Web::getNonce(); ?>">
+            window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>');
+        </script>
     <?php endif; ?>
-
 </head>
 <body>
-<div class="material-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-    <header class="material-header mdl-layout__header mdl-color--grey-100 mdl-color-text--grey-600">
-        <div class="mdl-layout__header-row">
-            <span class="mdl-layout-title sumana"><?php echo htmlspecialchars($config['org_name']); ?></span>
-        </div>
-    </header>
-    <div class="material-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
-        <header class="material-drawer-header">
-            <img src="<?php echo (Session::hasSession()) ? htmlspecialchars($id['picture']) : Config::getConfig()['app_icon'];?>" class="material-avatar">
-            <div class="material-avatar-dropdown">
-                <span><?php echo (Session::hasSession()) ? htmlspecialchars($id['email']) : "Not Signed In";  ?></span>
-                <div class="mdl-layout-spacer"></div>
-
-            </div>
-        </header>
-        <nav class="material-navigation mdl-navigation mdl-color--blue-grey-800">
-            <a class="unready" data-type="menu-item" data-page="/">
-                <i class="unready" data-type="menu-txt">home</i>Home
-            </a>
-            <a class="unready" data-type="menu-item" data-page="/dashboard">
-                <i class="unready mdl-badge mdl-badge--overlap" data-type="menu-txt" id="elections_icon">how_to_vote</i>My Elections
-            </a>
-            <a class="unready" data-type="menu-item" data-page="/results">
-                <i class="unready" data-type="menu-txt">ballot</i>Results
-            </a>
-            <a class="unready" data-type="menu-item" data-page="/candidates">
-                <i class="unready" data-type="menu-txt">people</i>Candidates
-            </a>
-            <a class="unready" data-type="menu-item" data-page="/contact">
-                <i class="unready" data-type="menu-txt">contact_support</i>Contact Us
-            </a><?php if(Session::hasSession()): ?>
-
-                <a class="unready ignore-page sign-out" data-type="menu-item">
-                    <i class="unready" data-type="menu-txt">power_settings_new</i>Sign Out
-                </a>
-            <?php endif; ?>
-
-            <a class="mdl-navigation__link">
-                <i class="unready" data-type="menu-txt">g_translate</i>
-                <div id="google_translate_element" class=""></div>
-            </a>
-            <div class="mdl-layout-spacer"></div>
-            <a class="unready" data-type="menu-item" data-page="faqs">
-                <i class="unready" data-type="menu-txt">help_outline</i>
-                <span>Faqs</span>
-            </a>
-        </nav>
+<header class="mdc-top-app-bar mdc-top-app-bar--fixed mdc-elevation--z1" id="app-bar" data-mdc-auto-init="MDCTopAppBar">
+    <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
+            <a class="material-icons mdc-top-app-bar__navigation-icon">menu</a>
+            <span class="mdc-top-app-bar__title sumana"><?php echo htmlspecialchars($config['org_name']); ?></span>
+        </section>
     </div>
-    <main class="mdl-layout__content mdl-color--grey-100">
-        <div class="mdl-progress mdl-js-progress mdl-progress__indeterminate page-loader"></div>
-        <div id="variable-region"></div>
-        <div id="variable-sources"></div>
-        <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
-            <div class="mdl-snackbar__text"></div>
-            <button class="mdl-snackbar__action" id="snackbar-button" type="button"></button>
+</header>
+<aside class="mdc-drawer mdc-drawer--dismissible mdc-top-app-bar--fixed-adjust">
+    <div class="mdc-drawer__header">
+        <img alt="logo" src="<?php echo htmlspecialchars(Config::getConfig()['app_icon']); ?>" class="drawer-logo">
+        <h3 class="mdc-drawer__title"><?php echo (Session::hasSession()) ? htmlspecialchars($id['first_name']." ".$id['last_name']) : "Not Signed In";  ?></h3>
+        <h6 class="mdc-drawer__subtitle"><?php echo (Session::hasSession()) ? htmlspecialchars($id['email']) : ""; ?></h6>
+    </div>
+    <div class="mdc-drawer__content">
+        <?php if(Session::hasSession()): ?>
+        <a class="mdc-list-item sign-out clickable">
+            <i class="material-icons mdc-list-item__graphic" aria-hidden="true">power_settings_new</i>
+            <span class="mdc-list-item__text">Sign Out</span>
+        </a>
+        <?php endif; ?>
+
+        <div class="mdc-list drawer-pages-list" data-menu-items="<?php echo rawurlencode(json_encode(Web::$menu_pages)); ?>"></div>
+    </div>
+</aside>
+
+<div class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">
+    <!-- Indeterminate Loader -->
+    <div role="progressbar" class="mdc-linear-progress mdc-linear-progress--indeterminate page-loader">
+        <div class="mdc-linear-progress__buffering-dots"></div>
+        <div class="mdc-linear-progress__buffer"></div>
+        <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+            <span class="mdc-linear-progress__bar-inner"></span>
         </div>
-        <div id="network-error" class="fear">
-            <div class="mdl-grid">
-                <div class="unready" data-type="std-card-cont">
-                    <div class="unready" data-type="std-expand"></div>
-                    <h3 class="sumana text-center card-heading">Network Error:</h3>
-                    <div class="sub-container">
-                        <p class="text-center">The requested page could not be served. Please check your internet connection.</p>
-                        <div class="center-flex">
-                            <img src="/static/img/sad-cat.png" class="cat-404">
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+            <span class="mdc-linear-progress__bar-inner"></span>
+        </div>
+    </div>
+
+    <!-- Actual page content. Everything must be contained using the grid! -->
+    <main class="main-content" id="main-content">
+        <div class="mdc-layout-grid">
+            <div id="variable-region"></div>
         </div>
     </main>
 </div>
-<script nonce="<?php echo Web::getNonce(); ?>" src="/static/js/global.js"></script>
-<script nonce="<?php echo Web::getNonce(); ?>" src="/static/js/material.min.js"></script>
+
+<!-- Initialize the material elements -->
+<script src="static/js/global.js" nonce="<?php echo Web::getNonce(); ?>"></script>
 </body>
 </html>

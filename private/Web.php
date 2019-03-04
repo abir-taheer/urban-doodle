@@ -24,6 +24,11 @@ class Web {
             "text"=>"Candidates",
             "icon"=>"people",
             "page"=>"/candidates"
+        ],
+        [
+            "text"=>"Contact Us",
+            "icon"=>"contact_support",
+            "page"=>"/contact"
         ]
     ];
     public static $dependencies = array("script"=>array(), "css"=>array());

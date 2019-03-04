@@ -1,231 +1,55 @@
-/* Material Styling */
-html, body {
-    font-family: 'Roboto', 'Helvetica', sans-serif;
-}
-.material-avatar {
-    width: 50px;
-    height: 50px;
-    border-radius: 24px;
-}
-.material-layout .mdl-layout__header .mdl-layout__drawer-button {
-    color: rgba(0, 0, 0, 0.54);
-}
-.mdl-layout__drawer .avatar {
-    margin-bottom: 16px;
-}
-.material-drawer {
-    border: none;
-}
-/* iOS Safari specific workaround */
-.material-drawer .mdl-menu__container {
-    z-index: -1;
-}
-.material-drawer .material-navigation {
-    z-index: -2;
-}
-/* END iOS Safari specific workaround */
-.material-drawer .mdl-menu .mdl-menu__item {
-    display: flex;
-    align-items: center;
-}
-.material-drawer-header {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 16px;
-    height: 151px;
-}
-.material-avatar-dropdown {
-    display: flex;
-    position: relative;
-    flex-direction: row;
-    align-items: center;
-    width: 100%;
-}
-
-.material-navigation {
-    flex-grow: 1;
-}
-.material-layout .material-navigation .mdl-navigation__link {
-    display: flex !important;
-    flex-direction: row;
-    align-items: center;
-    color: rgba(255, 255, 255, 0.56);
-    font-weight: 500;
-}
-.material-layout .material-navigation .mdl-navigation__link:hover {
-    background-color: #00BCD4;
-    color: #37474F;
-}
-.material-navigation .mdl-navigation__link .material-icons {
-    font-size: 24px;
-    color: rgba(255, 255, 255, 0.56);
-    margin-right: 32px;
-}
-
-.material-content {
-    max-width: 1080px;
-}
-
-.material-charts {
-    align-items: center;
-}
-.material-chart:nth-child(1) {
-    color: #ACEC00;
-}
-.material-chart:nth-child(2) {
-    color: #00BBD6;
-}
-.material-chart:nth-child(3) {
-    color: #BA65C9;
-}
-.material-chart:nth-child(4) {
-    color: #EF3C79;
-}
-.material-graphs {
-    padding: 16px 32px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-}
-/* TODO: Find a proper solution to have the graphs
- * not float around outside their container in IE10/11.
- * Using a browserhacks.com solution for now.
- */
-_:-ms-input-placeholder, :root .material-graphs {
-    min-height: 664px;
-}
-_:-ms-input-placeholder, :root .material-graph {
-    max-height: 300px;
-}
-/* TODO end */
-.material-graph:nth-child(1) {
-    color: #00b9d8;
-}
-.material-graph:nth-child(2) {
-    color: #d9006e;
-}
-
-.material-cards {
-    align-items: flex-start;
-    align-content: flex-start;
-}
-.material-cards .material-separator {
-    height: 32px;
-}
-.material-cards .mdl-card__title.mdl-card__title {
-    color: white;
-    font-size: 24px;
-    font-weight: 400;
-}
-.material-cards ul {
-    padding: 0;
-}
-.material-cards h3 {
-    font-size: 1em;
-}
-.material-cards .mdl-card__actions a {
-    color: #00BCD4;
-    text-decoration: none;
-}
-
-.material-options h3 {
-    margin: 0;
-}
-.material-options .mdl-checkbox__box-outline {
-    border-color: rgba(255, 255, 255, 0.89);
-}
-.material-options ul {
-    margin: 0;
-    list-style-type: none;
-}
-.material-options li {
-    margin: 4px 0;
-}
-.material-options .material-icons {
-    color: rgba(255, 255, 255, 0.89);
-}
-.material-options .mdl-card__actions {
-    height: 64px;
-    display: flex;
-    box-sizing: border-box;
-    align-items: center;
-}
-/* End Material Styling */
-.fear {
-    display: none;
-}
 body {
-    top: 0px !important;
+    display: flex;
+    margin: 0;
 }
-.sumana {
-    font-family: 'Sumana', serif;
+
+.mdc-drawer-app-content {
+    flex: auto;
+    position: relative;
 }
-#signin {
+.mdc-drawer {
     position: fixed;
-    display: block;
-    right: 0;
-    bottom: 0;
-    margin-right: 40px;
-    margin-bottom: 40px;
-    z-index: 900;
 }
-.goog-te-gadget img {
-    display: none;
+.main-content {
+    overflow: auto;
+    height: 100%;
 }
-.goog-te-gadget-simple {
-    background-color: #fff0 !important;
-    border-width: 0px !important;
+.mdc-top-app-bar {
+    z-index: 7;
+    background-color: white;
+    color: black;
 }
-.goog-te-menu-value span {
-    color: rgba(255, 255, 255, 0.56);
-    font-weight: 500;
-    font-family: 'Roboto', 'Helvetica', sans-serif;
-    margin-right: 5px;
+.mdc-top-app-bar .material-icons {
+    color: black;
 }
-.goog-te-menu-frame {
-    left: 0px !important;
+.drawer-logo {
+    padding-top: 10px;
+    height: 100px;
+    width: 100px;
 }
-.goog-te-banner-frame {
-    display: none;
+.card-expand-default {
+    width: 100%;
+    height: 16px;
+    background-color: var(--mdc-theme-primary);
+    border-radius: 4px 4px 0 0;
+}
+.txt-ctr {
+    text-align: center;
+}
+.flx-ctr {
+    display: flex;
+    justify-content: center;
+}
+.clickable {
+    cursor: pointer;
 }
 .sub-container {
     width:90%;
     margin-left:5%;
     margin-right:5%;
 }
-.text-center {
-    text-align:center;
-}
-.card-heading {
-    font-size: 24px;
-}
-.clickable {
-    cursor: pointer;
-}
-.page-loader {
-    width: 100%;
-    position: absolute;
-}
-.center-flex {
-    display: flex;
-    justify-content: center;
-}
 .cat-404 {
     width: 200px;
     height: 200px;
     margin-bottom: 10px;
-}
-.button-spinner {
-    vertical-align: middle;
-    margin-left: 10px;
-    width: 20px;
-    height: 20px;
-}
-.election-card .mdl-card__title{
-    min-height: 200px;
-    background-image: url('/static/img/vote.png');
-    background-position: 90% 100%;
-    background-repeat: no-repeat;
 }
