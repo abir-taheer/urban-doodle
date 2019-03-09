@@ -194,9 +194,15 @@ $(window).resize(function () {
 
 // Calculate how long it took the page to load
 let pageLoadOffset = new Date().getTime() - pageLoadStart.getTime();
-
+let serverTime = new Date(decodeURIComponent($("meta[name=server-utc-time]").attr("content")));
+serverTime.setTime(serverTime.getTime() + pageLoadOffset);
 let countdowns = setInterval(function () {
     // TODO
+    let timePassed = new Date().getTime() - serverTime.getTime();
+    let timeSeconds = serverTime.getTime() + timePassed;
+    //currentTime.setTime();
+    console.log(new Date(timeSeconds));
+
 
     // After the above is done, update all of the countdowns on the page
     let counters = document.getElementsByClassName("countdown-timer");

@@ -24,8 +24,8 @@ $id = Session::getIdInfo();
     <meta name="google-signin-client_id" content="<?php echo $config['google-signin-client_id']; ?>">
 
     <!-- Time Information -->
-    <meta name="server-utc-time" content="<?php echo rawurlencode(Web::getUTCTime()->format(DateTime::RFC850)); ?>">
-    <meta name="app_time_zone" content="<?php echo rawurlencode(Config::getConfig()['time_zone']); ?>">
+    <meta name="server-utc-time" content="<?php echo rawurlencode(Web::getUTCTime()->format(DateTime::ATOM)); ?>">
+    <meta name="app-time-zone" content="<?php echo rawurlencode(Config::getConfig()['time_zone']); ?>">
 
     <!-- Social Media Information -->
     <meta property="og:type" content="website">
