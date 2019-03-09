@@ -1,6 +1,10 @@
 'use strict';
 /* auth */
 /* TODO REMOVE PREVIOUS SNACKBAR FUNCTION CALLS */
+let useGoogleAnalytics = $("meta[name=use-google-analytics]").attr("content") === "true";
+if(useGoogleAnalytics){
+    var gtagTrackingID = $("meta[name=gtag-tracking-id]").attr("content");
+}
 function onSignIn(googleUser) {
     let token = googleUser.getAuthResponse().id_token;
     //let profile = googleUser.getBasicProfile();
@@ -11,10 +15,16 @@ function onSignIn(googleUser) {
             if( decoded_resp.status === "success" ){
                 //add the success message to the queue
                 //addSnackbarQueue(decoded_resp.message, 3000);
-                //refresh the page and they should see the updated page
+
+                // Log the sign in on Google Analytics if it is used
+                if(useGoogleAnalytics){
+                    gtag('event', 'login', {'method': 'Google'});
+                }
+
+                // Refresh the page and they should see the updated page
                 window.location.reload();
             } else {
-                //there was an error, read out the error in a snackbar
+                // There was an error, read out the error in a snackbar
                 let x = 0;
                 while( x < decoded_resp.message.length ){
                     //showSnackbar(decoded_resp.message[x] , 2000);
@@ -23,6 +33,9 @@ function onSignIn(googleUser) {
             }
     });
 }
+
+// If the user ever manually triggered the drawer
+let manDrawTrig = false;
 
 function changePage(path){
     let vr = document.getElementById("variable-region");
@@ -55,6 +68,12 @@ function changePage(path){
             $(vr).fadeIn();
         });
     });
+
+    if(useGoogleAnalytics){
+        gtag('config', gtagTrackingID, {
+            'page_path': window.location.pathname
+        });
+    }
 }
 
 function addSources(c){
@@ -86,6 +105,7 @@ $(document).ready(function () {
         a.classList.add("mdc-list-item");
         a.classList.add("change-page");
         a.classList.add("clickable");
+        a.setAttribute("data-mdc-auto-init", "MDCRipple");
         a.setAttribute("data-page", pages[x]['page']);
         let i = document.createElement("a");
         i.classList.add("material-icons");
@@ -117,6 +137,9 @@ if( window.innerWidth > 800 ){
 // When user clicks on the hamburger menu in the appBar, trigger the drawer
 topAppBar.listen('MDCTopAppBar:nav', () => {
     drawer.open = !drawer.open;
+    if( ! manDrawTrig && window.innerWidth > 800 ){
+        manDrawTrig = true;
+    }
 });
 
 window.onpopstate = function (){changePage()};
@@ -126,7 +149,7 @@ $(document.body).on("click", ".change-page", function (ev) {
         drawer.open = false;
     }
 });
-$('#variable-region').bind("DOMSubtreeModified",function(){
+$('#variable-region').on("DOMSubtreeModified",function(){
     window.mdc.autoInit(document, () => {});
 });
 $(document.body).on("click", ".sign-out", function(){
@@ -156,3 +179,28 @@ if (navigator.userAgent.match(/(FB|Messenger)/)) {
         };
     }
 }
+
+$(window).resize(function () {
+    if( window.innerWidth <= 1250 ){
+        if( drawer.open ){
+            drawer.open = false;
+        }
+    } else {
+        if( ! manDrawTrig ){
+            drawer.open = true;
+        }
+    }
+});
+
+// Calculate how long it took the page to load
+let pageLoadOffset = new Date().getTime() - pageLoadStart.getTime();
+
+let countdowns = setInterval(function () {
+    // TODO
+
+    // After the above is done, update all of the countdowns on the page
+    let counters = document.getElementsByClassName("countdown-timer");
+    for( let x = 0; x < counters.length ; x++ ){
+        // TODO
+    }
+}, 1000);

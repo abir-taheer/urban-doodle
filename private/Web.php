@@ -1,5 +1,7 @@
 <?php
 class Web {
+    private static $utc_time;
+
     /**
      * An array of all of the items to be generated that will appear on the menu
      * @var array
@@ -27,8 +29,13 @@ class Web {
         ],
         [
             "text"=>"Contact Us",
-            "icon"=>"contact_support",
+            "icon"=>"chat_bubble",
             "page"=>"/contact"
+        ],
+        [
+            "text"=>"Faqs",
+            "icon"=>"help",
+            "page"=>"/faqs"
         ]
     ];
     public static $dependencies = array("script"=>array(), "css"=>array());
@@ -87,5 +94,12 @@ class Web {
         } else {
             header("X-Fetch-New-Sources: false");
         }
+    }
+
+    public static function getUTCTime(){
+        if( !isset(self::$utc_time) ){
+            self::$utc_time = new DateTime("now", new DateTimeZone("UTC"));
+        }
+        return self::$utc_time;
     }
 }

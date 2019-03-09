@@ -3,46 +3,50 @@
 signInRequired();
 $user = Session::getUser();
 ?>
-<div class="mdl-grid">
-
 <?php switch($user->status):
 case -1: ?>
     <?php Web::addScript("/static/js/unrecognized.js"); ?>
-    <div class="unready" data-type="std-card-cont">
-        <div class="unready" data-type="std-expand"></div>
-        <h3 class="sumana text-center card-heading">Email Not Recognized</h3>
+    <div class="mdc-card mdc-layout-grid__cell--span-12">
+        <div class="card-expand-default"></div>
+        <h3 class="sumana txt-ctr">Email Not Recognized</h3>
         <div class="sub-container">
-            <p class="text-center "><a>We could not locate a user with the provided email address. Please fill out the form below to request the ability to vote and you will be notified by email when your request has been approved.</a></p>
-            <form id="unrecognized" data-action="/requests.php" data-callback="reload">
+            <p class="txt-ctr"><a>We could not locate a user with the provided email address. Please fill out the form below to request the ability to vote and you will be notified by email when your request has been approved.</a></p>
+            <form id="unrecognized" data-action="/requests.php" action="requests.php" method="post" data-callback="reload" data-mdc-auto-init="MDCTextField">
                 <input name="token" type="hidden" value="<?php echo $user->makeFormToken("unrecognized", "submit", strtotime("+ 1 hour")); ?>">
-                <div class="unready" data-type="f-txt-input">
-                    <input class="mdl-textfield__input validate" name="full_name" type="text" data-validation="r">
-                        <label class="mdl-textfield__label">Full Name*</label>
-                </div><br>
-                <div class="unready" data-type="f-txt-input">
-                    <select class="mdl-textfield__input validate" name="grade" data-validation="r">
-                        <option></option>
+                <div class="mdc-text-field mdc-text-field--outlined">
+                    <input type="text" name="full_name" class="mdc-text-field__input">
+                    <label class="mdc-floating-label">Full Name</label>
+                    <div class="mdc-line-ripple"></div>
+                </div><br><br>
+                <div class="mdc-select mdc-select--outlined" data-mdc-auto-init="MDCSelect">
+                    <i class="mdc-select__dropdown-icon"></i>
+                    <select class="mdc-select__native-control" name="grade">
+                        <option value="" disabled selected></option>
                         <option value="9">9</option>
                         <option value="10">10</option>
                         <option value="11">11</option>
                         <option value="12">12</option>
                         <option value="f">Faculty</option>
                     </select>
-                    <label class="mdl-textfield__label">Grade*</label>
-                </div><br>
-                <div class="unready" data-type="f-txt-input">
-                    <input class="mdl-textfield__input validate" name="osis" type="text" pattern="^\d{0,9}$" data-validation="pr">
-                    <label class="mdl-textfield__label">OSIS*</label>
-                    <span class="mdl-textfield__error">Input is not an OSIS!</span>
-                </div><br><br>
+                    <label class="mdc-floating-label">Grade</label>
+                    <div class="mdc-line-ripple"></div>
+                </div>
+                <br><br>
+                <div class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+                    <input type="text" name="osis" pattern="^\d{0,9}$" class="mdc-text-field__input">
+                    <label class="mdc-floating-label">OSIS</label>
+                    <div class="mdc-line-ripple"></div>
+                </div>
+                <div class="mdc-text-field-helper-line">
+                    <div class="mdc-text-field-helper-text mdc-text-field-helper-text--validation-msg" >Must be 9 digits.</div>
+                </div>
+                <br><br>
+
                 <p class="faculty-warning fear mdl-color-text--red-600">This is meant for faculty only! Setting your grade to faculty means that your votes will have no effect towards elections! <b>This cannot be changed!</b></p>
                 <p class="mdl-color-text--red-500 error-text fear">There were errors with your submission:</p>
             </form>
             <div>
-                <button class="unready form-submit" data-type="btn">
-                    Submit
-                </button>
-                <div class="unready button-spinner fear" data-type="spinner"></div>
+                <button class="mdc-button" data-mdc-auto-init="MDCRipple">Submit</button>
             </div>
             <br><br>
         </div>
@@ -60,45 +64,57 @@ case -1: ?>
             array("Submitted On", date("F d, Y  h:ia", strtotime($u_req['created'])), "access_time")
         );
     ?>
-    <div class="unready" data-type="std-card-cont">
-        <div class="unready" data-type="std-expand"></div>
-        <h3 class="sumana text-center card-heading">Email Not Recognized</h3>
+    <div class="mdc-card mdc-layout-grid__cell--span-12">
+        <div class="card-expand-default"></div>
+        <h3 class="sumana txt-ctr">Email Not Recognized</h3>
         <div class="sub-container">
-            <p class="text-center"><a>Your request to be able to vote has been received. The details are below. You will receive an email email the request has been approved.</a></p>
-            <ul class="mdl-list">
+            <p class="txt-ctr"><a>Your request to be able to vote has been received. The details are below. You will receive an email email the request has been approved.</a></p>
+            <ul class="mdc-list">
                 <?php foreach($data_list as $i ): ?>
-                <li class="mdl-list__item">
-                    <span class="mdl-list__item-primary-content">
+                    <li class="mdc-list-item" tabindex="0">
                         <i class="material-icons mdl-list__item-icon"><?php echo $i[2]; ?></i>
-                        <?php echo htmlentities($i[0]); ?> :&nbsp;<a class="notranslate"><?php echo htmlentities($i[1]); ?></a>
-                    </span>
-                </li>
+                        <span class="mdc-list-item__text">
+                        &nbsp;&nbsp;<?php echo htmlentities($i[0]); ?> :&nbsp;<a class="notranslate"><?php echo htmlentities($i[1]); ?></a>
+                        </span>
+                    </li>
                 <?php endforeach; ?>
-
             </ul>
         </div>
     </div>
     <?php break; ?>
 <?php case 1: ?>
     <?php foreach( $user->getElections() as $e ): ?>
-        <div class="unready election-card" data-type="small-card-cont">
-            <div class="mdl-card__title mdl-card--expand mdl-color--teal-300 mdl-color-text--white">
-                <h2 class="mdl-card__title-text"><?php echo htmlentities($e->name); ?></h2>
+            <div class="mdc-card mdc-layout-grid__cell--span-4">
+                <div class="mdc-card__primary-action change-page" data-page="/vote/<?php echo htmlspecialchars($e->db_code); ?>" tabindex="0" data-mdc-auto-init="MDCRipple">
+                    <div class="mdc-card__media mdc-card__media--16-9 vote-card__media"></div>
+                    <div>
+                        <h2 class="mdc-typography mdc-typography--headline6 vote-card__pad"><?php echo htmlspecialchars($e->name); ?></h2>
+                    </div>
+                    <div class="mdc-typography mdc-typography--body2 vote-card__pad">
+                        <?php if( time() < $e->start_time ): //Before Election starts, notify when election will start?>
+                            <a>Election will start: <?php echo date("M d, Y h:ia", $e->start_time); ?></a>
+                        <?php elseif ( time() > $e->start_time ): //If we've passed the start time, 2 possibilities ?>
+                            <?php if( time() < $e->end_time ): //Time if before the end time, voting in session ?>
+                                <a class="voting-timer" data-end-time="" data-current-time=""></a>
+                            <?php else: //Election is over ?>
+                                <a>Election has concluded. Please await results.</a>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <br>
+                </div>
+                <div class="mdc-card__actions">
+                    <div class="mdc-card__action-buttons">
+                        <button class="mdc-button mdc-card__action mdc-card__action--button change-page" data-page="/vote/<?php echo htmlspecialchars($e->db_code); ?>" data-mdc-auto-init="MDCRipple">Vote</button>
+                        <button class="mdc-button mdc-card__action mdc-card__action--button change-page" data-page="/candidates/<?php echo htmlspecialchars($e->db_code); ?>" data-mdc-auto-init="MDCRipple">Candidates</button>
+                    </div>
+                    <div class="mdc-card__action-icons">
+                        <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon--unbounded" title="Share" data-mdc-ripple-is-unbounded="true">share</button>
+                        <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon--unbounded" title="More options" data-mdc-ripple-is-unbounded="true">more_vert</button>
+                    </div>
+                </div>
             </div>
-            <div class="mdl-card__supporting-text mdl-color-text--grey-600">
-                Non dolore elit adipisicing ea reprehenderit consectetur culpa.
-            </div>
-            <form data-action="/load.php?page=/vote" data-callback="page-url" data-page="/vote/<?php echo urlencode($e->db_code); ?>">
-                <input type="hidden" name="token" value="<?php echo $user->makeFormToken("vote", $e->db_code, strtotime("+ 10 min")); ?>">
-            </form>
-            <div class="mdl-card__actions mdl-card--border">
-                <a class="mdl-button form-submit mdl-js-button">Vote</a>
-                <div class="unready button-spinner fear" data-type="spinner"></div>
-            </div>
-        </div>
     <?php endforeach; ?>
 
     <?php break; ?>
 <?php endswitch; ?>
-
-</div>

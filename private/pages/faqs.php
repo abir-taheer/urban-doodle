@@ -1,2 +1,4 @@
 <?php //TODO FINISH THIS PAGE ?>
-This page is yet to be completed
+<div class="mdc-card mdc-layout-grid__cell--span-12">
+    test
+</div>

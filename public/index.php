@@ -6,37 +6,55 @@ header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'no
 
 $config = Config::getConfig();
 $id = Session::getIdInfo();
+
+//TODO get the obfuscator to work
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script nonce="<?php echo Web::getNonce(); ?>">
+        // Record the time the page starts loading to calculate the offset between server and local time
+        let pageLoadStart = new Date();
+    </script>
+
     <meta charset="utf-8">
     <meta name="description" content="<?php echo $config['metadata']['description']; ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="<?php echo $config['google-signin-client_id']; ?>">
 
+    <!-- Time Information -->
+    <meta name="server-utc-time" content="<?php echo rawurlencode(Web::getUTCTime()->format(DateTime::RFC850)); ?>">
+    <meta name="app_time_zone" content="<?php echo rawurlencode(Config::getConfig()['time_zone']); ?>">
+
     <!-- Social Media Information -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="<?php echo $config['metadata']['title']; ?>" />
-    <meta property="og:description" content="<?php echo addslashes($config['metadata']['description']); ?>" />
-    <meta property="og:image" content="<?php echo Config::getConfig()['app_icon']; ?>" />
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?php echo $config['metadata']['title']; ?>">
+    <meta property="og:description" content="<?php echo addslashes($config['metadata']['description']); ?>">
+    <meta property="og:image" content="<?php echo Config::getConfig()['app_icon']; ?>">
 
     <title><?php echo htmlspecialchars($config['metadata']['title']); ?></title>
     <link rel="icon" sizes="192x192" href="<?php echo Config::getConfig()['metadata']['favicon']; ?>">
 
     <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
-    <link rel="stylesheet" href="static/css/fonts.css">
-    <link rel="stylesheet" href="static/css/global.css">
+    <link rel="stylesheet" href="/static/css/fonts.css">
+    <link rel="stylesheet" href="/static/css/global.css">
 
-    <script nonce="<?php echo Web::getNonce(); ?>" src="static/js/jquery-3.3.1.min.js"></script>
+    <script nonce="<?php echo Web::getNonce(); ?>" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script nonce="<?php echo Web::getNonce(); ?>" src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
     <?php if( Config::getConfig()['google_analytics']['use'] ): ?>
         <!-- Google Analytics -->
-        <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js"></script>
+        <meta name="use-google-analytics" content="true">
+        <meta name="gtag-tracking-id" content="<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>">
+        <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>"></script>
         <script nonce="<?php echo Web::getNonce(); ?>">
-            window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>');
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>');
         </script>
+    <?php else: ?>
+        <meta name="use-google-analytics" content="false" >
     <?php endif; ?>
 </head>
 <body>
@@ -65,8 +83,8 @@ $id = Session::getIdInfo();
         <div class="mdc-list drawer-pages-list" data-menu-items="<?php echo rawurlencode(json_encode(Web::$menu_pages)); ?>"></div>
     </div>
 </aside>
-
 <div class="mdc-drawer-app-content mdc-top-app-bar--fixed-adjust">
+    <div class="obs fear mobile-only"></div>
     <!-- Indeterminate Loader -->
     <div role="progressbar" class="mdc-linear-progress mdc-linear-progress--indeterminate page-loader">
         <div class="mdc-linear-progress__buffering-dots"></div>
@@ -82,12 +100,12 @@ $id = Session::getIdInfo();
     <!-- Actual page content. Everything must be contained using the grid! -->
     <main class="main-content" id="main-content">
         <div class="mdc-layout-grid">
-            <div id="variable-region"></div>
+            <div id="variable-region" class="mdc-layout-grid__inner"></div>
         </div>
     </main>
 </div>
 
 <!-- Initialize the material elements -->
-<script src="static/js/global.js" nonce="<?php echo Web::getNonce(); ?>"></script>
+<script src="/static/js/global.js" nonce="<?php echo Web::getNonce(); ?>"></script>
 </body>
 </html>

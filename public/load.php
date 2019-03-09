@@ -4,7 +4,10 @@
         include "../private/".$class_name . '.php';
     });
 
-    //split the pathName sent to us, using the / as a delimiter, into an array
+    date_default_timezone_set(Config::getConfig()['time_zone']);
+
+
+//split the pathName sent to us, using the / as a delimiter, into an array
     $path = explode("/", $_GET['page']);
 
    //in the case that a page requires sign in, respond with the following html and stop script execution

@@ -1,3 +1,6 @@
+.fear {
+    display: none;
+}
 body {
     display: flex;
     margin: 0;
@@ -32,6 +35,7 @@ body {
     height: 16px;
     background-color: var(--mdc-theme-primary);
     border-radius: 4px 4px 0 0;
+    opacity: 0.8;
 }
 .txt-ctr {
     text-align: center;
@@ -52,4 +56,23 @@ body {
     width: 200px;
     height: 200px;
     margin-bottom: 10px;
+}
+.obs {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 3;
+    opacity: 0.5;
+    position: fixed;
+}
+@media only screen and (min-width: 801px){
+    .mobile-only {
+        display: none;
+    }
+}
+.vote-card__media {
+    background-image: url(https://abir.taheer.me/resources/images/vote.jpg);
+}
+.vote-card__pad {
+    padding: 0 20px;
 }
