@@ -2,6 +2,7 @@
 /* auth */
 /* TODO REMOVE PREVIOUS SNACKBAR FUNCTION CALLS */
 let useGoogleAnalytics = $("meta[name=use-google-analytics]").attr("content") === "true";
+let isSignedIn = $("meta[name=signed-in]").attr("content") === "true";
 if(useGoogleAnalytics){
     var gtagTrackingID = $("meta[name=gtag-tracking-id]").attr("content");
 }
@@ -15,21 +16,22 @@ function onSignIn(googleUser) {
             if( decoded_resp.status === "success" ){
                 //add the success message to the queue
                 //addSnackbarQueue(decoded_resp.message, 3000);
-
                 // Log the sign in on Google Analytics if it is used
                 if(useGoogleAnalytics){
                     gtag('event', 'login', {'method': 'Google'});
                 }
 
+                addSnackbarQueue("You have been successfully signed in");
                 // Refresh the page and they should see the updated page
                 window.location.reload();
             } else {
                 // There was an error, read out the error in a snackbar
                 let x = 0;
                 while( x < decoded_resp.message.length ){
-                    //showSnackbar(decoded_resp.message[x] , 2000);
+                    addSnackbarQueue(decoded_resp.message[x]);
                     x++;
                 }
+                playSnackbarQueue();
             }
     });
 }
@@ -74,6 +76,7 @@ function changePage(path){
             'page_path': window.location.pathname
         });
     }
+    playSnackbarQueue();
 }
 
 function addSources(c){
@@ -95,6 +98,12 @@ function addSources(c){
         vr.appendChild(node);
     }
 }
+
+$(".obs").on("click", function (ev) {
+   drawer.open = false;
+   $(ev.currentTarget).addClass("fear");
+   $("#variable-region").fadeIn();
+});
 
 $(document).ready(function () {
     // first setup the necessary elements
@@ -120,24 +129,34 @@ $(document).ready(function () {
     }
     // Now load the first page
     changePage();
+
+    // Play the snackbars
+    playSnackbarQueue();
 });
 // Automatically instantiate the mdc elements on the page
 mdc.autoInit();
 
 // Create an instance of the drawer and store it
 let drawer = new mdc.drawer.MDCDrawer(document.querySelector('.mdc-drawer'));
-// Store the topAppBar in a variable
-let topAppBar = mdc.topAppBar.MDCTopAppBar.attachTo(document.querySelector('.mdc-top-app-bar'));
+let snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
 
 // Automatically open the drawer if the user is on a desktop device
-if( window.innerWidth > 800 ){
+if( window.innerWidth > 1250 ){
     drawer.open = true;
 }
 
 // When user clicks on the hamburger menu in the appBar, trigger the drawer
-topAppBar.listen('MDCTopAppBar:nav', () => {
+$(document.body).on("click", ".menu-trigger", function () {
+    let a = $("#variable-region");
+    let b = $(".obs");
+    if( window.innerWidth < 1250) {
+        (!drawer.open) ? a.fadeOut(1) : a.fadeIn();
+        (!drawer.open) ? b.removeClass("fear") : b.addClass("fear");
+    } else {
+        a.fadeIn();
+    }
     drawer.open = !drawer.open;
-    if( ! manDrawTrig && window.innerWidth > 800 ){
+    if( ! manDrawTrig && window.innerWidth > 1250 ){
         manDrawTrig = true;
     }
 });
@@ -145,8 +164,9 @@ topAppBar.listen('MDCTopAppBar:nav', () => {
 window.onpopstate = function (){changePage()};
 $(document.body).on("click", ".change-page", function (ev) {
     changePage($(ev.currentTarget).data("page"));
-    if(window.innerWidth <= 800){
+    if(window.innerWidth <= 1250){
         drawer.open = false;
+        $(".obs").addClass("fear");
     }
 });
 $('#variable-region').on("DOMSubtreeModified",function(){
@@ -154,22 +174,18 @@ $('#variable-region').on("DOMSubtreeModified",function(){
 });
 $(document.body).on("click", ".sign-out", function(){
     $.post('/signout.php').done(function() {
-        //addSnackbarQueue("You have been sucessfully signed out!", 2000);
+        addSnackbarQueue("You have been successfully signed out!");
         window.location.reload();
     }).fail(function(er){
-        if( window.innerWidth <= 800 ){
+        if( window.innerWidth <= 1250 ){
             drawer.open = false;
         }
         //showSnackbar("There was an error signing you out. You are currently not connected to the internet!", 3000);
     });
 });
 
-if (navigator.userAgent.match(/(FB|Messenger)/)) {
-    window.onbeforeunload = function(){
-        gapi.auth2.getAuthInstance().disconnect()
-    };
-} else {
-    if (navigator.userAgent.match(/(iPod|iPhone|iPad)/)) {
+if(! isSignedIn){
+    if (navigator.userAgent.match(/(iPod|iPhone|iPad)/) && ! navigator.userAgent.match(/(FB|Messenger)/)) {
         document.pagehide = function(){
             gapi.auth2.getAuthInstance().disconnect()
         };
@@ -180,6 +196,7 @@ if (navigator.userAgent.match(/(FB|Messenger)/)) {
     }
 }
 
+
 $(window).resize(function () {
     if( window.innerWidth <= 1250 ){
         if( drawer.open ){
@@ -189,24 +206,115 @@ $(window).resize(function () {
         if( ! manDrawTrig ){
             drawer.open = true;
         }
+        $("#variable-region").fadeIn();
     }
 });
 
+$(document.body).on("click", ".submit-form", function (ev) {
+    let button = ev.currentTarget;
+    button.setAttribute("disabled", true);
+    let cont = button.parentElement.parentElement;
+    let form = $(cont).find("form");
+    $.post($(form).data("action"), $(form).serialize(), function (a, b, c) {
+        // TODO Add more callback options
+        let resp = JSON.parse(a);
+        for( let x = 0 ; x < resp.message.length ; x++ ){
+            addSnackbarQueue(resp.message[x]);
+        }
+        if( resp.status === "success" ){
+            switch($(form).data("callback")){
+                case "reload":
+                    changePage();
+                    break;
+            }
+        } else {
+            button.removeAttribute("disabled");
+            playSnackbarQueue();
+        }
+    });
+
+});
+
+snackbar.listen("MDCSnackbar:closed", () => {
+    playSnackbarQueue();
+});
+
+function playSnackbarQueue(){
+    try {
+        let snacks = JSON.parse(localStorage.getItem("snackbar"));
+        if( snacks.length > 0 ){
+            // Only show the first snackbar on the list, this function will automatically get called again once the snackbar closes
+            snackbar.labelText = snacks[0];
+            $(".mdc-snackbar__action").addClass("fear");
+            snacks.shift();
+            snackbar.open();
+            localStorage.setItem("snackbar", JSON.stringify(snacks));
+        }
+    } catch(e){
+        localStorage.setItem("snackbar", "[]");
+    }
+}
+
+function addSnackbarQueue(txt){
+    try {
+        if( typeof JSON.parse(localStorage.getItem("snackbar")) != "object" ){
+            throw new Error("Snackbar not setup");
+        }
+    } catch(e){
+        localStorage.setItem("snackbar", "[]");
+    }
+    let snacks = JSON.parse(localStorage.getItem("snackbar"));
+    snacks.push(txt);
+    localStorage.setItem("snackbar", JSON.stringify(snacks));
+}
+
+// Record the time the page finished loading
+let pageLoadedTime = new Date();
+
 // Calculate how long it took the page to load
-let pageLoadOffset = new Date().getTime() - pageLoadStart.getTime();
+let pageLoadOffset = pageLoadedTime.getTime() - pageLoadStart.getTime();
+
+// Create a variable containing the time received from the server
 let serverTime = new Date(decodeURIComponent($("meta[name=server-utc-time]").attr("content")));
+
+// Offset the server time with the page load time
 serverTime.setTime(serverTime.getTime() + pageLoadOffset);
+
 let countdowns = setInterval(function () {
-    // TODO
-    let timePassed = new Date().getTime() - serverTime.getTime();
-    let timeSeconds = serverTime.getTime() + timePassed;
-    //currentTime.setTime();
-    console.log(new Date(timeSeconds));
 
+    // Calculate how long it's been since the page loaded
+    let timePassed = new Date().getTime() - pageLoadedTime.getTime();
 
-    // After the above is done, update all of the countdowns on the page
-    let counters = document.getElementsByClassName("countdown-timer");
+    // Get current server time by adding time since page load to the serverTime
+    let currentTime = new Date(serverTime.getTime() + timePassed);
+
+    // Get all elements on page that require the time to be updated
+    let counters = document.getElementsByClassName("js-timer");
     for( let x = 0; x < counters.length ; x++ ){
-        // TODO
+        let i = counters[x];
+        let countType = $(i).data("timer-type");
+        switch (countType) {
+            case "countdown":
+                let countDownDate = decodeURIComponent($(i).data("count-down-date"));
+                let dist = new Date(countDownDate).getTime() - currentTime.getTime();
+                let countDownTxt = "";
+                let d = Math.floor(dist / (1000 * 60 * 60 * 24)); // Days till date
+                let h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));  // Hours till date
+                let m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60)); // Minutes till date
+                let s = Math.floor((dist % (1000 * 60)) / 1000); // Seconds till date
+                countDownTxt = (d > 0) ? d + "d " : countDownTxt;
+                countDownTxt = (dist > 3600000 ) ? countDownTxt + h + "h ": countDownTxt;
+                countDownTxt = countDownTxt + m + "m ";
+                countDownTxt =  ( dist < 86400000 )? countDownTxt + s + "s" : countDownTxt;
+                if( $(i).hasClass("js-timer__warning") && dist < parseInt($(i).data("count-down-warning")) && ! $(i).hasClass("red-txt") ){
+                    $(i).addClass("red-txt");
+                }
+                if( dist < 0 ){
+                    countDownTxt = "0s";
+                    $(i).removeClass("js-timer");
+                }
+                i.innerHTML = countDownTxt;
+                break;
+        }
     }
 }, 1000);

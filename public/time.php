@@ -7,3 +7,4 @@ spl_autoload_register(function ($class_name) {
 $date_utc = new DateTime("now", new DateTimeZone("UTC"));
 
 echo $date_utc->format(DateTime::ATOM);
+

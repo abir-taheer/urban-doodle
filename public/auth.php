@@ -7,8 +7,9 @@ $e = new GoogleAuth($_POST['token']);
 if( $e->status ){
     //their sign in attempt has been verified. Make sessions for them
     $u_id = User::readyUserId($e->email, $e->sub);
-    Session::createVotingSession($u_id, strtotime("+ 1 day"));
-    Session::createIdSession($e->first_name, $e->last_name, $e->email, $e->pic, strtotime("+ 1 day"));
+    $expiration = Web::UTCDate("+1 day");
+    Session::createVotingSession($u_id, $expiration);
+    Session::createIdSession($e->first_name, $e->last_name, $e->email, $e->pic, $expiration);
     $response['status'] = "success";
     $response['message'] = "You have been successfully signed in!";
 } else {

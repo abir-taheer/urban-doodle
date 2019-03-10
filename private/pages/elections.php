@@ -11,8 +11,8 @@ case -1: ?>
         <h3 class="sumana txt-ctr">Email Not Recognized</h3>
         <div class="sub-container">
             <p class="txt-ctr"><a>We could not locate a user with the provided email address. Please fill out the form below to request the ability to vote and you will be notified by email when your request has been approved.</a></p>
-            <form id="unrecognized" data-action="/requests.php" action="requests.php" method="post" data-callback="reload" data-mdc-auto-init="MDCTextField">
-                <input name="token" type="hidden" value="<?php echo $user->makeFormToken("unrecognized", "submit", strtotime("+ 1 hour")); ?>">
+            <form id="unrecognized" data-action="/requests.php" data-callback="reload" data-mdc-auto-init="MDCTextField">
+                <input name="token" type="hidden" value="<?php echo $user->makeFormToken("unrecognized", "submit", Web::UTCDate("+1 hour")); ?>">
                 <div class="mdc-text-field mdc-text-field--outlined">
                     <input type="text" name="full_name" class="mdc-text-field__input">
                     <label class="mdc-floating-label">Full Name</label>
@@ -46,7 +46,7 @@ case -1: ?>
                 <p class="mdl-color-text--red-500 error-text fear">There were errors with your submission:</p>
             </form>
             <div>
-                <button class="mdc-button" data-mdc-auto-init="MDCRipple">Submit</button>
+                <button class="mdc-button submit-form" data-mdc-auto-init="MDCRipple">Submit</button>
             </div>
             <br><br>
         </div>
@@ -55,13 +55,14 @@ case -1: ?>
 <?php case 0: ?>
     <?php
         $u_req = $user->unrecognized_request;
+        $submitted = new DateTime($u_req['created']);
         $data_list = array(
             array("Request ID", $u_req['track'], "device_hub"),
             array("Name", $u_req['name'], "person_pin"),
             array("Email", $u_req['email'], "contact_mail"),
             array("Grade", $u_req['grade'], "school"),
             array("OSIS", $u_req['osis'], "dialpad"),
-            array("Submitted On", date("F d, Y  h:ia", strtotime($u_req['created'])), "access_time")
+            array("Submitted On", $submitted->format("F d, Y  h:ia"), "access_time")
         );
     ?>
     <div class="mdc-card mdc-layout-grid__cell--span-12">
@@ -80,6 +81,7 @@ case -1: ?>
                 <?php endforeach; ?>
             </ul>
         </div>
+        <br>
     </div>
     <?php break; ?>
 <?php case 1: ?>
@@ -91,10 +93,10 @@ case -1: ?>
                         <h2 class="mdc-typography mdc-typography--headline6 vote-card__pad"><?php echo htmlspecialchars($e->name); ?></h2>
                     </div>
                     <div class="mdc-typography mdc-typography--body2 vote-card__pad">
-                        <?php if( time() < $e->start_time ): //Before Election starts, notify when election will start?>
-                            <a>Election will start: <?php echo date("M d, Y h:ia", $e->start_time); ?></a>
-                        <?php elseif ( time() > $e->start_time ): //If we've passed the start time, 2 possibilities ?>
-                            <?php if( time() < $e->end_time ): //Time if before the end time, voting in session ?>
+                        <?php if( Web::getUTCTime() < $e->start_time ): //Before Election starts, notify when election will start?>
+                            <a>Election will start: <?php echo $e->start_time->format("M d, Y h:ia"); ?></a>
+                        <?php elseif ( Web::getUTCTime() > $e->start_time ): //If we've passed the start time, 2 possibilities ?>
+                            <?php if( Web::getUTCTime() < $e->end_time ): //Time if before the end time, voting in session ?>
                                 <a class="voting-timer" data-end-time="" data-current-time=""></a>
                             <?php else: //Election is over ?>
                                 <a>Election has concluded. Please await results.</a>
@@ -110,7 +112,6 @@ case -1: ?>
                     </div>
                     <div class="mdc-card__action-icons">
                         <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon--unbounded" title="Share" data-mdc-ripple-is-unbounded="true">share</button>
-                        <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon--unbounded" title="More options" data-mdc-ripple-is-unbounded="true">more_vert</button>
                     </div>
                 </div>
             </div>

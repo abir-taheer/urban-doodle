@@ -1,5 +1,4 @@
 <?php
-date_default_timezone_set ( "America/New_York");
 $user = Session::getUser();
 $id = Session::getIdInfo();
 switch($form['extra']){
@@ -28,7 +27,8 @@ switch($form['extra']){
                 $email = $id['email'];
                 $grade = ($_POST['grade'] === "f") ? "Faculty" : $_POST['grade'];
                 $osis = $_POST['osis'];
-                $created = date("Y-m-d H:i:s");
+                $date = new DateTime("now", new DateTimeZone(Config::getConfig()['time_zone']));
+                $created = Web::getUTCTime()->format("Y-m-d H:i:s");
                 try{
                     Database::secureQuery(
                         "INSERT INTO `unrecognized_emails` (`track`, `name`, `email`, `grade`, `osis`, `created`) VALUES (:track, :full_name, :email, :grade, :osis, :created)",
@@ -56,7 +56,7 @@ switch($form['extra']){
                         <br>Email Address: ".htmlspecialchars($email)."
                         <br>Grade: ".htmlspecialchars($grade)."
                         <br>Osis: ".htmlspecialchars($osis)."
-                        <br>Submitted At: ".htmlspecialchars(date("F d, Y  h:ia"))."
+                        <br>Submitted At: ".htmlspecialchars($date->format("F d, Y  h:ia"))."
                         <br><br>This is just a confirmation. You will receive a follow up email once your request has been approved.";
                     $em->send();
                 } catch(Exception $e){

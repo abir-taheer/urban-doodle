@@ -33,9 +33,9 @@ class Web {
             "page"=>"/contact"
         ],
         [
-            "text"=>"Faqs",
+            "text"=>"Help",
             "icon"=>"help",
-            "page"=>"/faqs"
+            "page"=>"/help"
         ]
     ];
     public static $dependencies = array("script"=>array(), "css"=>array());
@@ -101,5 +101,8 @@ class Web {
             self::$utc_time = new DateTime("now", new DateTimeZone("UTC"));
         }
         return self::$utc_time;
+    }
+    public static function UTCDate($time){
+        return new DateTime($time, new DateTimeZone("UTC"));
     }
 }

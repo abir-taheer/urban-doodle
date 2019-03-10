@@ -4,10 +4,8 @@
         include "../private/".$class_name . '.php';
     });
 
-    date_default_timezone_set(Config::getConfig()['time_zone']);
 
-
-//split the pathName sent to us, using the / as a delimiter, into an array
+    //split the pathName sent to us, using the / as a delimiter, into an array
     $path = explode("/", $_GET['page']);
 
    //in the case that a page requires sign in, respond with the following html and stop script execution
@@ -65,22 +63,20 @@
    }
 ?>
 <?php //The part below is only sent in case the page could not be found ?>
-<div class="mdl-grid">
-    <div class="unready" data-type="std-card-cont">
-        <div class="unready" data-type="std-expand"></div>
-        <h3 class="sumana text-center card-heading">Error:</h3>
+<div class="mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12">
+    <div class="card-expand-default"></div>
+        <h3 class="sumana txt-ctr">Error:</h3>
         <div class="sub-container">
-            <p class="text-center">The page you are looking for could not be found.</p>
-            <div class="center-flex">
+            <p class="txt-ctr">The page you are looking for could not be found.</p>
+            <div class="flx-ctr">
                 <img src="/static/img/sad-cat.png" class="cat-404">
             </div>
-            <?php // In the case that we found pages with a similar name in our page directory, ask the user if they meant to go to those pages?>
-            <?php if( count($similar_pages) > 0 ): ?>
-                <p class="text-center">Did you mean to go to one of the following pages?</p>
-                <?php foreach( $similar_pages as $s ): ?>
-                    <p class="text-center"><a href="/<?php echo $s; ?>"><?php echo ucwords($s); ?></a></p>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </div>
+    <?php // In the case that we found pages with a similar name in our page directory, ask the user if they meant to go to those pages?>
+    <?php if( count($similar_pages) > 0 ): ?>
+            <p class="txt-ctr">Did you mean to go to one of the following pages?</p>
+        <?php foreach( $similar_pages as $s ): ?>
+            <p class="txt-ctr"><a href="/<?php echo $s; ?>"><?php echo ucwords($s); ?></a></p>
+        <?php endforeach; ?>
+    <?php endif; ?>
     </div>
 </div>

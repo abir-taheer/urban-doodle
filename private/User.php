@@ -174,12 +174,12 @@ Class User {
      * Makes a form token to be sent with forms that tells the site which script files to hand the form data off to
      * @param string $request The name of the file associated with performing the request
      * @param string $extra Extra information to be used by the file processing the request
-     * @param false|int $expiration Date object of the expiration time for the token
+     * @param DateTime $expiration Date object of the expiration time for the token
      * @return string
      * @throws
      */
     public function makeFormToken($request, $extra, $expiration){
-        $expiration = date("Y-m-d H:i:s", $expiration);
+        $expiration = $expiration->format("Y-m-d H:i:s");
         $token = bin2hex(random_bytes(64));
         $data = Database::secureQuery(
             "SELECT * FROM `form_tokens` WHERE `user_id` = :u AND `request` = :r AND `extra` = :e",
@@ -191,7 +191,7 @@ Class User {
             'fetch');
         if( count($data) > 1 ){
             //they already have a token previously generated, check if it has been used or expired yet
-            if( strtotime($data['expires']) > time() ){
+            if( Web::UTCDate($data['expires']) > Web::getUTCTime() ){
                 return $data['token'];
             }
             Database::secureQuery(
@@ -213,7 +213,7 @@ Class User {
     }
 
     public function getFormTokenData($token){
-        $now = date("Y-m-d H:i:s");
+        $now = Web::getUTCTime()->format("Y-m-d H:i:s");
         return Database::secureQuery(
             "SELECT * FROM `form_tokens` WHERE `token` = :t AND `user_id` = :u AND `expires` > :n",
             array(":t"=>$token, ":u"=>$this->u_id, ":n"=>$now),

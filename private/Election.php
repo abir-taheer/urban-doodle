@@ -11,8 +11,8 @@ class Election {
             $this->color_intensity = $data['color_intensity'];
             $this->type = $data['type'];
             $this->status = $data['status'];
-            $this->start_time = strtotime($data['start_time']);
-            $this->end_time = strtotime($data['end_time']);
+            $this->start_time = new DateTime($data['start_time'], new DateTimeZone("UTC"));
+            $this->end_time = new DateTime($data['end_time'], new DateTimeZone("UTC"));
             $this->grade = $data['grade'];
             $this->votes_allowed = $data['votes_allowed'];
             $this->visibility = $data['votes_allowed'];

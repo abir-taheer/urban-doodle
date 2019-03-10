@@ -31,9 +31,9 @@ body {
     width: 100px;
 }
 .card-expand-default {
-    width: 100%;
+    /*width: 100%;
     height: 16px;
-    background-color: var(--mdc-theme-primary);
+    background-color: var(--mdc-theme-primary);*/
     border-radius: 4px 4px 0 0;
     opacity: 0.8;
 }
@@ -75,4 +75,14 @@ body {
 }
 .vote-card__pad {
     padding: 0 20px;
+}
+:root {
+    --mdc-theme-primary: #6c5ce7;
+}
+.red-txt {
+    color: #d63031;
+}
+h1, h2, h3, h4, .heading{
+    font-family: 'Roboto Slab', serif;
+    font-weight: 600;
 }

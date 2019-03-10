@@ -7,8 +7,8 @@ class Session{
         if(
             count($checkID) > 1 &&
             count($checkVoter) > 1 &&
-            time() < strtotime($checkID['expires']) &&
-            time() < strtotime($checkVoter['expires'])
+            Web::getUTCTime() < Web::UTCDate($checkID['expires']) &&
+            Web::getUTCTime() < Web::UTCDate($checkVoter['expires'])
         ){
             return true;
         }
@@ -62,7 +62,7 @@ class Session{
     //creates a record in the database with given data and creates a voting session cookie to reference the data
     public static function createVotingSession($email_hash, $expires){
         $track = bin2hex(random_bytes(64));
-        $string_expires = date("Y-m-d H:i:s", $expires);
+        $string_expires = $expires->format("Y-m-d H:i:s");
         Database::secureQuery(
             "INSERT INTO `voter_tokens`(`cookie_id`, `user_id`, `expires`) VALUES (:cookie, :hsh, :exp)",
             array(
@@ -72,13 +72,13 @@ class Session{
             ),
             null
         );
-        setcookie(Config::getConfig()['voting_cookie_name'], $track, $expires, "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
+        setcookie(Config::getConfig()['voting_cookie_name'], $track, $expires->getTimestamp(), "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
     }
 
     //creates a record in the database with given data and creates a identity session cookie to reference the data
     public static function createIdSession($first, $last, $email, $picture, $expires){
         $track = bin2hex(random_bytes(64));
-        $string_expires = date("Y-m-d H:i:s", $expires);
+        $string_expires = $expires->format("Y-m-d H:i:s");
         Database::secureQuery(
             "INSERT INTO `id_tokens`(`cookie_id`, `first_name`, `last_name`, `email`, `picture`, `expires`) VALUES (:cookie, :frst, :lst, :email, :pic, :exp)",
             array(
@@ -91,14 +91,20 @@ class Session{
             ),
             null
         );
-        setcookie(Config::getConfig()['id_cookie_name'], $track, $expires, "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
+        setcookie(Config::getConfig()['id_cookie_name'], $track, $expires->getTimestamp(), "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
     }
 
     public static function deleteSession(){
-        Database::secureQuery("DELETE FROM `id_tokens` WHERE `cookie_id` = :cookie", array(":cookie"=>$_COOKIE[Config::getConfig()['id_cookie_name']]), null);
-        Database::secureQuery("DELETE FROM `voter_tokens` WHERE `cookie_id` = :cookie", array(":cookie"=>$_COOKIE[Config::getConfig()['voting_cookie_name']]), null);
-        setcookie(Config::getConfig()['id_cookie_name'], "", strtotime("- 30 years"), "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
-        setcookie(Config::getConfig()['voting_cookie_name'], "", strtotime("- 30 years"), "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
+        Database::secureQuery(
+            "DELETE FROM `id_tokens` WHERE `cookie_id` = :cookie",
+            array(":cookie"=>$_COOKIE[Config::getConfig()['id_cookie_name']]),
+            null);
+        Database::secureQuery(
+            "DELETE FROM `voter_tokens` WHERE `cookie_id` = :cookie",
+            array(":cookie"=>$_COOKIE[Config::getConfig()['voting_cookie_name']]),
+            null);
+        setcookie(Config::getConfig()['id_cookie_name'], "", 1, "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
+        setcookie(Config::getConfig()['voting_cookie_name'], "", 1, "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
 
     }
 }
