@@ -6,8 +6,6 @@ header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'no
 
 $config = Config::getConfig();
 $id = Session::getIdInfo();
-
-//TODO get the obfuscator to work
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,16 +27,16 @@ $id = Session::getIdInfo();
 
         <!-- Time Information -->
         <meta name="server-utc-time" content="<?php echo rawurlencode(Web::getUTCTime()->format(DateTime::ATOM)); ?>">
-        <meta name="app-time-zone" content="<?php echo rawurlencode(Config::getConfig()['time_zone']); ?>">
+        <meta name="app-time-zone" content="<?php echo rawurlencode($config['time_zone']); ?>">
 
         <!-- Social Media Information -->
         <meta property="og:type" content="website">
         <meta property="og:title" content="<?php echo $config['metadata']['title']; ?>">
         <meta property="og:description" content="<?php echo addslashes($config['metadata']['description']); ?>">
-        <meta property="og:image" content="<?php echo Config::getConfig()['app_icon']; ?>">
+        <meta property="og:image" content="<?php echo $config['app_icon']; ?>">
 
         <!-- Favicon -->
-        <link rel="icon" sizes="192x192" href="<?php echo Config::getConfig()['metadata']['favicon']; ?>">
+        <link rel="icon" sizes="192x192" href="<?php echo $config['metadata']['favicon']; ?>">
 
         <!-- Page Setup Stylesheets -->
         <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
@@ -53,15 +51,15 @@ $id = Session::getIdInfo();
         <meta name="signed-in" content="<?php echo (Session::hasSession()) ? "true" : "false" ; ?>">
 
         <!-- Google Analytics -->
-<?php if( Config::getConfig()['google_analytics']['use'] ): ?>
+<?php if( $config['google_analytics']['use'] ): ?>
         <meta name="use-google-analytics" content="true">
-        <meta name="gtag-tracking-id" content="<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>">
-        <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>"></script>
+        <meta name="gtag-tracking-id" content="<?php echo $config['google_analytics']['tag_id']; ?>">
+        <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $config['google_analytics']['tag_id']; ?>"></script>
         <script nonce="<?php echo Web::getNonce(); ?>">
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '<?php echo Config::getConfig()['google_analytics']['tag_id']; ?>');
+            gtag('config', '<?php echo $config['google_analytics']['tag_id']; ?>');
         </script>
 <?php else: ?>
         <meta name="use-google-analytics" content="false" >
@@ -82,7 +80,7 @@ $id = Session::getIdInfo();
         <!-- Menu Drawer -->
         <aside class="mdc-drawer mdc-drawer--dismissible mdc-top-app-bar--fixed-adjust">
             <div class="mdc-drawer__header">
-                <img alt="logo" src="<?php echo htmlspecialchars(Config::getConfig()['app_icon']); ?>" class="drawer-logo">
+                <img alt="logo" src="<?php echo htmlspecialchars($config['app_icon']); ?>" class="drawer-logo">
                 <h3 class="mdc-drawer__title"><?php echo (Session::hasSession()) ? htmlspecialchars($id['first_name']." ".$id['last_name']) : "Not Signed In";  ?></h3>
                 <h6 class="mdc-drawer__subtitle"><?php echo (Session::hasSession()) ? htmlspecialchars($id['email']) : ""; ?></h6>
             </div>
@@ -125,13 +123,9 @@ $id = Session::getIdInfo();
         <!-- Snackbar -->
         <div class="mdc-snackbar">
             <div class="mdc-snackbar__surface">
-                <div class="mdc-snackbar__label"
-                     role="status"
-                     aria-live="polite">
-                    Can't send photo. Retry in 5 seconds.
-                </div>
+                <div class="mdc-snackbar__label" role="status" aria-live="polite"></div>
                 <div class="mdc-snackbar__actions">
-                    <button type="button" class="mdc-button mdc-snackbar__action">Retry</button>
+                    <button type="button" class="mdc-button mdc-snackbar__action"></button>
                     <button class="mdc-icon-button mdc-snackbar__dismiss material-icons" title="Dismiss">close</button>
                 </div>
             </div>

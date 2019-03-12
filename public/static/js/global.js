@@ -3,9 +3,8 @@
 /* TODO REMOVE PREVIOUS SNACKBAR FUNCTION CALLS */
 let useGoogleAnalytics = $("meta[name=use-google-analytics]").attr("content") === "true";
 let isSignedIn = $("meta[name=signed-in]").attr("content") === "true";
-if(useGoogleAnalytics){
-    var gtagTrackingID = $("meta[name=gtag-tracking-id]").attr("content");
-}
+let gtagTrackingID = (useGoogleAnalytics) ? $("meta[name=gtag-tracking-id]").attr("content") : "";
+
 function onSignIn(googleUser) {
     let token = googleUser.getAuthResponse().id_token;
     //let profile = googleUser.getBasicProfile();
@@ -99,13 +98,13 @@ function addSources(c){
     }
 }
 
-$(".obs").on("click", function (ev) {
+$(".obs").on("click", ev => {
    drawer.open = false;
    $(ev.currentTarget).addClass("fear");
    $("#variable-region").fadeIn();
 });
 
-$(document).ready(function () {
+$(document).ready(() => {
     // first setup the necessary elements
     let pageList = document.querySelector(".drawer-pages-list");
     let pages = JSON.parse(decodeURIComponent(pageList.getAttribute("data-menu-items")));
@@ -146,7 +145,7 @@ if( window.innerWidth > 1250 ){
 }
 
 // When user clicks on the hamburger menu in the appBar, trigger the drawer
-$(document.body).on("click", ".menu-trigger", function () {
+$(document.body).on("click", ".menu-trigger", () => {
     let a = $("#variable-region");
     let b = $(".obs");
     if( window.innerWidth < 1250) {
@@ -162,42 +161,37 @@ $(document.body).on("click", ".menu-trigger", function () {
 });
 
 window.onpopstate = function (){changePage()};
-$(document.body).on("click", ".change-page", function (ev) {
+$(document.body).on("click", ".change-page", ev => {
     changePage($(ev.currentTarget).data("page"));
     if(window.innerWidth <= 1250){
         drawer.open = false;
         $(".obs").addClass("fear");
     }
 });
-$('#variable-region').on("DOMSubtreeModified",function(){
+$('#variable-region').on("DOMSubtreeModified", () => {
     window.mdc.autoInit(document, () => {});
 });
-$(document.body).on("click", ".sign-out", function(){
-    $.post('/signout.php').done(function() {
+$(document.body).on("click", ".sign-out", () => {
+    $.post('/signout.php').done(() => {
         addSnackbarQueue("You have been successfully signed out!");
         window.location.reload();
-    }).fail(function(er){
-        if( window.innerWidth <= 1250 ){
-            drawer.open = false;
-        }
-        //showSnackbar("There was an error signing you out. You are currently not connected to the internet!", 3000);
     });
 });
 
 if(! isSignedIn){
     if (navigator.userAgent.match(/(iPod|iPhone|iPad)/) && ! navigator.userAgent.match(/(FB|Messenger)/)) {
-        document.pagehide = function(){
+        document.pagehide = () => {
             gapi.auth2.getAuthInstance().disconnect()
         };
     } else {
-        window.onbeforeunload = function(){
+        window.onbeforeunload = () => {
             gapi.auth2.getAuthInstance().disconnect()
         };
     }
 }
 
 
-$(window).resize(function () {
+$(window).resize(() => {
     if( window.innerWidth <= 1250 ){
         if( drawer.open ){
             drawer.open = false;
@@ -210,12 +204,12 @@ $(window).resize(function () {
     }
 });
 
-$(document.body).on("click", ".submit-form", function (ev) {
+$(document.body).on("click", ".submit-form", ev => {
     let button = ev.currentTarget;
     button.setAttribute("disabled", true);
     let cont = button.parentElement.parentElement;
     let form = $(cont).find("form");
-    $.post($(form).data("action"), $(form).serialize(), function (a, b, c) {
+    $.post($(form).data("action"), $(form).serialize(), (a, b, c) => {
         // TODO Add more callback options
         let resp = JSON.parse(a);
         for( let x = 0 ; x < resp.message.length ; x++ ){
@@ -280,7 +274,7 @@ let serverTime = new Date(decodeURIComponent($("meta[name=server-utc-time]").att
 // Offset the server time with the page load time
 serverTime.setTime(serverTime.getTime() + pageLoadOffset);
 
-let countdowns = setInterval(function () {
+let countdowns = setInterval(() => {
 
     // Calculate how long it's been since the page loaded
     let timePassed = new Date().getTime() - pageLoadedTime.getTime();

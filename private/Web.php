@@ -45,7 +45,6 @@ class Web {
      * Stores the nonce using PHP Sessions
      * Generates new one if session does not exist and stores it in the session
      * @return string
-     * @throws Exception
      */
     public static function getNonce(){
         //this is something that we can use PHP's built in sessions for, since they will only need to last for the duration of the session
@@ -57,10 +56,14 @@ class Web {
     /**
      * Helper function to create a unique nonce and store it in the session
      * @return string
-     * @throws Exception
      */
     public static function setNonce(){
-        $n = base64_encode(bin2hex(random_bytes(16)));
+        try {
+            $n = base64_encode(bin2hex(random_bytes(16)));
+        } catch (Exception $e){
+            $crypto_strong = true;
+            $n = bin2hex(openssl_random_pseudo_bytes(16, $crypto_strong));
+        }
         $_SESSION['nonce'] = $n;
         return $n;
     }
@@ -96,13 +99,33 @@ class Web {
         }
     }
 
+    /**
+     * Returns a DateTime instance with the current time, and the timezone set to UTC
+     * @return DateTime
+     */
     public static function getUTCTime(){
         if( !isset(self::$utc_time) ){
-            self::$utc_time = new DateTime("now", new DateTimeZone("UTC"));
+            try {
+                self::$utc_time = new DateTime("now", new DateTimeZone("UTC"));
+            } catch (Exception $e) {
+                echo $e->getMessage();
+                exit;
+            }
         }
         return self::$utc_time;
     }
+
+    /**
+     * Returns an instance of the DateTime class in accordance with a given time
+     * @param string $time A string that is in accordance with the accepted values for the "time" parameter of the DateTime constructor
+     * @return DateTime An instance of the DateTime class, with the timezone set to UTC
+     */
     public static function UTCDate($time){
-        return new DateTime($time, new DateTimeZone("UTC"));
+        try {
+            return new DateTime($time, new DateTimeZone("UTC"));
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            exit;
+        }
     }
 }

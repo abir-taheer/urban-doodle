@@ -27,7 +27,7 @@ Class User {
             if( $u_id === hash('sha256', $email) ){
                 //their u_id hasn't been readied yet, kill the session and have them sign in again
                 Session::deleteSession();
-                echo "<p class='text-center'>Please reload the page and sign in again</p>";
+                echo "<p class='txt-ctr mdc-layout-grid__cell--span-12'>Please reload the page and sign in again</p>";
                 exit;
             }
 
@@ -137,6 +137,7 @@ Class User {
     /**
      * Get an array of Election objects that the user is allowed to vote for
      * @return Election[]
+     * @throws Exception
      */
     public function getElections(){
         if( ! isset($this->elections) ){
@@ -176,7 +177,7 @@ Class User {
      * @param string $extra Extra information to be used by the file processing the request
      * @param DateTime $expiration Date object of the expiration time for the token
      * @return string
-     * @throws
+     * @throws Exception
      */
     public function makeFormToken($request, $extra, $expiration){
         $expiration = $expiration->format("Y-m-d H:i:s");
