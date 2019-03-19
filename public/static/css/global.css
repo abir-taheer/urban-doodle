@@ -86,3 +86,18 @@ h1, h2, h3, h4, .heading{
     font-family: 'Roboto Slab', serif;
     font-weight: 600;
 }
+.candidate-select {
+    cursor: move;
+}
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.drag-icon {
+    position: absolute;
+    right: 10px;
+}

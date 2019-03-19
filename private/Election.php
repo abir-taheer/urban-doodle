@@ -30,7 +30,7 @@ class Election {
         if(!isset($this->candidates)) {
             $data = Database::secureQuery("SELECT `id` FROM `candidates` WHERE `db_code` = :db_code", array(":db_code" => $this->db_code), null);
             foreach ($data as $i) {
-                $this->candidates[] = new Candidate($i);
+                $this->candidates[] = new Candidate($i['id']);
             }
         }
         return $this->candidates;

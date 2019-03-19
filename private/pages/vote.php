@@ -22,10 +22,10 @@ try {
 
 //now we import the class that handles the current type of election
 require_once "../private/handlers/".$e->type.".php";
-$handler  = new $e->type($e->db_code);
+$handler  = new $e->type($e);
 if (! $handler instanceof ElectionHandler) {
     throw new Exception("Class for handling an election must implement the ElectionHandler interface.");
 }
 
 
-echo $handler->makeSelectionForm();
+$handler->makeSelectionForm();

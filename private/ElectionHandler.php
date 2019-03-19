@@ -2,21 +2,19 @@
 interface ElectionHandler {
     /**
      * ElectionHandler constructor.
-     * @param string $db_code The ID of the election to get the relevant information for
+     * @param Election $election an instance of the election
      */
-    public function __construct(string $db_code);
+    public function __construct(Election $election);
 
     /**
-     * Returns the completed html elements, and any necessary resources, to be inserted into the page for the voting selection
-     * @return string
+     * Echos the completed html elements, and any necessary resources, to be inserted into the page for the voting selection
      */
-    public function makeSelectionForm() : string;
+    public function makeSelectionForm() : void;
 
     /**
-     * Returns the completed html elements, and any necessary resources, to be inserted onto the confirmation page
-     * @return string
+     * Echos the completed html elements, and any necessary resources, to be inserted onto the confirmation page
      */
-    public function showConfirmation() : string;
+    public function showConfirmation() : void;
 
     /**
      * Stores the current votes for the election in a CSV file in the public/static/elections directory.
