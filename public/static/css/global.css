@@ -65,8 +65,13 @@ body {
     opacity: 0.5;
     position: fixed;
 }
-@media only screen and (min-width: 801px){
+@media only screen and (min-width: 1001px){
     .mobile-only {
+        display: none;
+    }
+}
+@media only screen and (max-width: 1000px){
+    .desktop-only {
         display: none;
     }
 }
@@ -83,7 +88,7 @@ body {
     color: #d63031;
 }
 h1, h2, h3, h4, .heading{
-    font-family: 'Roboto Slab', serif;
+    font-family: "Roboto Slab", serif;
     font-weight: 600;
 }
 .candidate-select {
@@ -97,7 +102,19 @@ h1, h2, h3, h4, .heading{
     -ms-user-select: none;
     user-select: none;
 }
-.drag-icon {
+.right-icons {
     position: absolute;
     right: 10px;
+}
+.candidate-remove {
+    margin-right: 10px;
+    cursor: pointer;
+}
+.small-txt{
+    font-size: 12px;
+}
+.candidate-select li {
+    border: solid 1px;
+    border-radius: 1px;
+    margin-bottom: 2px;
 }

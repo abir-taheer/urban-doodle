@@ -12,6 +12,7 @@ class Runoff implements ElectionHandler {
         $response = "
             <div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12 instant\">
                 <h3 class=\"txt-ctr\">".$this->election->name."</h3>
+                <p class=\"txt-ctr small-txt sub-container\">Order the candidates based on your preference by holding down and dragging. <a class=\"desktop-only\">Click on the X to remove a candidate from your ballot</a><a class=\"mobile-only\">Swipe on a candidate to remove them from your ballot</a>.</p>
                 <ul class=\"mdc-list sub-container candidate-select\" data-mdc-auto-init=\"MDCList\">
         ";
         $candidates = $this->election->getCandidates();
@@ -20,13 +21,28 @@ class Runoff implements ElectionHandler {
             $response.= "
                 <li class=\"mdc-list-item\">
                     <input type=\"hidden\" name=\"vote[]\" value=\"".$candidate->id."\">
-                    <span class=\"mdc-list-item__text no-select\"><a class=\"candidate-name\">".$candidate->name."</a><i class=\"material-icons drag-icon\">drag_indicator</i></span>
+                    <span class=\"mdc-list-item__text no-select\">
+                        <a class=\"candidate-name\">".$candidate->name."</a>
+                        <span class=\"right-icons\">
+                            <i class=\"material-icons candidate-remove desktop-only\">clear</i>
+                            <i class=\"material-icons drag-icon\">drag_indicator</i>
+                        </span>
+                    </span>
                 </li>
             ";
         }
         $response.= "
                 </ul>
+                <div class=\"not-vote-txt fear sub-container\">
+                    <p class=\"txt-ctr\">Removed from ballot:</p>
+                    <p class=\"txt-ctr small-txt\">Click on a candidate to add them back to your ballot.</p>
+                </div>
                 <div class=\"mdc-chip-set non-vote-container sub-container\" data-mdc-auto-init=\"MDCChipSet\"></div>
+                <br>
+                <div class=\"sub-container\">
+                    <button class=\"mdc-button mdc-button--unelevated\" data-mdc-auto-init=\"MDCRipple\">Submit</button>
+                </div>
+                <br>
             </div>
         ";
         echo $response;

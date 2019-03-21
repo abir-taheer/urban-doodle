@@ -1,10 +1,9 @@
-'use strict';
+"use strict";
 /* auth */
 /* TODO REMOVE PREVIOUS SNACKBAR FUNCTION CALLS */
 let useGoogleAnalytics = $("meta[name=use-google-analytics]").attr("content") === "true";
 let isSignedIn = $("meta[name=signed-in]").attr("content") === "true";
 let gtagTrackingID = (useGoogleAnalytics) ? $("meta[name=gtag-tracking-id]").attr("content") : "";
-
 function onSignIn(googleUser) {
     let token = googleUser.getAuthResponse().id_token;
     //let profile = googleUser.getBasicProfile();
@@ -17,7 +16,7 @@ function onSignIn(googleUser) {
                 //addSnackbarQueue(decoded_resp.message, 3000);
                 // Log the sign in on Google Analytics if it is used
                 if(useGoogleAnalytics){
-                    gtag('event', 'login', {'method': 'Google'});
+                    gtag("event", "login", {"method": "Google"});
                 }
 
                 addSnackbarQueue("You have been successfully signed in");
@@ -71,8 +70,8 @@ function changePage(path){
     });
 
     if(useGoogleAnalytics){
-        gtag('config', gtagTrackingID, {
-            'page_path': window.location.pathname
+        gtag("config", gtagTrackingID, {
+            "page_path": window.location.pathname
         });
     }
     playSnackbarQueue();
@@ -114,15 +113,15 @@ $(document).ready(() => {
         a.classList.add("change-page");
         a.classList.add("clickable");
         a.setAttribute("data-mdc-auto-init", "MDCRipple");
-        a.setAttribute("data-page", pages[x]['page']);
+        a.setAttribute("data-page", pages[x]["page"]);
         let i = document.createElement("a");
         i.classList.add("material-icons");
         i.classList.add("mdc-list-item__graphic");
-        i.innerHTML = pages[x]['icon'];
+        i.innerHTML = pages[x]["icon"];
         a.appendChild(i);
         let span = document.createElement("span");
         span.classList.add("mdc-list-item__text");
-        span.innerHTML = pages[x]['text'];
+        span.innerHTML = pages[x]["text"];
         a.appendChild(span);
         pageList.appendChild(a);
     }
@@ -136,8 +135,8 @@ $(document).ready(() => {
 mdc.autoInit();
 
 // Create an instance of the drawer and store it
-let drawer = new mdc.drawer.MDCDrawer(document.querySelector('.mdc-drawer'));
-let snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector('.mdc-snackbar'));
+let drawer = new mdc.drawer.MDCDrawer(document.querySelector(".mdc-drawer"));
+let snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector(".mdc-snackbar"));
 
 // Automatically open the drawer if the user is on a desktop device
 if( window.innerWidth > 1250 ){
@@ -168,11 +167,11 @@ $(document.body).on("click", ".change-page", ev => {
         $(".obs").addClass("fear");
     }
 });
-$('#variable-region').on("DOMSubtreeModified", () => {
+$("#variable-region").on("DOMSubtreeModified", () => {
     window.mdc.autoInit(document, () => {});
 });
 $(document.body).on("click", ".sign-out", () => {
-    $.post('/signout.php').done(() => {
+    $.post("/signout.php").done(() => {
         addSnackbarQueue("You have been successfully signed out!");
         window.location.reload();
     });

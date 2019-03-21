@@ -1,6 +1,6 @@
 <?php
 spl_autoload_register(function ($class_name) {
-    include "../private/".$class_name . '.php';
+    include "../private/".$class_name . ".php";
 });
 header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'nonce-".Web::getNonce()."';");
 
@@ -17,26 +17,26 @@ $id = Session::getIdInfo();
 
         <!-- Site SEO Info -->
         <meta charset="utf-8">
-        <title><?php echo htmlspecialchars($config['metadata']['title']); ?></title>
-        <meta name="description" content="<?php echo $config['metadata']['description']; ?>">
+        <title><?php echo htmlspecialchars($config["metadata"]["title"]); ?></title>
+        <meta name="description" content="<?php echo $config["metadata"]["description"]; ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
         <!-- Google Sign-In Information -->
         <meta name="google-signin-scope" content="profile email">
-        <meta name="google-signin-client_id" content="<?php echo $config['google-signin-client_id']; ?>">
+        <meta name="google-signin-client_id" content="<?php echo $config["google-signin-client_id"]; ?>">
 
         <!-- Time Information -->
         <meta name="server-utc-time" content="<?php echo rawurlencode(Web::getUTCTime()->format(DateTime::ATOM)); ?>">
-        <meta name="app-time-zone" content="<?php echo rawurlencode($config['time_zone']); ?>">
+        <meta name="app-time-zone" content="<?php echo rawurlencode($config["time_zone"]); ?>">
 
         <!-- Social Media Information -->
         <meta property="og:type" content="website">
-        <meta property="og:title" content="<?php echo $config['metadata']['title']; ?>">
-        <meta property="og:description" content="<?php echo addslashes($config['metadata']['description']); ?>">
-        <meta property="og:image" content="<?php echo $config['app_icon']; ?>">
+        <meta property="og:title" content="<?php echo $config["metadata"]["title"]; ?>">
+        <meta property="og:description" content="<?php echo addslashes($config["metadata"]["description"]); ?>">
+        <meta property="og:image" content="<?php echo $config["app_icon"]; ?>">
 
         <!-- Favicon -->
-        <link rel="icon" sizes="192x192" href="<?php echo $config['metadata']['favicon']; ?>">
+        <link rel="icon" sizes="192x192" href="<?php echo $config["metadata"]["favicon"]; ?>">
 
         <!-- Page Setup Stylesheets -->
         <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
@@ -51,15 +51,15 @@ $id = Session::getIdInfo();
         <meta name="signed-in" content="<?php echo (Session::hasSession()) ? "true" : "false" ; ?>">
 
         <!-- Google Analytics -->
-<?php if( $config['google_analytics']['use'] ): ?>
+<?php if( $config["google_analytics"]["use"] ): ?>
         <meta name="use-google-analytics" content="true">
-        <meta name="gtag-tracking-id" content="<?php echo $config['google_analytics']['tag_id']; ?>">
-        <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $config['google_analytics']['tag_id']; ?>"></script>
+        <meta name="gtag-tracking-id" content="<?php echo $config["google_analytics"]["tag_id"]; ?>">
+        <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $config["google_analytics"]["tag_id"]; ?>"></script>
         <script nonce="<?php echo Web::getNonce(); ?>">
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '<?php echo $config['google_analytics']['tag_id']; ?>');
+            gtag("js", new Date());
+            gtag("config", "<?php echo $config["google_analytics"]["tag_id"]; ?>");
         </script>
 <?php else: ?>
         <meta name="use-google-analytics" content="false" >
@@ -72,7 +72,7 @@ $id = Session::getIdInfo();
             <div class="mdc-top-app-bar__row">
                 <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
                     <a class="material-icons mdc-top-app-bar__navigation-icon menu-trigger">menu</a>
-                    <span class="mdc-top-app-bar__title sumana"><?php echo htmlspecialchars($config['org_name']); ?></span>
+                    <span class="mdc-top-app-bar__title sumana"><?php echo htmlspecialchars($config["org_name"]); ?></span>
                 </section>
             </div>
         </header>
@@ -80,9 +80,9 @@ $id = Session::getIdInfo();
         <!-- Menu Drawer -->
         <aside class="mdc-drawer mdc-drawer--dismissible mdc-top-app-bar--fixed-adjust">
             <div class="mdc-drawer__header">
-                <img alt="logo" src="<?php echo htmlspecialchars($config['app_icon']); ?>" class="drawer-logo">
-                <h3 class="mdc-drawer__title"><?php echo (Session::hasSession()) ? htmlspecialchars($id['first_name']." ".$id['last_name']) : "Not Signed In";  ?></h3>
-                <h6 class="mdc-drawer__subtitle"><?php echo (Session::hasSession()) ? htmlspecialchars($id['email']) : ""; ?></h6>
+                <img alt="logo" src="<?php echo htmlspecialchars($config["app_icon"]); ?>" class="drawer-logo">
+                <h3 class="mdc-drawer__title"><?php echo (Session::hasSession()) ? htmlspecialchars($id["first_name"]." ".$id["last_name"]) : "Not Signed In";  ?></h3>
+                <h6 class="mdc-drawer__subtitle"><?php echo (Session::hasSession()) ? htmlspecialchars($id["email"]) : ""; ?></h6>
             </div>
             <div class="mdc-drawer__content">
                 <?php if(Session::hasSession()): ?>
