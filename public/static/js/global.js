@@ -106,7 +106,7 @@ $(".obs").on("click", ev => {
 $(document).ready(() => {
     // first setup the necessary elements
     let pageList = document.querySelector(".drawer-pages-list");
-    let pages = JSON.parse(decodeURIComponent(pageList.getAttribute("data-menu-items")));
+    let pages = JSON.parse(atob(pageList.getAttribute("data-menu-items")));
     for(let x = 0; x < pages.length ; x++){
         let a = document.createElement("a");
         a.classList.add("mdc-list-item");
@@ -268,7 +268,7 @@ let pageLoadedTime = new Date();
 let pageLoadOffset = pageLoadedTime.getTime() - pageLoadStart.getTime();
 
 // Create a variable containing the time received from the server
-let serverTime = new Date(decodeURIComponent($("meta[name=server-utc-time]").attr("content")));
+let serverTime = new Date(atob($("meta[name=server-utc-time]").attr("content")));
 
 // Offset the server time with the page load time
 serverTime.setTime(serverTime.getTime() + pageLoadOffset);
@@ -288,7 +288,7 @@ let countdowns = setInterval(() => {
         let countType = $(i).data("timer-type");
         switch (countType) {
             case "countdown":
-                let countDownDate = decodeURIComponent($(i).data("count-down-date"));
+                let countDownDate = atob($(i).data("count-down-date"));
                 let dist = new Date(countDownDate).getTime() - currentTime.getTime();
                 let countDownTxt = "";
                 let d = Math.floor(dist / (1000 * 60 * 60 * 24)); // Days till date

@@ -7,6 +7,7 @@ header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'no
 $config = Config::getConfig();
 $id = Session::getIdInfo();
 ?>
+<!-- https://github.com/abir-taheer/urban-doodle -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -26,8 +27,8 @@ $id = Session::getIdInfo();
         <meta name="google-signin-client_id" content="<?php echo $config["google-signin-client_id"]; ?>">
 
         <!-- Time Information -->
-        <meta name="server-utc-time" content="<?php echo rawurlencode(Web::getUTCTime()->format(DateTime::ATOM)); ?>">
-        <meta name="app-time-zone" content="<?php echo rawurlencode($config["time_zone"]); ?>">
+        <meta name="server-utc-time" content="<?php echo base64_encode(Web::getUTCTime()->format(DateTime::ATOM)); ?>">
+        <meta name="app-time-zone" content="<?php echo base64_encode($config["time_zone"]); ?>">
 
         <!-- Social Media Information -->
         <meta property="og:type" content="website">
@@ -92,8 +93,8 @@ $id = Session::getIdInfo();
                 </a>
                 <?php endif; ?>
 
-                <!-- Menu container with a URI-Encoded json of menu items, their resource paths, and icons -->
-                <div class="mdc-list drawer-pages-list" data-menu-items="<?php echo rawurlencode(json_encode(Web::$menu_pages)); ?>"></div>
+                <!-- Menu container with a base64-Encoded json of menu items, their resource paths, and icons -->
+                <div class="mdc-list drawer-pages-list" data-menu-items="<?php echo base64_encode(json_encode(Web::$menu_pages)); ?>"></div>
             </div>
         </aside>
 

@@ -36,6 +36,21 @@ $(candidateSelect).off();
 $(candidateSelect).on("click", ".candidate-remove", ev =>{
     removeCandidate(ev.currentTarget.parentElement.parentElement.parentElement);
 });
+$(".candidate-lower").off();
+$(document.body).on("click", ".candidate-lower", ev =>{
+    moveCandidateDown(ev.currentTarget.parentElement.parentElement.parentElement);
+});
+
+function moveCandidateDown(el) {
+    let candidates = document.querySelectorAll(".candidate-select .mdc-list-item");
+    if( el === candidates[candidates.length - 1] ){
+        return;
+    }
+    let current = $(el).clone();
+    let next = $(el).next(".mdc-list-item");
+    $(el).replaceWith(next.clone());
+    next.replaceWith(current);
+}
 function removeCandidate(el) {
     el.classList.add("fear");
     el.querySelector("input").setAttribute("name", "removed[]");
@@ -56,14 +71,13 @@ $(".non-vote-container").on("DOMSubtreeModified", e => {
     let i = $(".not-vote-txt");
     (e.currentTarget.innerHTML === "") ? i.addClass("fear") : i.removeClass("fear");
 });
-$("#variable-region").ready(()=>{
+
+$("script[src*='https://cdnjs.cloudflare.com/ajax/libs/slipjs/2.1.1/slip.min.js']").ready(()=>{
     try {
         setupSlip(candidateSelect);
     } catch (e) {
         console.log("Error with setting up runoff elections: \n" + e + "\nTrying again in one second");
-        setTimeout(()=>{
-            $(candidateSelect).replaceWith($(candidateSelect).clone());
-            setupSlip(candidateSelect);
-        }, 1000);
+        addSnackbarQueue("Error setting up drag functionality. Please try reloading the page or use the arrow buttons to order candidates.");
+        playSnackbarQueue();
     }
 });

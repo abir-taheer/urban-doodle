@@ -93,6 +93,7 @@ h1, h2, h3, h4, .heading{
 }
 .candidate-select {
     cursor: move;
+    counter-reset: section;
 }
 .no-select {
     -webkit-touch-callout: none;
@@ -114,7 +115,17 @@ h1, h2, h3, h4, .heading{
     font-size: 12px;
 }
 .candidate-select li {
-    border: solid 1px;
-    border-radius: 1px;
     margin-bottom: 2px;
+}
+.candidate-lower {
+    cursor: pointer;
+    margin-right: 10px;
+}
+.candidate-select .mdc-list-item__text {
+    width: calc(100% - 62px);
+    font-size: 14px;
+}
+.candidate-select .candidate-name::before {
+    counter-increment: section;
+    content: counter(section) ". ";
 }

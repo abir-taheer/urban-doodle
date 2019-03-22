@@ -24,6 +24,7 @@ class Runoff implements ElectionHandler {
                     <span class=\"mdc-list-item__text no-select\">
                         <a class=\"candidate-name\">".$candidate->name."</a>
                         <span class=\"right-icons\">
+                            <i class=\"material-icons candidate-lower\">arrow_downward</i>
                             <i class=\"material-icons candidate-remove desktop-only\">clear</i>
                             <i class=\"material-icons drag-icon\">drag_indicator</i>
                         </span>
