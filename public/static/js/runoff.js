@@ -81,3 +81,9 @@ $("script[src*='https://cdnjs.cloudflare.com/ajax/libs/slipjs/2.1.1/slip.min.js'
         playSnackbarQueue();
     }
 });
+$(".vote-submit").off().on("click", () => {
+    let form = document.querySelector(".vote-form");
+    $.post("/load.php?page=/confirm", $(form).serialize(), a => {
+        $("#variable-region").html(a);
+    });
+});

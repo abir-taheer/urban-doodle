@@ -7,13 +7,18 @@ class Runoff implements ElectionHandler {
     }
 
     public function makeSelectionForm(): void{
+        // Get the user from the session
+        // Since we can already assume that there is already a valid user if this function is being called
+        $user = Session::getUser();
         Web::addScript("https://cdnjs.cloudflare.com/ajax/libs/slipjs/2.1.1/slip.min.js");
         Web::addScript("/static/js/runoff.js");
         $response = "
             <div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12 instant\">
                 <h3 class=\"txt-ctr\">".$this->election->name."</h3>
                 <p class=\"txt-ctr small-txt sub-container\">Order the candidates based on your preference by holding down and dragging. <a class=\"desktop-only\">Click on the X to remove a candidate from your ballot</a><a class=\"mobile-only\">Swipe on a candidate to remove them from your ballot</a>.</p>
-                <ul class=\"mdc-list sub-container candidate-select\" data-mdc-auto-init=\"MDCList\">
+                <form class=\"vote-form\">
+                    <input type=\"hidden\" name=\"token\" value=\"".$user->makeFormToken("confirm", $this->election->db_code, Web::UTCDate("+30 min"))."\">
+                    <ul class=\"mdc-list sub-container candidate-select\" data-mdc-auto-init=\"MDCList\">
         ";
         $candidates = $this->election->getCandidates();
         shuffle($candidates);
@@ -33,7 +38,8 @@ class Runoff implements ElectionHandler {
             ";
         }
         $response.= "
-                </ul>
+                    </ul>
+                </form>
                 <div class=\"not-vote-txt fear sub-container\">
                     <p class=\"txt-ctr\">Removed from ballot:</p>
                     <p class=\"txt-ctr small-txt\">Click on a candidate to add them back to your ballot.</p>
@@ -41,7 +47,7 @@ class Runoff implements ElectionHandler {
                 <div class=\"mdc-chip-set non-vote-container sub-container\" data-mdc-auto-init=\"MDCChipSet\"></div>
                 <br>
                 <div class=\"sub-container\">
-                    <button class=\"mdc-button mdc-button--unelevated\" data-mdc-auto-init=\"MDCRipple\">Submit</button>
+                    <button class=\"mdc-button vote-submit mdc-button--unelevated\" data-mdc-auto-init=\"MDCRipple\">Submit</button>
                 </div>
                 <br>
             </div>
