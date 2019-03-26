@@ -1,4 +1,5 @@
 <?php
+require_once "../config.php";
 spl_autoload_register(function ($class_name) {
     include "../private/".$class_name . '.php';
 });
@@ -19,7 +20,7 @@ $response = [];
 //we don't need to check if the file exists since the data associated with the tokens is controlled and any 500 errors will be the result of invalid code
 if( count($form) > 1 ){
     //retrieve the file associated with the form function
-    require_once "../private/requests/".$form['request'].".php";
+    require_once "../requests/".$form['request'].".php";
 }
 
 echo json_encode($response);

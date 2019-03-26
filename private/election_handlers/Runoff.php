@@ -10,7 +10,6 @@ class Runoff implements ElectionHandler {
         // Get the user from the session
         // Since we can already assume that there is already a valid user if this function is being called
         $user = Session::getUser();
-        Web::addScript("https://cdnjs.cloudflare.com/ajax/libs/slipjs/2.1.1/slip.min.js");
         Web::addScript("/static/js/runoff.js");
         $response = "
             <div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12 instant\">

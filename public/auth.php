@@ -1,6 +1,7 @@
 <?php
+require_once "../config.php";
 spl_autoload_register(function ($class_name) {
-    include "../private/".$class_name . '.php';
+    require_once "../private/".$class_name . '.php';
 });
 
 $e = new GoogleAuth($_POST['token']);
@@ -11,7 +12,7 @@ if( $e->status ){
     Session::createVotingSession($u_id, $expiration);
     Session::createIdSession($e->first_name, $e->last_name, $e->email, $e->pic, $expiration);
     $response['status'] = "success";
-    $response['message'] = "You have been successfully signed in!";
+    $response['message'] = "You have been successfully signed in! ";
 } else {
     $response['status'] = "error";
     $response['message'] = $e->error;

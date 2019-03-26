@@ -1,26 +1,8 @@
 <?php
 class Database {
-    private static $username;
-    private static $password;
-    private static $host;
-    private static $dbname;
-
-    public static function setVariables(){
-        if(self::$dbname == null ) {
-            //Get the database credentials
-            $config = Config::getConfig();
-            self::$username = $config['database']['username'];
-            self::$password = $config['database']['password'];
-            self::$host = $config['database']['host'];
-            self::$dbname = $config['database']['db_name'];
-        }
-    }
-
     public static function secureQuery($query, $parameters, $data) {
-        self::setVariables();
-
         //Use PDO to make a secure, all purpose query function that returns a associative array
-        $conn = new PDO("mysql:host=". self::$host .";dbname=". self::$dbname , self::$username, self::$password);
+        $conn = new PDO("mysql:host=". db_host .";dbname=". db_name , db_username, db_password);
         $stmt = $conn->prepare($query);
         foreach($parameters as $key => &$value ) {
             $stmt->bindParam($key, $value);
@@ -39,9 +21,8 @@ class Database {
         return $return;
     }
     public static function testConn(){
-        self::setVariables();
         try {
-            $c = new PDO("mysql:host=".self::$host.";dbname=".self::$dbname, self::$username, self::$password);
+            $c = new PDO("mysql:host=".db_host.";dbname=".db_name, db_username, db_password);
             $c->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return true;
         }

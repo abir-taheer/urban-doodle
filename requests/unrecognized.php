@@ -27,7 +27,7 @@ switch($form['extra']){
                 $email = $id['email'];
                 $grade = ($_POST['grade'] === "f") ? "Faculty" : $_POST['grade'];
                 $osis = $_POST['osis'];
-                $date = new DateTime("now", new DateTimeZone(Config::getConfig()['time_zone']));
+                $date = new DateTime("now", new DateTimeZone(app_time_zone));
                 $created = Web::getUTCTime()->format("Y-m-d H:i:s");
                 try{
                     Database::secureQuery(

@@ -12,8 +12,6 @@ function onSignIn(googleUser) {
         function(response){
             let decoded_resp = JSON.parse(response);
             if( decoded_resp.status === "success" ){
-                //add the success message to the queue
-                //addSnackbarQueue(decoded_resp.message, 3000);
                 // Log the sign in on Google Analytics if it is used
                 if(useGoogleAnalytics){
                     gtag("event", "login", {"method": "Google"});

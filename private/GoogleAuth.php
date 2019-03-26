@@ -7,7 +7,7 @@ class GoogleAuth {
             $this->error[] = "The provided authentication token is invalid";
         } else {
 
-            if( $data['aud'] !== Config::getConfig()['google-signin-client_id'] ){
+            if( $data['aud'] !== google_auth_client_id ){
                 $this->error[] = "The authentication token provided does not belong to this app";
             }
             if( $data['email_verified'] !== "true" ){
@@ -33,7 +33,7 @@ class GoogleAuth {
     }
     public static function checkOrganizationAllowed($org){
         //if the user left it as an asterisk, allow all domains to sign in
-        $domains = Config::getConfig()['allowed_user_organizations'];
+        $domains = auth_allowed_org;
         if( $domains === "*" ){
             return true;
         }

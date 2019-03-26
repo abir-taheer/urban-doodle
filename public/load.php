@@ -1,4 +1,5 @@
 <?php
+    require_once "../config.php";
     //autoload necessary classes
     spl_autoload_register(function ($class_name) {
         include "../private/".$class_name . '.php';
@@ -31,11 +32,11 @@
     $page = (strtolower(trim($path[1])) === "") ? "index" : strtolower(trim($path[1]));
 
     //Get a list of all of the available pages
-    $available_pages = scandir("../private/pages");
+    $available_pages = scandir("../pages");
 
     if(in_array($page.".php", $available_pages)){
         //the page that the user requested does exist, include it in the response
-        include("../private/pages/".$page.".php");
+        include("../pages/".$page.".php");
         //We included the page that the user request, stop executing this script
         Web::sendDependencies();
         exit;

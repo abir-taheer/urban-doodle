@@ -21,7 +21,7 @@ class Session{
         return Database::secureQuery(
             "SELECT * FROM `voter_tokens` WHERE `cookie_id` = :cookie",
             array(
-                ":cookie"=>$_COOKIE[Config::getConfig()['voting_cookie_name']]
+                ":cookie"=>$_COOKIE[session_voting_cookie]
             ),
             "fetch"
         );
@@ -35,7 +35,7 @@ class Session{
             self::$id_info = Database::secureQuery(
                 "SELECT * FROM `id_tokens` WHERE `cookie_id` = :cookie ",
                 array(
-                    ":cookie"=>$_COOKIE[Config::getConfig()['id_cookie_name']]
+                    ":cookie"=>$_COOKIE[session_id_cookie]
                 ),
                 "assoc"
             );
@@ -72,7 +72,7 @@ class Session{
             ),
             null
         );
-        setcookie(Config::getConfig()['voting_cookie_name'], $track, $expires->getTimestamp(), "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
+        setcookie(session_voting_cookie, $track, $expires->getTimestamp(), "/", web_domain, web_ssl, true);
     }
 
     //creates a record in the database with given data and creates a identity session cookie to reference the data
@@ -91,20 +91,20 @@ class Session{
             ),
             null
         );
-        setcookie(Config::getConfig()['id_cookie_name'], $track, $expires->getTimestamp(), "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
+        setcookie(session_id_cookie, $track, $expires->getTimestamp(), "/", web_domain, web_ssl, true);
     }
 
     public static function deleteSession(){
         Database::secureQuery(
             "DELETE FROM `id_tokens` WHERE `cookie_id` = :cookie",
-            array(":cookie"=>$_COOKIE[Config::getConfig()['id_cookie_name']]),
+            array(":cookie"=>$_COOKIE[session_id_cookie]),
             null);
         Database::secureQuery(
             "DELETE FROM `voter_tokens` WHERE `cookie_id` = :cookie",
-            array(":cookie"=>$_COOKIE[Config::getConfig()['voting_cookie_name']]),
+            array(":cookie"=>$_COOKIE[session_voting_cookie]),
             null);
-        setcookie(Config::getConfig()['id_cookie_name'], "", 1, "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
-        setcookie(Config::getConfig()['voting_cookie_name'], "", 1, "/", Config::getConfig()['domain'], Config::getConfig()['ssl'], true);
+        setcookie(session_id_cookie, "", 1, "/", web_domain, web_ssl, true);
+        setcookie(session_voting_cookie, "", 1, "/", web_domain, web_ssl, true);
 
     }
 }
