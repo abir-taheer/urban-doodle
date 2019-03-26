@@ -1,7 +1,7 @@
 <?php
 require_once "../config.php";
 spl_autoload_register(function ($class_name) {
-    include "../private/".$class_name . ".php";
+    require_once "../classes/".$class_name . ".php";
 });
 header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'nonce-".Web::getNonce()."';");
 

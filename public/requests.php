@@ -1,7 +1,7 @@
 <?php
 require_once "../config.php";
 spl_autoload_register(function ($class_name) {
-    include "../private/".$class_name . '.php';
+    require_once "../classes/".$class_name . '.php';
 });
 
 if( ! isset($_POST['token']) || ! Session::hasSession()){
