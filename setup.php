@@ -1,7 +1,7 @@
 <?php
 require_once "config.php";
 spl_autoload_register(function ($class_name) {
-    include "private/".$class_name . '.php';
+    include "classes/".$class_name . '.php';
 });
 
 try{
