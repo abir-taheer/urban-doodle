@@ -2,3 +2,6 @@ config.json
 app_files/
 public/static/img/candidates/
 public/static/elections/
+composer/*
+!composer/.gitkeep
+
