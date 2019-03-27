@@ -17,7 +17,7 @@ try{
 
     //execute some ssl to set up the database
     $e = new Email();
-    $e->to = array(Config::getConfig()['smtp_config']['from_email']);
+    $e->to = array(smtp_from_email);
     $e->subject = "Test Email";
     $e->body = "This is to test that the email configuration information that was given is correct. Please disregard this email.";
     if(! $e->send()){
@@ -35,8 +35,8 @@ try{
     if(file_put_contents ('public/static/test/index.php', $random_test) === false){
         throw new Exception("ERROR CREATING DOMAIN TEST FILE. MAKE SURE PHP HAS EDIT PERMISSIONS TO APP DIRECTORY");
     }
-    $method = ( Config::getConfig()['ssl'] ) ? "https" : "http";
-    if(file_get_contents($method."://".Config::getConfig()['domain']."/static/test/index.php") === $random_test){
+    $method = ( web_ssl ) ? "https" : "http";
+    if(file_get_contents($method."://".web_domain."/static/test/index.php") === $random_test){
         //test was a success, delete the test folder now
         if(! unlink("public/static/test/index.php")){
             throw new Exception("COULD NOT DELETE TEST FILE. MAKE SURE PHP HAS EDIT PERMISSIONS TO THE APP DIRECTORY");
