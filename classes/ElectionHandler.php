@@ -8,13 +8,40 @@ interface ElectionHandler {
 
     /**
      * Echos the completed html elements, and any necessary resources, to be inserted into the page for the voting selection
+     * Choices for candidates must be under the name votes[] -- All votes must be accessible using $_POST["votes"]
+     * DBCode of election must be accessible using -- $_POST["election"]
      */
     public function makeSelectionForm() : void;
 
+
+    /**
+     * Checks if raw vote data sent from the client and makes sure that it matches the necessary format
+     * @param array $vote Raw post vote data from client -- $_POST["votes"]
+     * @return bool
+     */
+    public function verifyVote($vote): bool;
+
+    /**
+     * Encodes the array of votes into a string that can be later decoded to form an array of the votes
+     * Depending on the election, the order of items in this array is very important!
+     * @param array $vote -- The equivalent of $_POST["votes"]
+     * @return string
+     */
+    public function encodeVotes($vote): string;
+
+    /**
+     * Convert encoded votes back into an array of votes that can be used by the countVotes method
+     * @param string $str a string of votes encoded using the encodeVotes() method
+     * @return array
+     */
+    public function decodeVotes($str): array;
+
     /**
      * Echos the completed html elements, and any necessary resources, to be inserted onto the confirmation page
+     * Must also send out the $vote_id as a parameter
+     * @param string $vote_id The user's votes, encoded, referenced by a form token
      */
-    public function showConfirmation() : void;
+    public function showConfirmation($confirmation_id) : void;
 
     /**
      * Stores the current votes for the election in a CSV file in the public/static/elections directory.
@@ -25,21 +52,6 @@ interface ElectionHandler {
     //public function storeVotesCSV() : void;
 
 
-    /**
-     * Returns an array containing the votes, unchanged from the database
-     * Candidates are stored using their ID's and there is a reference for correlating candidate ID to name
-     * Example of format:
-     * {
-     *      "candidates": {
-     *          "a1b2c3d4": "Guido van Rossum and Rasmus Lerdorf"
-     *      }
-     *      "votes": [
-     *          "a1b2c3d4,d4c3b2a1,b1c2d3a4"
-     *      ]
-     * }
-     * @return array
-     */
-    public function getVotesArray() : array;
 
     /**
      * Tallies up the votes for all of the candidates and returns an array containing the results

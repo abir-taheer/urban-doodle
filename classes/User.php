@@ -48,7 +48,7 @@ Class User {
 
                     //their request was approved, sign them out
                     Session::deleteSession();
-                    echo "<p class='text-center'>Please reload the page and sign in again</p>";
+                    echo "<p class='txt-ctr mdc-layout-grid__cell--span-12'>Please reload the page and sign in again</p>";
                     exit;
                 }
             } else {
@@ -181,7 +181,7 @@ Class User {
      */
     public function makeFormToken($request, $extra, $expiration){
         $expiration = $expiration->format("Y-m-d H:i:s");
-        $token = bin2hex(random_bytes(64));
+        $token = bin2hex(random_bytes(36));
         $data = Database::secureQuery(
             "SELECT * FROM `form_tokens` WHERE `user_id` = :u AND `request` = :r AND `extra` = :e",
             array(
@@ -230,6 +230,31 @@ Class User {
             "DELETE FROM `form_tokens` WHERE `token` = :t",
             array(":t"=>$token),
             null);
+    }
+
+    public function createConfirmToken($db_code, $votes){
+        $data = Database::secureQuery("SELECT * FROM `vote_confirmations` WHERE `user_id` = :u AND `db_code` = :d AND `expires` > CURRENT_TIMESTAMP",
+            array(":u"=>$this->u_id,":d"=>$db_code),
+            "fetch");
+        $expires = Web::UTCDate("+1 hour")->format(DATE_ATOM);
+        if( count($data) > 1 ){
+            $track = $data["track"];
+            Database::secureQuery(
+                "UPDATE `vote_confirmations` SET `content` = :c, `expires` = :e WHERE `track` = :t",
+                array(":c"=>$votes, ":e"=>$expires, ":t"=>$data["track"]), null);
+        } else {
+            $track = bin2hex(random_bytes(36));
+            Database::secureQuery("INSERT INTO `vote_confirmations` (`track`, `user_id`, `content`, `db_code`, `expires`) VALUES (:t, :u, :c, :d, :e)", array(":t"=>$track, ":u"=>$this->u_id, ":c"=>$votes, ":d"=>$db_code, ":e"=>$expires), null);
+        }
+        return $track;
+    }
+
+    public static function getConfirmationData($confirmation_id){
+        return Database::secureQuery("SELECT * FROM `vote_confirmations` WHERE `track` = :t", array(":t"=>$confirmation_id), 'fetch');
+    }
+
+    public static function deleteConfirmToken($track){
+        Database::secureQuery("DELETE FROM `vote_confirmations` WHERE `track` = :t", array(":t"=>$track), null);
     }
     public static function adminPermissions(){
         return array("u_e"=>"Unrecognized Email Approval");

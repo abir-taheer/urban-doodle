@@ -169,10 +169,7 @@ $("#variable-region").on("DOMSubtreeModified", () => {
     window.mdc.autoInit(document, () => {});
 });
 $(document.body).on("click", ".sign-out", () => {
-    $.post("/signout.php").done(() => {
-        addSnackbarQueue("You have been successfully signed out!");
-        window.location.reload();
-    });
+    location.replace("/signout.php");
 });
 
 if(! isSignedIn){

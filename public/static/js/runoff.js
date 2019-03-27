@@ -31,7 +31,7 @@ $(nonVoteChips).on("click", ".candidate-chip", ev => {
     let el = ev.currentTarget;
     let input = $("input[value=\""+ el.getAttribute("data-candidate-id") +"\"]");
     input.parent().removeClass("fear");
-    input.attr("name", "vote[]");
+    input.attr("name", "votes[confirmed][]");
     el.remove();
 });
 
@@ -56,7 +56,7 @@ function moveCandidateDown(el) {
 }
 function removeCandidate(el) {
     el.classList.add("fear");
-    el.querySelector("input").setAttribute("name", "removed[]");
+    el.querySelector("input").setAttribute("name", "votes[removed][]");
     let chip = document.createElement("div");
     chip.classList.add("mdc-chip", "candidate-chip");
     chip.setAttribute("data-candidate-id", el.querySelector("input").value);

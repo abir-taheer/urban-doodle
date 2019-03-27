@@ -27,5 +27,4 @@ if (! $handler instanceof ElectionHandler) {
     throw new Exception("Class for handling an election must implement the ElectionHandler interface.");
 }
 
-
 $handler->makeSelectionForm();

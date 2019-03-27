@@ -16,7 +16,7 @@ class Runoff implements ElectionHandler {
                 <h3 class=\"txt-ctr\">".$this->election->name."</h3>
                 <p class=\"txt-ctr small-txt sub-container\">Order the candidates based on your preference by holding down and dragging. <a class=\"desktop-only\">Click on the X to remove a candidate from your ballot</a><a class=\"mobile-only\">Swipe on a candidate to remove them from your ballot</a>.</p>
                 <form class=\"vote-form\">
-                    <input type=\"hidden\" name=\"token\" value=\"".$user->makeFormToken("confirm", $this->election->db_code, Web::UTCDate("+30 min"))."\">
+                    <input type=\"hidden\" name=\"election\" value=\"".$this->election->db_code."\">
                     <ul class=\"mdc-list sub-container candidate-select\" data-mdc-auto-init=\"MDCList\">
         ";
         $candidates = $this->election->getCandidates();
@@ -24,7 +24,7 @@ class Runoff implements ElectionHandler {
         foreach( $candidates as $candidate ) {
             $response.= "
                 <li class=\"mdc-list-item\">
-                    <input type=\"hidden\" name=\"vote[]\" value=\"".$candidate->id."\">
+                    <input type=\"hidden\" name=\"votes[confirmed][]\" value=\"".$candidate->id."\">
                     <span class=\"mdc-list-item__text no-select\">
                         <a class=\"candidate-name\">".$candidate->name."</a>
                         <span class=\"right-icons\">
@@ -53,12 +53,24 @@ class Runoff implements ElectionHandler {
         ";
         echo $response;
     }
-    public function showConfirmation(): void{
-
+    public function showConfirmation($votes): void{
+        print_r( User::getConfirmationData($votes) );
     }
-    public function getVotesArray(): array{
-        // TODO: Implement getVotesArray() method.
-        return array();
+
+    public function verifyVote($vote): bool {
+        $all_votes = array_merge($vote["confirmed"], $vote["removed"]);
+        print_r($vote);
+        $total_candidates = 0;
+        $accounted_for = 0;
+        foreach( $this->election->getCandidates() as $candidate ){
+            $total_candidates++;
+            if( in_array($candidate->id, $all_votes) ){
+                $accounted_for++;
+            }
+        }
+        echo $total_candidates;
+        echo $accounted_for;
+        return count($all_votes) === $total_candidates &&  count($all_votes) === $accounted_for;
     }
 
     public function countVotes(): array{
@@ -66,5 +78,15 @@ class Runoff implements ElectionHandler {
     }
     public function hasAnalysisMethod(): bool {
         return false;
+    }
+
+    public function encodeVotes($votes): string {
+        return implode(",", $votes["confirmed"]);
+    }
+
+    public function decodeVotes($str): array
+    {
+        // TODO: Implement decodeVotes() method.
+        return explode(",", $str);
     }
 }
