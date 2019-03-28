@@ -236,7 +236,7 @@ Class User {
         $data = Database::secureQuery("SELECT * FROM `vote_confirmations` WHERE `user_id` = :u AND `db_code` = :d AND `expires` > CURRENT_TIMESTAMP",
             array(":u"=>$this->u_id,":d"=>$db_code),
             "fetch");
-        $expires = Web::UTCDate("+1 hour")->format(DATE_ATOM);
+        $expires = Web::UTCDate("+1 hour")->format("Y-m-d H:i:s");
         if( count($data) > 1 ){
             $track = $data["track"];
             Database::secureQuery(
@@ -249,8 +249,8 @@ Class User {
         return $track;
     }
 
-    public static function getConfirmationData($confirmation_id){
-        return Database::secureQuery("SELECT * FROM `vote_confirmations` WHERE `track` = :t", array(":t"=>$confirmation_id), 'fetch');
+    public function getConfirmationData($confirmation_id){
+        return Database::secureQuery("SELECT * FROM `vote_confirmations` WHERE `track` = :t AND `user_id` = :u AND `expires` > CURRENT_TIMESTAMP", array(":t"=>$confirmation_id, ":u"=>$this->u_id), 'fetch');
     }
 
     public static function deleteConfirmToken($track){

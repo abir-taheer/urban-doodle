@@ -39,7 +39,7 @@ interface ElectionHandler {
     /**
      * Echos the completed html elements, and any necessary resources, to be inserted onto the confirmation page
      * Must also send out the $vote_id as a parameter
-     * @param string $vote_id The user's votes, encoded, referenced by a form token
+     * @param string $confirmation_id The user's votes, encoded, referenced by a form token
      */
     public function showConfirmation($confirmation_id) : void;
 

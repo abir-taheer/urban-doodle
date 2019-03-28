@@ -38,6 +38,7 @@ if( ! $handler->verifyVote($_POST["votes"]) ){
             <img src=\"/static/img/sad-cat.png\" class=\"cat-404\" alt=\"sad-cat\">
         </div>
     </div>";
+    exit;
 }
 
 $votes = $handler->encodeVotes($_POST["votes"]);

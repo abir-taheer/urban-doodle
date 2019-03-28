@@ -93,7 +93,10 @@ h1, h2, h3, h4, .heading{
 }
 .candidate-select {
     cursor: move;
-    counter-reset: section;
+    counter-reset: rank;
+}
+.rank-candidates {
+    counter-reset: rank;
 }
 .no-select {
     -webkit-touch-callout: none;
@@ -125,7 +128,7 @@ h1, h2, h3, h4, .heading{
     width: calc(100% - 62px);
     font-size: 14px;
 }
-.candidate-select .candidate-name::before {
-    counter-increment: section;
-    content: counter(section) ". ";
+.candidate-select .candidate-name::before, .rank-candidates .candidate-name::before {
+    counter-increment: rank;
+    content: counter(rank) ". ";
 }

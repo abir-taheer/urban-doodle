@@ -86,7 +86,33 @@ $("#variable-region").ready(()=>{
 });
 $(".vote-submit").off().on("click", () => {
     let form = document.querySelector(".vote-form");
-    $.post("/load.php?page=/confirm", $(form).serialize(), a => {
-        $("#variable-region").html(a);
-    });
+    // Check to make sure the form isn't empty
+    let confirmed = document.querySelectorAll(".candidate-select input[name='votes[confirmed][]']");
+    if( confirmed.length > 0 ){
+        $.post("/load.php?page=/confirm", $(form).serialize(), a => {
+            $("#variable-region").html(a);
+            $(".cancel-confirm").off().on("click", () => {
+                changePage();
+            });
+            $(".confirm-votes").off().on("click", () =>{
+                $.post("/requests.php", $(".confirm-form").serialize(), r => {
+                    let resp = JSON.parse(r);
+                    if( resp.status === "success" ){
+                        addSnackbarQueue("Your vote has been successfully recorded. Thank you for voting!");
+                        changePage();
+                    } else {
+                        for( let x = 0 ; x < resp.message.length ; x++ ) {
+                            addSnackbarQueue(resp.message[x]);
+                        }
+                        playSnackbarQueue();
+                    }
+
+                });
+            });
+
+        });
+    } else {
+        addSnackbarQueue("You must vote for at least one candidate!");
+        playSnackbarQueue();
+    }
 });
