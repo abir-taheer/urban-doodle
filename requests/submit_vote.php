@@ -5,12 +5,15 @@
 
 try {
     $vote_data = $user->getConfirmationData($form["extra"]);
-    $verification = hash("sha256", $vote_data["db_code"].$user->u_id);
-    Database::secureQuery("INSERT INTO `votes` (`db_code`, `content`, `verification_hash`) VALUES (:d, :c, :v)", array(":d"=>$vote_data["db_code"], ":c"=>$vote_data["content"], ":v"=>$verification), null );
-    User::deleteFormToken($form["token"]);
-    User::deleteConfirmToken($form["content"]);
-    $response["status"] = "success";
+    if( ! $user->hasVoted($vote_data["db_code"]) ){
+        $verification = hash("sha256", $vote_data["db_code"].$user->u_id);
+        Database::secureQuery("INSERT INTO `votes` (`db_code`, `content`, `verification_hash`) VALUES (:d, :c, :v)", array(":d"=>$vote_data["db_code"], ":c"=>$vote_data["content"], ":v"=>$verification), null );
+        $response["status"] = "success";
+    } else {
+        $response["status"] = "error";
+        $response["message"][] = "Error: You have already voted";
+    }
 } catch (Exception $e){
     $response["status"] = "error";
-    $response["message"][] = "Error: ".$e;
+    $response["message"][] = "Unexpected Error Please Send This To Developer: ".$e;
 }

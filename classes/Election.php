@@ -36,4 +36,12 @@ class Election {
         return $this->candidates;
     }
 
+    // Returns if election hasn't started yet (-1), has started and is in session (0), or has ended (1)
+    public function electionState(){
+        if( Web::getUTCTime() < $this->start_time ){
+            return -1;
+        }
+        return Web::getUTCTime() < $this->end_time ? 0 : 1;
+    }
+
 }

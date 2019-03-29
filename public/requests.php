@@ -21,6 +21,9 @@ $response = [];
 if( count($form) > 1 ){
     //retrieve the file associated with the form function
     require_once "../requests/".$form['request'].".php";
+} else {
+    $response["status"] = "error";
+    $response["message"][] = "Invalid form token. Please contact developer if this continues.";
 }
 
 echo json_encode($response);

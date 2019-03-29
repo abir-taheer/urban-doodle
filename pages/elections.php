@@ -94,10 +94,14 @@ case -1: ?>
                     </div>
                     <div class="mdc-typography mdc-typography--body2 vote-card__pad">
                         <?php if( Web::getUTCTime() < $e->start_time ): //Before Election starts, notify when election will start?>
-                            <a>Election will start: <?php echo $e->start_time->format("M d, Y h:ia"); ?></a>
-                        <?php elseif ( Web::getUTCTime() > $e->start_time ): //If we've passed the start time, 2 possibilities ?>
+                            <a>Election will start: <?php
+                                $starts = clone $e->start_time;
+                                $starts->setTimezone(new DateTimeZone(app_time_zone));
+                                echo $starts->format("M d, Y h:ia");
+                                ?></a>
+                        <?php else: //If we've passed the start time, 2 possibilities ?>
                             <?php if( Web::getUTCTime() < $e->end_time ): //Time if before the end time, voting in session ?>
-                                <a class="voting-timer" data-end-time="" data-current-time=""></a>
+                                <a>Election ends in: <span class="js-timer js-timer__warning" data-timer-type="countdown" data-count-down-date="<?php echo base64_encode($e->end_time->format(DATE_ATOM)); ?>" data-count-down-warning="3600000"></span></a>
                             <?php else: //Election is over ?>
                                 <a>Election has concluded. Please await results.</a>
                             <?php endif; ?>

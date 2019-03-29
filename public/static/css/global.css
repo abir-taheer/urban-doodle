@@ -87,6 +87,9 @@ body {
 .red-txt {
     color: #d63031;
 }
+.green-txt {
+    color: #00b894;
+}
 h1, h2, h3, h4, .heading{
     font-family: "Roboto Slab", serif;
     font-weight: 600;
@@ -131,4 +134,9 @@ h1, h2, h3, h4, .heading{
 .candidate-select .candidate-name::before, .rank-candidates .candidate-name::before {
     counter-increment: rank;
     content: counter(rank) ". ";
+}
+.error-img {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    height: 200px;
 }

@@ -259,4 +259,16 @@ Class User {
     public static function adminPermissions(){
         return array("u_e"=>"Unrecognized Email Approval");
     }
+    public function hasVoted($db_code){
+        $verification = hash("sha256", $db_code.$this->u_id);
+        $data = Database::secureQuery("SELECT COUNT(`db_code`) as `vote` FROM `votes` WHERE `verification_hash` = :v", array(":v"=>$verification), 'fetch');
+        return $data["vote"] !== "0";
+    }
+    public function canVote($db_code){
+        if( $this->status !== 1 ){
+            return false;
+        }
+        $data = Database::secureQuery("SELECT COUNT(*) as `possible` FROM `elections` WHERE `db_code` = :d AND `grade` LIKE :g", array(":d"=>$db_code, ":g"=>"%".$this->grade."%"), 'fetch');
+        return $data["possible"] !== "0";
+    }
 }
