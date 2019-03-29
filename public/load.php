@@ -5,6 +5,18 @@
         require_once "../classes/".$class_name . '.php';
     });
 
+    function replyError($heading, $error, $image_src = "/static/img/sad-cat.png", $image_alt = "sad-cat", $image_class = "cat-404"){
+        echo
+            "<div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12\">
+            <div class=\"card-expand-default\"></div>
+            <h3 class=\"txt-ctr\">".$heading."</h3>
+            <div class=\"sub-container\"></div>
+            <p class=\"txt-ctr\">".$error."</p>
+            <div class=\"flx-ctr\">
+                <img src=\"".$image_src."\" class=\"".$image_class."\" alt=\"".$image_alt."\">
+            </div>
+        </div>";
+    }
 
     //split the pathName sent to us, using the / as a delimiter, into an array
     $path = explode("/", $_GET['page']);

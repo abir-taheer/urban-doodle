@@ -5,7 +5,8 @@
 
 try {
     $vote_data = $user->getConfirmationData($form["extra"]);
-    if( ! $user->hasVoted($vote_data["db_code"]) ){
+    $e = new Election($vote_data["db_code"]);
+    if( $e->electionState() === 0 && ! $user->hasVoted($vote_data["db_code"]) ){
         $verification = hash("sha256", $vote_data["db_code"].$user->u_id);
         Database::secureQuery("INSERT INTO `votes` (`db_code`, `content`, `verification_hash`) VALUES (:d, :c, :v)", array(":d"=>$vote_data["db_code"], ":c"=>$vote_data["content"], ":v"=>$verification), null );
         $response["status"] = "success";

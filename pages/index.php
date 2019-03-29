@@ -1,3 +1,9 @@
+<?php
+if( Session::hasSession() ){
+    header("Location: /load.php?page=/feed");
+    exit;
+}
+?>
 <!-- Script tag doesn't need nonce because apis.google.com is a trusted whitelisted source -->
 <script src="https://apis.google.com/js/platform.js"></script>
 <div class="mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12">

@@ -44,4 +44,13 @@ class Election {
         return Web::getUTCTime() < $this->end_time ? 0 : 1;
     }
 
+    public static function getAllElections() {
+        $response = [];
+        $data = Database::secureQuery("SELECT `db_code` FROM `elections`", [], null);
+        foreach($data as $election){
+            $response[] = new Election($election["db_code"]);
+        }
+        return $response;
+    }
+
 }

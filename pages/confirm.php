@@ -6,16 +6,7 @@ try {
     $e = new Election($db_code);
     $c = $e->getCandidates();
 } catch (Exception $e) {
-    echo
-        "<div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12\">
-        <div class=\"card-expand-default\"></div>
-        <h3 class=\"txt-ctr\">Error:</h3>
-        <div class=\"sub-container\"></div>
-        <p class=\"txt-ctr\">There is no ongoing election with the ID ".$db_code.".</p>
-        <div class=\"flx-ctr\">
-            <img src=\"/static/img/sad-cat.png\" class=\"cat-404\" alt=\"sad-cat\">
-        </div>
-    </div>";
+    replyError("Error:", "There is no election with that ID.");
     exit;
 }
 
@@ -29,15 +20,7 @@ if (! $handler instanceof ElectionHandler) {
 // First call the verify functions to make sure that the data received from the client is valid
 if( ! $handler->verifyVote($_POST["votes"]) ){
     // Let the user know that there was an error with their form
-    echo "<div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12\">
-        <div class=\"card-expand-default\"></div>
-        <h3 class=\"txt-ctr\">Error:</h3>
-        <div class=\"sub-container\"></div>
-        <p class=\"txt-ctr\">There were issues with the data received with your form</p>
-        <div class=\"flx-ctr\">
-            <img src=\"/static/img/sad-cat.png\" class=\"cat-404\" alt=\"sad-cat\">
-        </div>
-    </div>";
+    replyError("Error:", "There were issues with the data received with your form.");
     exit;
 }
 

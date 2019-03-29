@@ -271,4 +271,8 @@ Class User {
         $data = Database::secureQuery("SELECT COUNT(*) as `possible` FROM `elections` WHERE `db_code` = :d AND `grade` LIKE :g", array(":d"=>$db_code, ":g"=>"%".$this->grade."%"), 'fetch');
         return $data["possible"] !== "0";
     }
+
+    public function isFollowing($id){
+        return false;
+    }
 }

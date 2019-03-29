@@ -55,7 +55,7 @@ $id = Session::getIdInfo();
 <?php if( google_analytics_use ): ?>
         <meta name="use-google-analytics" content="true">
         <meta name="gtag-tracking-id" content="<?php echo google_analytics_tag_id; ?>">
-        <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo google_auth_client_id; ?>"></script>
+        <script nonce="<?php echo Web::getNonce(); ?>" async src="https://www.googletagmanager.com/gtag/js?id=<?php echo google_analytics_tag_id; ?>"></script>
         <script nonce="<?php echo Web::getNonce(); ?>">
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}

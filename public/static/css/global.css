@@ -78,6 +78,9 @@ body {
 .vote-card__media {
     background-image: url(https://abir.taheer.me/resources/images/vote.jpg);
 }
+.candidate-card__media {
+    background-image: url(/static/img/candidates.jpg);
+}
 .vote-card__pad {
     padding: 0 20px;
 }
@@ -139,4 +142,8 @@ h1, h2, h3, h4, .heading{
     margin-top: 10px;
     margin-bottom: 20px;
     height: 200px;
+}
+.card-subtext {
+    padding: 10px 20px;
+    color: grey;
 }

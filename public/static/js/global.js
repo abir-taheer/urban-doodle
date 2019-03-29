@@ -106,6 +106,9 @@ $(document).ready(() => {
     let pageList = document.querySelector(".drawer-pages-list");
     let pages = JSON.parse(atob(pageList.getAttribute("data-menu-items")));
     for(let x = 0; x < pages.length ; x++){
+        if( pages[x].session !== "*" && pages[x].session !== $("meta[name=signed-in]").attr("content") ){
+            continue;
+        }
         let a = document.createElement("a");
         a.classList.add("mdc-list-item");
         a.classList.add("change-page");

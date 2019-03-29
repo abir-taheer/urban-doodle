@@ -10,32 +10,44 @@ class Web {
         [
             "text"=>"Home",
             "icon"=>"home",
-            "page"=>"/"
+            "page"=>"/",
+            "session"=>"false"
+        ],
+        [
+            "text"=>"My Feed",
+            "icon"=>"person",
+            "page"=>"/",
+            "session"=>"true"
         ],
         [
             "text"=>"Elections",
             "icon"=>"how_to_vote",
-            "page"=>"/elections"
+            "page"=>"/elections",
+            "session"=>"*"
         ],
         [
             "text"=>"Results",
             "icon"=>"ballot",
-            "page"=>"/results"
+            "page"=>"/results",
+            "session"=>"*"
         ],
         [
             "text"=>"Candidates",
             "icon"=>"people",
-            "page"=>"/candidates"
+            "page"=>"/candidates",
+            "session"=>"*"
         ],
         [
             "text"=>"Contact Us",
             "icon"=>"chat_bubble",
-            "page"=>"/contact"
+            "page"=>"/contact",
+            "session"=>"*"
         ],
         [
             "text"=>"Help",
             "icon"=>"help",
-            "page"=>"/help"
+            "page"=>"/help",
+            "session"=>"*"
         ]
     ];
     public static $dependencies = array("script"=>array(), "css"=>array());
