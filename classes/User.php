@@ -274,5 +274,23 @@ Class User {
 
     public function isFollowing($id){
         return false;
+        // TODO IMPLEMENT THIS
     }
+
+    public function isAdmin() {
+        $data = Database::secureQuery(
+            "SELECT COUNT(*) as `admin` FROM `roles` WHERE `email` = :email AND `association` = 'admin'",
+            array(":email"=>$this->email)
+        , 'fetch');
+        return $data["admin"] !== "0";
+    }
+
+    public function isManager(){
+        $data = Database::secureQuery(
+            "SELECT COUNT(*) as `manager` FROM `roles` WHERE `association` != 'admin' AND `email` = :email",
+            array(":email"=>$this->email),
+            'fetch');
+        return $data["manager"] !== "0";
+    }
+
 }

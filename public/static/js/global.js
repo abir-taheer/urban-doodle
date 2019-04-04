@@ -35,7 +35,7 @@ function onSignIn(googleUser) {
 // If the user ever manually triggered the drawer
 let manDrawTrig = false;
 
-function changePage(path){
+function changePage(path = null){
     let vr = document.getElementById("variable-region");
     let pld = document.querySelector(".page-loader");
     $(pld).removeClass("mdc-linear-progress--closed");
@@ -271,6 +271,13 @@ let serverTime = new Date(atob($("meta[name=server-utc-time]").attr("content")))
 // Offset the server time with the page load time
 serverTime.setTime(serverTime.getTime() + pageLoadOffset);
 
+let short_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+let long_months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+let short_days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+let long_days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 let countdowns = setInterval(() => {
 
     // Calculate how long it's been since the page loaded
@@ -305,6 +312,32 @@ let countdowns = setInterval(() => {
                     $(i).removeClass("js-timer");
                 }
                 i.innerHTML = countDownTxt;
+                break;
+            case "current":
+                let timeFormat = $(i).data("time-format");
+                let times = {
+                    "d":currentTime.getDate().toString().padStart(2, '0'),
+                    "D":short_days[currentTime.getDay()],
+                    "l":long_days[currentTime.getDay()],
+                    "w":currentTime.getDay() + 1,
+                    "F":long_months[currentTime.getMonth()],
+                    "m":(currentTime.getMonth() + 1).toString().padStart(2, "0"),
+                    "M":short_months[currentTime.getMonth()],
+                    "n":currentTime.getMonth() + 1,
+                    "Y":currentTime.getFullYear(),
+                    "y":currentTime.getFullYear() % 100,
+                    "a": ( currentTime.getHours() >= 12 ) ? "pm" : "am",
+                    "h":(currentTime.getHours() % 12).toString().padStart(2, '0'),
+                    "H":currentTime.getHours().toString().padStart(2, "0"),
+                    "i":currentTime.getMinutes().toString().padStart(2, '0'),
+                    "s":currentTime.getSeconds().toString().padStart(2, '0')
+                };
+                let dateString = "";
+                for( let a = 0; a < timeFormat.length ; a++ ){
+                    dateString += ( timeFormat[a] in times ) ? times[timeFormat[a]] : timeFormat[a];
+                }
+                console.log(dateString);
+                $(i).html(dateString);
                 break;
         }
     }

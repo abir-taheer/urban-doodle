@@ -147,3 +147,12 @@ h1, h2, h3, h4, .heading{
     padding: 10px 20px;
     color: grey;
 }
+.candidate-photo {
+    border-radius: 50%;
+    object-fit: cover;
+    width: 200px;
+    height: 200px;
+}
+.click-hover:hover {
+    opacity: 0.8;
+}

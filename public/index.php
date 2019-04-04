@@ -86,12 +86,30 @@ $id = Session::getIdInfo();
                 <h6 class="mdc-drawer__subtitle"><?php echo (Session::hasSession()) ? htmlspecialchars($id["email"]) : ""; ?></h6>
             </div>
             <div class="mdc-drawer__content">
-                <?php if(Session::hasSession()): ?>
+        <?php if(Session::hasSession()): ?>
+
                 <a class="mdc-list-item sign-out clickable">
                     <i class="material-icons mdc-list-item__graphic" aria-hidden="true">power_settings_new</i>
                     <span class="mdc-list-item__text">Sign Out</span>
                 </a>
-                <?php endif; ?>
+
+            <?php if( Session::getUser()->isAdmin() ): ?>
+
+                <a class="mdc-list-item clickable change-page" data-page="/admin">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">build</i>
+                    <span class="mdc-list-item__text">Admin</span>
+                </a>
+
+            <?php endif; ?>
+            <?php if( Session::getUser()->isManager() ): ?>
+
+                <a class="mdc-list-item clickable change-page" data-page="/campaign">
+                    <i class="material-icons mdc-list-item__graphic" aria-hidden="true">assignment_ind</i>
+                    <span class="mdc-list-item__text">Manage Campaign</span>
+                </a>
+
+            <?php endif; ?>
+        <?php endif; ?>
 
                 <!-- Menu container with a base64-Encoded json of menu items, their resource paths, and icons -->
                 <div class="mdc-list drawer-pages-list" data-menu-items="<?php echo base64_encode(json_encode(Web::$menu_pages)); ?>"></div>
