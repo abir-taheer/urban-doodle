@@ -6,7 +6,7 @@
         <div class="sub-container">
             <!-- TODO INCLUDE SOME TECH COMPATABILITY CHECKUPS HERE -->
             <h3></h3>
-            <a class="js-timer" data-timer-type="current" data-time-format="F m, y h:i:sa"></a>
+            <a class="js-timer" data-timer-type="current" data-time-format="l F jS, Y h:i:sa"></a>
 
         </div>
         <h3>FAQS:</h3>

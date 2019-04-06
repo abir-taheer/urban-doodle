@@ -4,6 +4,7 @@ spl_autoload_register(function ($class_name) {
     require_once "../classes/".$class_name . ".php";
 });
 header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'nonce-".Web::getNonce()."';");
+$request = explode("/", $_SERVER["REQUEST_URI"]);
 
 $id = Session::getIdInfo();
 ?>
@@ -19,7 +20,7 @@ $id = Session::getIdInfo();
         <!-- Site SEO Info -->
         <meta charset="utf-8">
         <title><?php echo htmlspecialchars(web_title); ?></title>
-        <meta name="description" content="<?php echo web_description; ?>">
+        <meta name="description" content="<?php echo addslashes(web_description); ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
         <!-- Google Sign-In Information -->
@@ -32,9 +33,9 @@ $id = Session::getIdInfo();
 
         <!-- Social Media Information -->
         <meta property="og:type" content="website">
-        <meta property="og:title" content="<?php echo web_title; ?>">
-        <meta property="og:description" content="<?php echo addslashes(web_description); ?>">
-        <meta property="og:image" content="<?php echo app_icon; ?>">
+        <meta property="og:title" content="<?php echo addslashes(Web::getTitle($request)); ?>">
+        <meta property="og:description" content="<?php echo addslashes(Web::getDescription($request)); ?>">
+        <meta property="og:image" content="<?php echo Web::getSocialPic($request); ?>">
 
         <!-- Favicon -->
         <link rel="icon" sizes="192x192" href="<?php echo web_favicon; ?>">

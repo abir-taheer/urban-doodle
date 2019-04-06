@@ -16,4 +16,8 @@ Class Candidate{
             $this->constructed = false;
         }
     }
+
+    public function getElection(){
+        return new Election($this->db_code);
+    }
 }

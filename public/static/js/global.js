@@ -54,8 +54,15 @@ function changePage(path = null){
     }
     $.get("/load.php?page=" + window.location.pathname, function(a, b, c){
         $(vr).html(a);
+        if( c.getResponseHeader("X-Page-Redirect") !== null ){
+            changePage(c.getResponseHeader("X-Page-Redirect"));
+            return;
+        }
         if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
             addSources(c);
+        }
+        if( c.getResponseHeader("X-Load-Sub") !== null ){
+            loadSubPage();
         }
     }).fail(function(){
         $(vr).fadeIn();
@@ -134,6 +141,19 @@ $(document).ready(() => {
 });
 // Automatically instantiate the mdc elements on the page
 mdc.autoInit();
+
+$(document.body).on("click", ".sub-page-change", ev => {
+    let i = ev.currentTarget;
+    loadSubPage(i.getAttribute("data-page"));
+});
+function loadSubPage(path = null){
+    if(path !== null){
+        history.pushState({}, null, path);
+    }
+    $.get("/subload.php?page=" + window.location.pathname, (a, b, c) => {
+        $("#sub-variable-region").html(a);
+    });
+}
 
 // Create an instance of the drawer and store it
 let drawer = new mdc.drawer.MDCDrawer(document.querySelector(".mdc-drawer"));
@@ -278,6 +298,22 @@ let long_months = ["January", "February", "March", "April", "May", "June", "July
 let short_days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 let long_days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+function getDateEnding(date){
+    if( 10 < date && date < 14 ){
+        return "th";
+    }
+    if( date % 10 === 1 ){
+        return "st";
+    }
+    if( date % 10 === 2 ){
+        return "nd";
+    }
+    if( date % 10 === 3 ){
+        return "rd";
+    }
+    return "th";
+}
+
 let countdowns = setInterval(() => {
 
     // Calculate how long it's been since the page loaded
@@ -318,7 +354,9 @@ let countdowns = setInterval(() => {
                 let times = {
                     "d":currentTime.getDate().toString().padStart(2, '0'),
                     "D":short_days[currentTime.getDay()],
+                    "j":currentTime.getDate(),
                     "l":long_days[currentTime.getDay()],
+                    "S":getDateEnding(currentTime.getDate()),
                     "w":currentTime.getDay() + 1,
                     "F":long_months[currentTime.getMonth()],
                     "m":(currentTime.getMonth() + 1).toString().padStart(2, "0"),
@@ -333,10 +371,15 @@ let countdowns = setInterval(() => {
                     "s":currentTime.getSeconds().toString().padStart(2, '0')
                 };
                 let dateString = "";
+                let escape = false;
                 for( let a = 0; a < timeFormat.length ; a++ ){
-                    dateString += ( timeFormat[a] in times ) ? times[timeFormat[a]] : timeFormat[a];
+                    if( ! escape && timeFormat[a] === "\\" ){
+                        escape = true;
+                        continue;
+                    }
+                    dateString += ( timeFormat[a] in times && ! escape ) ? times[timeFormat[a]] : timeFormat[a];
+                    escape = false;
                 }
-                console.log(dateString);
                 $(i).html(dateString);
                 break;
         }

@@ -293,4 +293,15 @@ Class User {
         return $data["manager"] !== "0";
     }
 
+    public function managerFor(){
+        $candidates = [];
+        $data = Database::secureQuery(
+            "SELECT * FROM `roles` WHERE `association` != 'admin' AND `email` = :email",
+            array(":email"=>$this->email),
+            null);
+        foreach( $data as $d ){
+            $candidates[] = new Candidate($d['association']);
+        }
+        return $candidates;
+    }
 }

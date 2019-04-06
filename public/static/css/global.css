@@ -156,3 +156,7 @@ h1, h2, h3, h4, .heading{
 .click-hover:hover {
     opacity: 0.8;
 }
+.linkish {
+    color: #0984e3;
+    text-decoration: underline;
+}

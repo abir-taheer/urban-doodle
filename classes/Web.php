@@ -140,4 +140,108 @@ class Web {
             exit;
         }
     }
+
+    public static function getTitle($path)
+    {
+        switch ($path[1]) {
+            case "candidates":
+                // The Election is set, include that in the title
+                if ( isset($path[2]) && $path[2] !== "") {
+                    try{
+                        $election = new Election($path[2]);
+                        if( isset($path[3]) && $path[3] !== "" ){
+                            $candidate = new Candidate($path[3]);
+                            if ($candidate->constructed) {
+                                return $candidate->name . " for " . $candidate->getElection()->name . " | " . web_title;
+                            } else {
+                                return "No Candidate Found | " . web_title;
+                            }
+                        } else {
+                            return "View Candidates for ".$election->name." | ".web_title;
+                        }
+                    } catch (Exception $e){
+                        return "Invalid Election | ".web_title;
+                    }
+                } else {
+                    return "View Candidates | ".web_title;
+                }
+                break;
+            case "elections":
+                return "View Elections | ".web_title;
+                break;
+            case "vote":
+                try {
+                    $election = new Election($path[2]);
+                    return $election->name." | ".web_title;
+                } catch (Exception $e){
+                    return "No Current Election Found | ".web_title;
+                }
+                break;
+            case "contact":
+                return "Contact Us | ".web_title;
+                break;
+            default:
+                return web_title;
+        }
+    }
+
+    public static function getDescription($path){
+        switch ($path[1]) {
+            case "candidates":
+                // The Election is set, include that in the title
+                if ( isset($path[2]) && $path[2] !== "") {
+                    try{
+                        $election = new Election($path[2]);
+                        if( isset($path[3]) && $path[3] !== "" ){
+                            $candidate = new Candidate($path[3]);
+                            if ($candidate->constructed) {
+                                return "View updates and ask questions to candidate: ".$candidate->name . " who is currently running for " . $candidate->getElection()->name;
+                            } else {
+                                return "The id that was passed using the url does not belong to any candidate";
+                            }
+                        } else {
+                            return "View the profiles and updates of candidates running for ".$election->name;
+                        }
+                    } catch (Exception $e){
+                        return "There is no current election with the id that was passed via the url";
+                    }
+                } else {
+                    return "Choose an election to view the candidates for that election.";
+                }
+                break;
+            case "elections":
+                return "Choose an election to be able to vote for that election";
+                break;
+            case "vote":
+                try {
+                    $election = new Election($path[2]);
+                    return "Vote for ".$election->name;
+                } catch (Exception $e){
+                    return "There currently is no election with the ID that was passed via the url.";
+                }
+                break;
+            case "contact":
+                return "Let us know how we're doing; give us any updates and suggestions; tell us anything you think we should know.";
+                break;
+            default:
+                return web_description;
+        }
+    }
+    public static function sendRedirect($path){
+        header("X-Page-Redirect: ".$path);
+    }
+    public static function getSocialPic($path){
+        switch($path[1]){
+            case "candidates":
+                if( isset($path[3]) && $path[3] !== ""){
+                    $candidate = new Candidate($path[3]);
+                    if($candidate->constructed){
+                        return "/static/elections/".$candidate->db_code."/candidates/".$candidate->id.".png";
+                    }
+                }
+            default:
+                return app_icon;
+        }
+    }
+
 }
