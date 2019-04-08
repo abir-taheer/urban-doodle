@@ -54,6 +54,8 @@ function changePage(path = null){
     }
     $.get("/load.php?page=" + window.location.pathname, function(a, b, c){
         $(vr).html(a);
+        let success_event = new Event("content_loaded");
+        document.body.dispatchEvent(success_event);
         if( c.getResponseHeader("X-Page-Redirect") !== null ){
             changePage(c.getResponseHeader("X-Page-Redirect"));
             return;
@@ -142,10 +144,14 @@ $(document).ready(() => {
 // Automatically instantiate the mdc elements on the page
 mdc.autoInit();
 
-$(document.body).on("click", ".sub-page-change", ev => {
-    let i = ev.currentTarget;
-    loadSubPage(i.getAttribute("data-page"));
-});
+function openPopup(url, platform) {
+    let newpopup = window.open(url,'Share ' + platform,'height=400,width=550');
+    if (window.focus) {
+        newpopup.focus()
+    }
+    return newpopup;
+}
+
 function loadSubPage(path = null){
     if(path !== null){
         history.pushState({}, null, path);
@@ -156,7 +162,9 @@ function loadSubPage(path = null){
 }
 
 // Create an instance of the drawer and store it
-let drawer = new mdc.drawer.MDCDrawer(document.querySelector(".mdc-drawer"));
+const drawer = new mdc.drawer.MDCDrawer(document.querySelector(".mdc-drawer"));
+const shareBox = new mdc.dialog.MDCDialog(document.querySelector('.mdc-dialog'));
+
 let snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector(".mdc-snackbar"));
 
 // Automatically open the drawer if the user is on a desktop device
@@ -164,8 +172,55 @@ if( window.innerWidth > 1250 ){
     drawer.open = true;
 }
 
-// When user clicks on the hamburger menu in the appBar, trigger the drawer
-$(document.body).on("click", ".menu-trigger", () => {
+window.onpopstate = function (){changePage()};
+
+$(document.body).on("click", ".change-page", ev => {
+    changePage($(ev.currentTarget).data("page"));
+    if(window.innerWidth <= 1250){
+        drawer.open = false;
+        $(".obs").addClass("fear");
+    }
+}).on("click", ".share-card", ev => {
+    let url = $(ev.currentTarget).data("share-url");
+    $(".share-url").find(".url-content").val(url);
+    shareBox.open();
+}).on("click", ".copy-social", ev => {
+    document.querySelector(".url-content").select();
+    document.execCommand("copy");
+    $(ev.currentTarget).html("Copied!");
+    setTimeout(()=> {$(ev.currentTarget).html("Copy");}, 1000);
+}).on("click", ".submit-form", ev => {
+    let button = ev.currentTarget;
+    button.setAttribute("disabled", true);
+    let cont = button.parentElement.parentElement;
+    let form = $(cont).find("form");
+    $.post($(form).data("action"), $(form).serialize(), (a, b, c) => {
+        // TODO Add more callback options
+        let resp = JSON.parse(a);
+        for( let x = 0 ; x < resp.message.length ; x++ ){
+            addSnackbarQueue(resp.message[x]);
+        }
+        if( resp.status === "success" ){
+            switch($(form).data("callback")){
+                case "reload":
+                    changePage();
+                    break;
+            }
+        } else {
+            button.removeAttribute("disabled");
+            playSnackbarQueue();
+        }
+    });
+
+}).on("click", ".sign-out", () => {
+    location.replace("/signout.php");
+}).on("click", ".sub-page-change", ev => {
+    // TODO IMPLEMENT THIS
+    let i = ev.currentTarget;
+    loadSubPage(i.getAttribute("data-page"));
+}).on("click", ".menu-trigger", () => {
+    // When user clicks on the hamburger menu in the appBar, trigger the drawer
+
     let a = $("#variable-region");
     let b = $(".obs");
     if( window.innerWidth < 1250) {
@@ -178,22 +233,42 @@ $(document.body).on("click", ".menu-trigger", () => {
     if( ! manDrawTrig && window.innerWidth > 1250 ){
         manDrawTrig = true;
     }
+}).on("click", ".social", ev => {
+    let i = ev.currentTarget;
+    let Ji = $(i);
+    let url = $(".url-content").val();
+    let social_media  = [["so-facebook", "https://www.facebook.com/sharer/sharer.php?u=", "Facebook"], ["so-twitter", "https://twitter.com/intent/tweet?url=", "Twitter"], ["so-linkedin", "https://www.linkedin.com/shareArticle?mini=true&url=", "LinkedIn"], ["so-pinterest", "https://www.pinterest.com/pin/create/button/?url=", "Pinterest"]];
+    for( let x = 0 ; x < social_media.length ; x ++ ) {
+        if( Ji.hasClass(social_media[x][0]) ){
+            openPopup(social_media[x][1] + encodeURIComponent(url), social_media[x][2]);
+            return true;
+        }
+    }
+    if( Ji.hasClass("so-envelope") ){
+        window.location.href = "mailto:?body=" + encodeURIComponent(url);
+        return true;
+    }
+    if( Ji.hasClass("so-print") ){
+        let popup = openPopup(url);
+        popup.postMessage("printClose", url);
+        return true;
+    }
+    // TODO ADD SERVER REPORTING OF ERROR
+    console.log("Unexpected case: " + i);
+    return false;
 });
 
-window.onpopstate = function (){changePage()};
-$(document.body).on("click", ".change-page", ev => {
-    changePage($(ev.currentTarget).data("page"));
-    if(window.innerWidth <= 1250){
-        drawer.open = false;
-        $(".obs").addClass("fear");
-    }
-});
+window.addEventListener("printClose", () => {
+    document.body.addEventListener("content_loaded", () => {
+        print();
+        close();
+    });
+}, false);
+
 $("#variable-region").on("DOMSubtreeModified", () => {
     window.mdc.autoInit(document, () => {});
 });
-$(document.body).on("click", ".sign-out", () => {
-    location.replace("/signout.php");
-});
+
 
 if(! isSignedIn){
     if (navigator.userAgent.match(/(iPod|iPhone|iPad)/) && ! navigator.userAgent.match(/(FB|Messenger)/)) {
@@ -219,31 +294,6 @@ $(window).resize(() => {
         }
         $("#variable-region").fadeIn();
     }
-});
-
-$(document.body).on("click", ".submit-form", ev => {
-    let button = ev.currentTarget;
-    button.setAttribute("disabled", true);
-    let cont = button.parentElement.parentElement;
-    let form = $(cont).find("form");
-    $.post($(form).data("action"), $(form).serialize(), (a, b, c) => {
-        // TODO Add more callback options
-        let resp = JSON.parse(a);
-        for( let x = 0 ; x < resp.message.length ; x++ ){
-            addSnackbarQueue(resp.message[x]);
-        }
-        if( resp.status === "success" ){
-            switch($(form).data("callback")){
-                case "reload":
-                    changePage();
-                    break;
-            }
-        } else {
-            button.removeAttribute("disabled");
-            playSnackbarQueue();
-        }
-    });
-
 });
 
 snackbar.listen("MDCSnackbar:closed", () => {

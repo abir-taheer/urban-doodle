@@ -65,6 +65,9 @@ body {
     opacity: 0.5;
     position: fixed;
 }
+.mdc-dialog__actions .mdc-icon-button {
+    margin: 10px 8px;
+}
 @media only screen and (min-width: 1001px){
     .mobile-only {
         display: none;
@@ -73,6 +76,11 @@ body {
 @media only screen and (max-width: 1000px){
     .desktop-only {
         display: none;
+    }
+    @media only screen and (max-width: 450px) {
+        .mdc-dialog__actions .mdc-icon-button {
+            margin: 10px 20px;
+        }
     }
 }
 .vote-card__media {
@@ -159,4 +167,65 @@ h1, h2, h3, h4, .heading{
 .linkish {
     color: #0984e3;
     text-decoration: underline;
+}
+.mdc-dialog__actions .mdc-icon-button {
+    border-radius: 50%;
+    color: white;
+}
+.so-pinterest {
+    background-color: #cb2027;
+}
+.so-facebook {
+    background-color: #3B5998;
+}
+.so-envelope {
+    background-color: #1d76d0;
+}
+.so-linkedin {
+    background-color: #007bb5;
+}
+.so-print {
+    background-color: #6c5ce7;
+}
+.so-twitter {
+    background-color: #55acee;
+}
+.share-url {
+    height: 40px;
+    background-color: #ececec;
+    position: relative;
+}
+.share-url input {
+    padding: 0 10px;
+    background-color: #f0f8ff00;
+    border: 0;
+    height: 40px;
+}
+.url-content {
+    width: calc( 100% - 86px );
+    overflow: auto;
+    overflow-scrolling: auto;
+    text-after-overflow: elipsis;
+    outline: none;
+}
+.url-content::-webkit-scrollbar {
+    width: 0 !important
+}
+.copy-social {
+    position: absolute;
+    border: solid 1px #d3d3d3;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding: 8px 7px;
+    cursor: pointer;
+}
+#select-box {
+    max-height: 0;
+    min-height: 0;
+    position: absolute;
+    opacity: 0;
+}
+.copy-social:hover {
+    opacity: 0.7;
 }

@@ -42,6 +42,7 @@ $id = Session::getIdInfo();
 
         <!-- Page Setup Stylesheets -->
         <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="/static/css/fonts.css">
         <link rel="stylesheet" href="/static/css/global.css">
 
@@ -149,6 +150,32 @@ $id = Session::getIdInfo();
                     <button class="mdc-icon-button mdc-snackbar__dismiss material-icons" title="Dismiss">close</button>
                 </div>
             </div>
+        </div>
+
+        <!-- Social Media Share Dialog -->
+        <div class="mdc-dialog" data-mdc-auto-init="MDCDialog">
+            <div class="mdc-dialog__container">
+                <div class="mdc-dialog__surface">
+                    <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
+                    <h2 class="mdc-dialog__title" id="my-dialog-title">Share Content</h2>
+                    <div class="mdc-dialog__content" id="my-dialog-content">
+                        <div class="share-url">
+                            <input type="text" class="url-content" readonly>
+                            <a class="copy-social">Copy</a>
+                        </div>
+                    </div>
+                    <footer class="mdc-dialog__actions flx-ctr">
+                        <button class="mdc-icon-button social so-facebook"><i class="fa fa-facebook"></i></button>
+                        <button class="mdc-icon-button social so-twitter"><i class="fa fa-twitter"></i></button>
+                        <button class="mdc-icon-button social so-linkedin"><i class="fa fa-linkedin"></i></button>
+                        <button class="mdc-icon-button social so-pinterest"><i class="fa fa-pinterest"></i></button>
+                        <button class="mdc-icon-button social so-envelope"><i class="fa fa-envelope"></i></button>
+                        <button class="mdc-icon-button social so-print"><i class="fa fa-print"></i></button>
+
+                    </footer>
+                </div>
+            </div>
+            <div class="mdc-dialog__scrim"></div>
         </div>
 
         <!-- Global functions to be used by all pages -->

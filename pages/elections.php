@@ -115,7 +115,7 @@ case -1: ?>
                         <button class="mdc-button mdc-card__action mdc-card__action--button change-page" data-page="/candidates/<?php echo htmlspecialchars($e->db_code); ?>" data-mdc-auto-init="MDCRipple">Candidates</button>
                     </div>
                     <div class="mdc-card__action-icons">
-                        <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon--unbounded" title="Share" data-mdc-ripple-is-unbounded="true">share</button>
+                        <button class="mdc-icon-button share-card material-icons mdc-card__action mdc-card__action--icon--unbounded" title="Share" data-mdc-ripple-is-unbounded="true" data-share-url="<?php echo (web_ssl) ? "https://" : "http://"; echo addslashes(web_domain); ?>/vote/<?php echo addslashes($e->db_code); ?>">share</button>
                     </div>
                 </div>
             </div>

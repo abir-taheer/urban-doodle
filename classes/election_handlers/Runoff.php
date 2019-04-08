@@ -80,7 +80,7 @@ class Runoff implements ElectionHandler {
                 </form>
                 <br>
                 <div class=\"sub-container\">
-                    <button class=\"mdc-button confirm-votes mdc-button--unelevated\" data-mdc-auto-init=\"MDCRipple\">Submit</button>
+                    <button class=\"mdc-button confirm-votes mdc-button--unelevated\" data-mdc-auto-init=\"MDCRipple\">Confirm</button>
                     &nbsp;&nbsp;
                     <button class=\"mdc-button cancel-confirm\" data-mdc-auto-init=\"MDCRipple\">Cancel</button>
                 </div>

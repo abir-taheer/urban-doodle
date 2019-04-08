@@ -45,7 +45,7 @@
 
                     </div>
                     <div class="mdc-card__action-icons">
-                        <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon--unbounded" title="Share" data-mdc-ripple-is-unbounded="true">share</button>
+                        <button class="mdc-icon-button share-card material-icons mdc-card__action mdc-card__action--icon--unbounded" title="Share" data-mdc-ripple-is-unbounded="true" data-share-url="<?php echo web_ssl ? "https://": "http://";echo web_domain; ?>/candidates/<?php echo $e->db_code."/".$candidate->id; ?>">share</button>
                     </div>
                 </div>
             </div>
