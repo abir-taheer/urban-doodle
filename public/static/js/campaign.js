@@ -1,4 +1,9 @@
-let tabs = document.querySelectorAll(".sub-page-tab");
+if(typeof tabs == "undefined"){
+    var tabs = document.querySelectorAll(".sub-page-tab");
+} else {
+    tabs = document.querySelectorAll(".sub-page-tab");
+}
+
 for(let x = 0; x < tabs.length ; x++ ){
     let i = tabs[x];
     if( window.location.pathname.includes(i.getAttribute("data-page")) ){

@@ -4,11 +4,11 @@ $user = Session::getUser();
 if( ! $user->isManager() ){
     replyError("Access Denied", "You do not have sufficient permissions to view this page.");
 }
-$for = $user->managerFor();
+$for = $user->managerOf();
 ?>
 <?php if( !isset($path[2]) || $path[2] === "" ): ?>
     <?php if( count($for) === 1 ){
-        Web::sendRedirect("/campaign/".$for[0]->id);
+        Web::sendRedirect("/campaign/".$for[0]->id."/");
         exit;
     } ?>
     <div class="mdc-card mdc-layout-grid__cell--span-12">
@@ -28,7 +28,7 @@ $for = $user->managerFor();
         <div class="mdc-tab-scroller">
             <div class="mdc-tab-scroller__scroll-area">
                 <div class="mdc-tab-scroller__scroll-content">
-                    <button class="mdc-tab sub-page-tab mdc-tab--active sub-page-change" data-page="/campaign/<?php echo $path[2] ; ?>/profile">
+                    <button class="mdc-tab sub-page-tab mdc-tab--active sub-page-change" data-page="profile">
                         <span class="mdc-tab__content">
                             <span class="mdc-tab__icon material-icons" aria-hidden="true">person</span>
                             <span class="mdc-tab__text-label">Profile</span>
@@ -38,7 +38,7 @@ $for = $user->managerFor();
                         </span>
                         <span class="mdc-tab__ripple"></span>
                     </button>
-                    <button class="mdc-tab sub-page-tab sub-page-change" data-page="/campaign/<?php echo $path[2] ; ?>/finances">
+                    <button class="mdc-tab sub-page-tab sub-page-change" data-page="finances">
                         <span class="mdc-tab__content">
                             <span class="mdc-tab__icon material-icons" aria-hidden="true">attach_money</span>
                             <span class="mdc-tab__text-label">Finances</span>
@@ -48,7 +48,7 @@ $for = $user->managerFor();
                         </span>
                         <span class="mdc-tab__ripple" data-mdc-auto-init="MDCRipple"></span>
                     </button>
-                    <button class="mdc-tab sub-page-tab sub-page-change" data-page="/campaign/<?php echo $path[2] ; ?>/materials">
+                    <button class="mdc-tab sub-page-tab sub-page-change" data-page="materials">
                         <span class="mdc-tab__content">
                             <span class="mdc-tab__icon material-icons" aria-hidden="true">format_shapes</span>
                             <span class="mdc-tab__text-label">Materials</span>
@@ -58,11 +58,22 @@ $for = $user->managerFor();
                         </span>
                         <span class="mdc-tab__ripple" data-mdc-auto-init="MDCRipple"></span>
                     </button>
+                    <button class="mdc-tab sub-page-tab sub-page-change" data-page="strikes">
+                        <span class="mdc-tab__content">
+                            <span class="mdc-tab__icon material-icons" aria-hidden="true">gavel</span>
+                            <span class="mdc-tab__text-label">Strikes</span>
+                        </span>
+                        <span class="mdc-tab-indicator">
+                            <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                        </span>
+                        <span class="mdc-tab__ripple" data-mdc-auto-init="MDCRipple"></span>
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
-<!--    <div id="sub-variable-region"></div>-->
+    <div class="mdc-layout-grid__cell--span-12">
+        <div id="sub-variable-region" class="mdc-layout-grid__inner"></div>
+    </div>
 
 <?php endif; ?>

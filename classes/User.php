@@ -2,14 +2,11 @@
 Class User {
     /*** TODO ADD THESE FEATURES
      * MAKE A DATABASE TABLE FOR THE UNRECOGNIZED EMAILS
-     * CHECKING FOR USER ROLES
      * CHECKING FOR ANY CONTACT THREADS THAT THIS USER STARTED
-     * GETTING THE AVAILABLE ELECTIONS FOR A USER
-     * CHECKING TO SEE IF A USER HAS VOTED FOR AN ELECTION ALREADY
      */
 
     public $email, $status, $u_id, $grade, $unrecognized_request;
-    private $elections;
+    private $elections, $admin_rights;
 
     /**
      * User constructor.
@@ -135,6 +132,7 @@ Class User {
     }
 
     /**
+     * TODO REMOVE FUNCTION FROM HERE AND ADD A GETALL TO THE ELECTIONS CLASS
      * Get an array of Election objects that the user is allowed to vote for
      * @return Election[]
      * @throws Exception
@@ -256,9 +254,7 @@ Class User {
     public static function deleteConfirmToken($track){
         Database::secureQuery("DELETE FROM `vote_confirmations` WHERE `track` = :t", array(":t"=>$track), null);
     }
-    public static function adminPermissions(){
-        return array("u_e"=>"Unrecognized Email Approval");
-    }
+
     public function hasVoted($db_code){
         $verification = hash("sha256", $db_code.$this->u_id);
         $data = Database::secureQuery("SELECT COUNT(`db_code`) as `vote` FROM `votes` WHERE `verification_hash` = :v", array(":v"=>$verification), 'fetch');
@@ -293,7 +289,7 @@ Class User {
         return $data["manager"] !== "0";
     }
 
-    public function managerFor(){
+    public function managerOf(){
         $candidates = [];
         $data = Database::secureQuery(
             "SELECT * FROM `roles` WHERE `association` != 'admin' AND `email` = :email",
@@ -303,5 +299,46 @@ Class User {
             $candidates[] = new Candidate($d['association']);
         }
         return $candidates;
+    }
+
+    public function isManagerFor($id){
+        $data = Database::secureQuery(
+            "SELECT COUNT(*) as `manager` FROM `roles` WHERE `association` = :id AND `email` = :email",
+            array(":id"=>$id, ":email"=>$this->email),
+            'fetch');
+        return $data["manager"] !== "0";
+    }
+
+    public function hasAdminPrivilege($privilege) {
+        $this->admin_rights = $this->admin_rights ??
+            explode(
+                "/",
+                Database::secureQuery(
+                "SELECT `privileges` FROM `roles` WHERE `email` = :email AND `association` = 'admin'",
+                array(":email"=>$this->email)
+                , 'fetch')["privileges"]
+            );
+        if($this->admin_rights[0] === "*"){
+            return true;
+        }
+        return in_array($privilege, $this->admin_rights);
+    }
+
+    public function getCampaignPrivileges($candidate_id){
+        return explode(
+            "/",
+            Database::secureQuery(
+                "SELECT `privileges` FROM `roles` WHERE `email` = :email AND `association` = :cand_id",
+                array(":email"=>$this->email, ":cand_id"=>$candidate_id)
+                , 'fetch')["privileges"]
+        );
+    }
+
+    public function hasCampaignPrivileges($candidate_id, $privilege){
+        $data = $this->getCampaignPrivileges($candidate_id);
+        if( $data[0] === "*" ){
+            return true;
+        }
+        return in_array($privilege, $data);
     }
 }

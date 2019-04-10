@@ -55,7 +55,9 @@ function changePage(path = null){
     $.get("/load.php?page=" + window.location.pathname, function(a, b, c){
         $(vr).html(a);
         let success_event = new Event("content_loaded");
-        document.body.dispatchEvent(success_event);
+        setTimeout(() => {
+            document.body.dispatchEvent(success_event);
+        }, 1000);
         if( c.getResponseHeader("X-Page-Redirect") !== null ){
             changePage(c.getResponseHeader("X-Page-Redirect"));
             return;
@@ -72,7 +74,7 @@ function changePage(path = null){
     }).then(function(){
         $(vr).ready(function(){
             $(pld).addClass("mdc-linear-progress--closed");
-            $(vr).fadeIn();
+            $(vr).fadeIn(1);
         });
     });
 
@@ -157,7 +159,14 @@ function loadSubPage(path = null){
         history.pushState({}, null, path);
     }
     $.get("/subload.php?page=" + window.location.pathname, (a, b, c) => {
+        if( c.getResponseHeader("X-Page-Redirect") !== null ){
+            changePage(c.getResponseHeader("X-Page-Redirect"));
+            return;
+        }
         $("#sub-variable-region").html(a);
+        if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
+            addSources(c);
+        }
     });
 }
 
@@ -188,7 +197,7 @@ $(document.body).on("click", ".change-page", ev => {
     document.querySelector(".url-content").select();
     document.execCommand("copy");
     $(ev.currentTarget).html("Copied!");
-    setTimeout(()=> {$(ev.currentTarget).html("Copy");}, 1000);
+    setTimeout(()=> {$(ev.currentTarget).html("Copy");}, 500);
 }).on("click", ".submit-form", ev => {
     let button = ev.currentTarget;
     button.setAttribute("disabled", true);
@@ -249,8 +258,15 @@ $(document.body).on("click", ".change-page", ev => {
         return true;
     }
     if( Ji.hasClass("so-print") ){
-        let popup = openPopup(url);
-        popup.postMessage("printClose", url);
+        var popup = openPopup(url);
+        let readyCheck = setInterval(function() {
+            if(popup.document.readyState === 'complete' ) {
+                clearInterval(readyCheck);
+                setTimeout(() => {
+                    popup.postMessage("printClose", url);
+                }, 1200);
+            }
+        }, 100);
         return true;
     }
     // TODO ADD SERVER REPORTING OF ERROR
@@ -258,12 +274,25 @@ $(document.body).on("click", ".change-page", ev => {
     return false;
 });
 
-window.addEventListener("printClose", () => {
-    document.body.addEventListener("content_loaded", () => {
-        print();
-        close();
-    });
-}, false);
+window.addEventListener("message", receiveMessage, false);
+
+function receiveMessage(event) {
+    if (event.origin === window.location.origin ){
+        if( event.data === "printClose" ){
+            let readyInterval = setInterval(() => {
+               if(initial_load){
+                   clearInterval(readyInterval);
+                   print();
+                   close();
+               }
+            }, 100);
+        }
+    }
+}
+let initial_load = false;
+document.body.addEventListener("content_loaded", () => {
+    initial_load = true;
+});
 
 $("#variable-region").on("DOMSubtreeModified", () => {
     window.mdc.autoInit(document, () => {});

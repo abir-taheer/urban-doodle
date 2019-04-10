@@ -106,8 +106,10 @@ h1, h2, h3, h4, .heading{
     font-weight: 600;
 }
 .candidate-select {
-    cursor: move;
     counter-reset: rank;
+}
+.candidate-select .mdc-list-item {
+    cursor: move !important;
 }
 .rank-candidates {
     counter-reset: rank;
@@ -228,4 +230,7 @@ h1, h2, h3, h4, .heading{
 }
 .copy-social:hover {
     opacity: 0.7;
+}
+.pos-rel {
+    position: relative;
 }

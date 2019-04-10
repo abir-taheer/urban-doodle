@@ -56,7 +56,7 @@
 
     //this statement is only reached in the case that the file requested by the user does not exist
 
-    $auto_correct_exceptions = array("..", ".", "index.php", "vote");
+    $auto_correct_exceptions = array("..", ".", "index.php", "vote.php");
     //since the requested file does not exist check our array of files to see if there is a file with a similar name that does exist
     foreach($available_pages as $p ){
         //if the current page being compared is the index, skip it since it does not have an actual name
