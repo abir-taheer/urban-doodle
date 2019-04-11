@@ -153,12 +153,11 @@ $id = Session::getIdInfo();
         </div>
 
         <!-- Social Media Share Dialog -->
-        <div class="mdc-dialog" data-mdc-auto-init="MDCDialog">
+        <div class="mdc-dialog share-dialog" data-mdc-auto-init="MDCDialog">
             <div class="mdc-dialog__container">
                 <div class="mdc-dialog__surface">
-                    <!-- Title cannot contain leading whitespace due to mdc-typography-baseline-top() -->
-                    <h2 class="mdc-dialog__title" id="my-dialog-title">Share Content</h2>
-                    <div class="mdc-dialog__content" id="my-dialog-content">
+                    <h2 class="mdc-dialog__title">Share Content</h2>
+                    <div class="mdc-dialog__content">
                         <div class="share-url">
                             <input type="text" class="url-content" readonly>
                             <a class="copy-social">Copy</a>
@@ -172,6 +171,24 @@ $id = Session::getIdInfo();
                         <button class="mdc-icon-button social so-envelope"><i class="fa fa-envelope"></i></button>
                         <button class="mdc-icon-button social so-print"><i class="fa fa-print"></i></button>
 
+                    </footer>
+                </div>
+            </div>
+            <div class="mdc-dialog__scrim"></div>
+        </div>
+
+        <div class="mdc-dialog confirm-dialog">
+            <div class="mdc-dialog__container">
+                <div class="mdc-dialog__surface">
+                    <h2 class="mdc-dialog__title">Confirm</h2>
+                    <div class="mdc-dialog__content" id="confirm-dialog-content"></div>
+                    <footer class="mdc-dialog__actions">
+                        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
+                            <span class="mdc-button__label">No</span>
+                        </button>
+                        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes">
+                            <span class="mdc-button__label">Yes</span>
+                        </button>
                     </footer>
                 </div>
             </div>

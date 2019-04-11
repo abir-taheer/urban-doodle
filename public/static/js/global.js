@@ -172,7 +172,9 @@ function loadSubPage(path = null){
 
 // Create an instance of the drawer and store it
 const drawer = new mdc.drawer.MDCDrawer(document.querySelector(".mdc-drawer"));
-const shareBox = new mdc.dialog.MDCDialog(document.querySelector('.mdc-dialog'));
+const shareBox = new mdc.dialog.MDCDialog(document.querySelector('.share-dialog'));
+const confirmDialog = new mdc.dialog.MDCDialog(document.querySelector('.confirm-dialog'));
+
 
 let snackbar = new mdc.snackbar.MDCSnackbar(document.querySelector(".mdc-snackbar"));
 
@@ -311,6 +313,22 @@ if(! isSignedIn){
     }
 }
 
+confirmDialog.listen('MDCDialog:opened', () => {
+    window.mdc.autoInit(document, () => {});
+});
+
+function showConfirmation(template = document.createElement("template"), onConfirm = ()=>{}, onReject = () => {}){
+    let content = template.content.cloneNode(true);
+    let dialog_content = document.getElementById("confirm-dialog-content");
+    dialog_content.innerHTML = "";
+    dialog_content.appendChild(content);
+    confirmDialog.open();
+    $(".confirm-dialog .mdc-dialog__button").on("click", e => {
+        let confirmation = e.currentTarget.getAttribute("data-mdc-dialog-action") === "yes";
+        confirmation ? onConfirm() : onReject();
+        $(".confirm-dialog .mdc-dialog__button").off();
+    });
+}
 
 $(window).resize(() => {
     if( window.innerWidth <= 1250 ){

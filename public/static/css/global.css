@@ -234,3 +234,17 @@ h1, h2, h3, h4, .heading{
 .pos-rel {
     position: relative;
 }
+.change-pic-overlay {
+    position: absolute;
+    background-color: black;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+.change-pic-overlay:hover {
+    opacity: 0.8;
+    cursor: pointer;
+}
+.change-pic-overlay p {
+    margin-top: 37%;
+    color: white;
+}
