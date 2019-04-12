@@ -52,5 +52,6 @@ if( isset($pages[$path[1]]) ){
 
     if( file_exists("../subpages/". $path[1]."/".$path[$main_page["file_loc"]].".php") ){
         require_once "../subpages/". $path[1]."/".$path[$main_page["file_loc"]].".php";
+        Web::sendDependencies();
     }
 }

@@ -276,6 +276,10 @@ $(document.body).on("click", ".change-page", ev => {
     return false;
 });
 
+function sendForm(){
+
+}
+
 window.addEventListener("message", receiveMessage, false);
 
 function receiveMessage(event) {

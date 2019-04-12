@@ -179,7 +179,7 @@ Class User {
      */
     public function makeFormToken($request, $extra, $expiration){
         $expiration = $expiration->format("Y-m-d H:i:s");
-        $token = bin2hex(random_bytes(36));
+        $token = bin2hex(random_bytes(32));
         $data = Database::secureQuery(
             "SELECT * FROM `form_tokens` WHERE `user_id` = :u AND `request` = :r AND `extra` = :e",
             array(

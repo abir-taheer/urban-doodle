@@ -238,7 +238,7 @@ h1, h2, h3, h4, .heading{
     position: absolute;
     background-color: black;
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 }
 .change-pic-overlay:hover {
     opacity: 0.8;
@@ -247,4 +247,9 @@ h1, h2, h3, h4, .heading{
 .change-pic-overlay p {
     margin-top: 37%;
     color: white;
+}
+#pfp-upload input[type='file']{
+    height: 0;
+    width: 0;
+    border: 0;
 }

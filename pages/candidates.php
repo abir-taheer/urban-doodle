@@ -28,7 +28,7 @@
         foreach( $candidates as $candidate ): ?>
             <div class="mdc-card mdc-layout-grid__cell--span-4">
                 <div class="mdc-card__primary-action change-page" data-page="/candidates/<?php echo $e->db_code."/".$candidate->id; ?>" tabindex="0" data-mdc-auto-init="MDCRipple">
-                    <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('/static/elections/<?php echo addslashes($candidate->db_code)."/candidates/".addslashes($candidate->id); ?>.png');"></div>
+                    <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('/static/elections/<?php echo addslashes($candidate->db_code)."/candidates/".addslashes($candidate->id); ?>.jpg');"></div>
                     <div>
                         <h2 class="mdc-typography mdc-typography--headline6 vote-card__pad"><?php echo htmlspecialchars($candidate->name); ?></h2>
                     </div>
@@ -69,7 +69,7 @@
                 <button class="mdc-button change-page" data-mdc-auto-init="MDCRipple" data-page="."><- Back To Candidates</button>
                 <br>
                 <div class="flx-ctr">
-                    <img class="candidate-photo" src="/static/elections/<?php echo addslashes($candidate->db_code)."/candidates/".addslashes($candidate->id); ?>.png" alt="Candidate Photo">
+                    <img class="candidate-photo" src="/static/elections/<?php echo addslashes($candidate->db_code)."/candidates/".addslashes($candidate->id); ?>.jpg" alt="Candidate Photo">
                 </div>
                 <h2 class="txt-ctr"><?php echo htmlspecialchars($candidate->name); ?></h2>
 
