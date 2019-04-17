@@ -58,14 +58,16 @@ function changePage(path = null){
         setTimeout(() => {
             document.body.dispatchEvent(success_event);
         }, 1000);
-        if( c.getResponseHeader("X-Page-Redirect") !== null ){
+        if( c.getResponseHeader("X-Page-Redirect") != null ){
             changePage(c.getResponseHeader("X-Page-Redirect"));
             return;
         }
+
         if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
             addSources(c);
         }
-        if( c.getResponseHeader("X-Load-Sub") !== null ){
+
+        if( c.getResponseHeader("X-Load-Sub") != null ){
             loadSubPage();
         }
     }).fail(function(){

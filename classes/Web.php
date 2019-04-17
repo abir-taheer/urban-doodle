@@ -1,6 +1,7 @@
 <?php
 class Web {
     private static $utc_time;
+    public static $headers_sent = false;
 
     /**
      * An array of all of the items to be generated that will appear on the menu
@@ -102,6 +103,10 @@ class Web {
      * Sends relevant information using HTTP headers
      */
     public static function sendDependencies(){
+        if( self::$headers_sent ){
+            return;
+        }
+        self::$headers_sent = true;
         if( count(self::$dependencies['script']) + count(self::$dependencies['css']) > 0 ){
             header("X-Nonce: ".self::getNonce());
             header("X-Fetch-New-Sources: true");

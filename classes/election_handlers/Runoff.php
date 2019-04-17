@@ -11,6 +11,9 @@ class Runoff implements ElectionHandler {
         // Since we can already assume that there is already a valid user if this function is being called
         $user = Session::getUser();
         Web::addScript("/static/js/runoff.js");
+        Web::sendDependencies();
+
+        // TODO move this to a template file
         $response = "
             <div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12 instant\">
                 <h3 class=\"txt-ctr\">".$this->election->name."</h3>

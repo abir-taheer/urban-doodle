@@ -48,9 +48,11 @@
 
     if(in_array($page.".php", $available_pages)){
         //the page that the user requested does exist, include it in the response
-        include("../pages/".$page.".php");
-        //We included the page that the user request, stop executing this script
+        require_once  "../pages/".$page.".php";
+
         Web::sendDependencies();
+
+        //We included the page that the user request, stop executing this script
         exit;
     }
 
