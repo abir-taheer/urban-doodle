@@ -24,7 +24,7 @@ header("X-Load-Sub: True");
                 <button class="mdc-tab sub-page-tab sub-page-change" data-page="/admin/live_results">
                         <span class="mdc-tab__content">
                             <span class="mdc-tab__icon material-icons" aria-hidden="true">attach_money</span>
-                            <span class="mdc-tab__text-label">Finances</span>
+                            <span class="mdc-tab__text-label">Incomplete</span>
                         </span>
                     <span class="mdc-tab-indicator">
                             <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>

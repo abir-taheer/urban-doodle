@@ -50,6 +50,13 @@ if( isset($pages[$path[1]]) ){
 
     }
 
+    if( $path[1] === "admin" ){
+        if( ! isset($path[2]) || $path[2] === ""){
+            echo "<a class=\"mdc-layout-grid__cell--span-12\">Select an item from the menu above</a>";
+            exit;
+        }
+    }
+
     if( file_exists("../subpages/". $path[1]."/".$path[$main_page["file_loc"]].".php") ){
         require_once "../subpages/". $path[1]."/".$path[$main_page["file_loc"]].".php";
         Web::sendDependencies();

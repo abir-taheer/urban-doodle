@@ -17,7 +17,7 @@ class Runoff implements ElectionHandler {
         $response = "
             <div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12 instant\">
                 <h3 class=\"txt-ctr\">".$this->election->name."</h3>
-                <p class=\"txt-ctr small-txt sub-container\">Order the candidates based on your preference by holding down and dragging. <a class=\"desktop-only\">Click on the X to remove a candidate from your ballot</a><a class=\"mobile-only\">Swipe on a candidate to remove them from your ballot</a>.</p>
+                <p class=\"txt-ctr small-txt sub-container\">Order the candidates based on your preference by holding down and dragging. <b><a class=\"desktop-only\">Click on the X to remove a candidate from your ballot</a><a class=\"mobile-only\">Swipe on a candidate to remove them from your ballot</a>.</b></p>
                 <form class=\"vote-form\">
                     <input type=\"hidden\" name=\"election\" value=\"".$this->election->db_code."\">
                     <ul class=\"mdc-list sub-container candidate-select\" data-mdc-auto-init=\"MDCList\">
@@ -65,7 +65,7 @@ class Runoff implements ElectionHandler {
                 <p class=\"txt-ctr small-txt sub-container red-txt\">Please verify that the votes below are in the order that you previously selected.</p>
                 <form class=\"confirm-form\">
                     <input type=\"hidden\" name=\"token\" value=\"".$user->makeFormToken("submit_vote", $votes, Web::UTCDate("+1 hour"))."\">
-                    <ul class=\"mdc-list rank-candidates sub-container\" data-mdc-auto-init=\"MDCList\">
+                    <ul class=\"mdc-list rank-candidates mdc-list--non-interactive sub-container\" data-mdc-auto-init=\"MDCList\">
         ";
         $candidates = $this->decodeVotes($form["content"]);
         foreach( $candidates as $id ) {
@@ -124,6 +124,8 @@ class Runoff implements ElectionHandler {
 
         while( $winner === null ){
             $votes_this_round = 0;
+            $vote_data["rounds"][$current_round]["eliminated"] = [];
+
             foreach( $decoded_votes as $choices ){
                 foreach( $choices as $vote ){
                     if( ! in_array($vote, $eliminated) ){
@@ -157,6 +159,7 @@ class Runoff implements ElectionHandler {
 
             $current_round++;
         }
+
         $vote_data["total_votes"] = count($decoded_votes);
         $vote_data["winner"] = $winner;
         return $vote_data;

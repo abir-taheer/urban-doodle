@@ -14,24 +14,24 @@ class Web {
             "page"=>"/",
             "session"=>"false"
         ],
-        [
-            "text"=>"My Feed",
-            "icon"=>"person",
-            "page"=>"/",
-            "session"=>"true"
-        ],
+//        [
+//            "text"=>"My Feed",
+//            "icon"=>"person",
+//            "page"=>"/",
+//            "session"=>"true"
+//        ],
         [
             "text"=>"Elections",
             "icon"=>"how_to_vote",
             "page"=>"/elections",
             "session"=>"*"
         ],
-        [
-            "text"=>"Results",
-            "icon"=>"ballot",
-            "page"=>"/results",
-            "session"=>"*"
-        ],
+//        [
+//            "text"=>"Results",
+//            "icon"=>"ballot",
+//            "page"=>"/results",
+//            "session"=>"*"
+//        ],
         [
             "text"=>"Candidates",
             "icon"=>"people",
@@ -237,6 +237,15 @@ class Web {
     }
     public static function getSocialPic($path){
         switch($path[1]){
+            case "vote":
+                if( isset($path[2]) && $path[2] !== "" ){
+                    try{
+                        $election = new Election($path[2]);
+                        return "https://abir.taheer.me/resources/images/vote.jpg";
+                    } catch(Exception $e){
+                        // Let this just go onto the default
+                    }
+                }
             case "candidates":
                 if( isset($path[3]) && $path[3] !== ""){
                     $candidate = new Candidate($path[3]);

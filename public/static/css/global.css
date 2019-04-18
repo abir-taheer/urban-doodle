@@ -253,3 +253,6 @@ h1, h2, h3, h4, .heading{
     width: 0;
     border: 0;
 }
+.no-bullet li {
+    list-style: none;
+}

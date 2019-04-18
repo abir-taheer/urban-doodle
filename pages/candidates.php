@@ -36,7 +36,7 @@
                 <div class="mdc-card__actions">
                     <div class="mdc-card__action-buttons">
                         <button class="mdc-button mdc-card__action mdc-card__action--button change-page" data-page="/candidates/<?php echo $e->db_code."/".$candidate->id; ?>">View</button>
-                        <?php if( Session::hasSession() ) : ?>
+                        <?php if( Session::hasSession() && false ): ?>
                         <button class="mdc-button mdc-card__action mdc-card__action--button"><?php
                             $user = Session::getUser();
                             echo $user->isFollowing($candidate->id) ? "Unfollow" : "Follow";
@@ -72,7 +72,14 @@
                     <img class="candidate-photo" src="/static/elections/<?php echo addslashes($candidate->db_code)."/candidates/".addslashes($candidate->id); ?>.jpg" alt="Candidate Photo">
                 </div>
                 <h2 class="txt-ctr"><?php echo htmlspecialchars($candidate->name); ?></h2>
-
+                <ul class="no-bullet">
+                    <?php foreach( $candidate->getBasicInfo() as $info ): ?>
+                        <li><?php echo htmlspecialchars(ucwords($info->type)); ?>:<br>
+                            <div class="sub-container"><?php echo $info->getEncodedContent(); ?></div>
+                        </li>
+                        <br>
+                    <?php endforeach; ?>
+                </ul>
             </div>
             <br>
         </div>

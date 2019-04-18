@@ -17,4 +17,13 @@ Class Candidate{
     public function getElection(){
         return new Election($this->db_code);
     }
+
+    public function getBasicInfo(){
+        $data = Database::secureQuery("SELECT * FROM `basic_info` WHERE `id` = :id", array(":id"=>$this->id), null);
+        $response = [];
+        foreach( $data as $info ){
+            $response[] = new BasicInfo($info["track"]);
+        }
+        return $response;
+    }
 }
