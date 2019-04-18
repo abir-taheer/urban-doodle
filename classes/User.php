@@ -113,6 +113,7 @@ Class User {
                 null);
             return true;
         } catch(Exception $e){
+            echo $e;
             return false;
         }
 
@@ -141,7 +142,7 @@ Class User {
         if( ! isset($this->elections) ){
             $data = Database::secureQuery(
                 "SELECT * FROM `elections` WHERE `grade` LIKE :grade",
-                array(":grade"=>"%".$this->grade."%"),
+                array(":grade"=>"%/".$this->grade."/%"),
                 null
             );
             foreach( $data as $i ){
@@ -264,7 +265,7 @@ Class User {
         if( $this->status !== 1 ){
             return false;
         }
-        $data = Database::secureQuery("SELECT COUNT(*) as `possible` FROM `elections` WHERE `db_code` = :d AND `grade` LIKE :g", array(":d"=>$db_code, ":g"=>"%".$this->grade."%"), 'fetch');
+        $data = Database::secureQuery("SELECT COUNT(*) as `possible` FROM `elections` WHERE `db_code` = :d AND `grade` LIKE :g", array(":d"=>$db_code, ":g"=>"%/".$this->grade."/%"), 'fetch');
         return $data["possible"] !== "0";
     }
 

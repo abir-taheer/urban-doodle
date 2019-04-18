@@ -50,5 +50,29 @@ class Talos {
 
     public function searchApi($query){
         // TODO IMPLEMENT THIS
+        $first_request = curl_init();
+        curl_setopt_array($first_request, [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => "https://talos.stuy.edu/api/students/?format=json&search=".urlencode($query),
+            CURLOPT_COOKIE => "csrftoken=".$this->csrf_token.";sessionid=".$this->session,
+            CURLOPT_USERAGENT => org_name." Voting Agent",
+        ]);
+        $first_response = curl_exec($first_request);
+
+        $first_data = json_decode($first_response, true);
+
+        $limit = $first_data["count"] + 1;
+
+        $second_request = curl_init();
+        curl_setopt_array($second_request, [
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_URL => "https://talos.stuy.edu/api/students/?format=json&search=".urlencode($query)."&limit=".$limit,
+            CURLOPT_COOKIE => "csrftoken=".$this->csrf_token.";sessionid=".$this->session,
+            CURLOPT_USERAGENT => org_name." Voting Agent",
+        ]);
+
+        $search_response = json_decode(curl_exec($second_request), true);
+
+        return $search_response;
     }
 }

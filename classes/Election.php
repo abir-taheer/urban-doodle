@@ -53,4 +53,8 @@ class Election {
         return $response;
     }
 
+    public function getAllVotes(){
+        return Database::secureQuery("SELECT * FROM `votes` WHERE `db_code` = :d" , array(":d"=>$this->db_code), null);
+    }
+
 }

@@ -106,8 +106,60 @@ class Runoff implements ElectionHandler {
         return count($all_votes) === count($this->election->getCandidates()) &&  count($all_votes) === $accounted_for && count($confirmed) != 0;
     }
 
-    public function countVotes(): array{
-        return array();
+    public function countVotes(): array {
+        $decoded_votes = [];
+        $eliminated = [];
+        foreach( $this->election->getAllVotes() as $raw_vote ){
+            $decoded_votes[] = $this->decodeVotes($raw_vote["content"]);
+        }
+        $vote_data = [];
+        $current_round = 0;
+        $winner = null;
+
+        // Setup the first round of the vote counts as 0
+        foreach( $this->election->getCandidates() as $candidate ){
+            $vote_data["rounds"][$current_round]["votes"][$candidate->id] = 0;
+            $vote_data["candidates"][$candidate->id] = $candidate->name;
+        }
+
+        while( $winner === null ){
+            $votes_this_round = 0;
+            foreach( $decoded_votes as $choices ){
+                foreach( $choices as $vote ){
+                    if( ! in_array($vote, $eliminated) ){
+                        $vote_data["rounds"][$current_round]["votes"][$vote]++;
+                        $votes_this_round++;
+                        break;
+                    }
+                }
+            }
+            $vote_data["rounds"][$current_round]["total_votes"] = $votes_this_round;
+
+            $lowest_votes = min($vote_data["rounds"][$current_round]["votes"]);
+            $highest_votes = max($vote_data["rounds"][$current_round]["votes"]);
+
+            if( $highest_votes === $lowest_votes ){
+                $winner = "Tie / No Winner";
+                break;
+            } else {
+                if( $highest_votes / $votes_this_round >= 0.5){
+                    $winner = array_search($highest_votes, $vote_data["rounds"][$current_round]["votes"]);
+                    break;
+                }
+            }
+
+            foreach($vote_data["rounds"][$current_round]["votes"] as $id => $vote_count){
+                if( $vote_count === $lowest_votes ){
+                    $eliminated[] = $id;
+                    $vote_data["rounds"][$current_round]["eliminated"][] = $id;
+                }
+            }
+
+            $current_round++;
+        }
+        $vote_data["total_votes"] = count($decoded_votes);
+        $vote_data["winner"] = $winner;
+        return $vote_data;
     }
     public function hasAnalysisMethod(): bool {
         return false;
@@ -119,7 +171,6 @@ class Runoff implements ElectionHandler {
 
     public function decodeVotes($str): array
     {
-        // TODO: Implement decodeVotes() method.
         return explode(",", $str);
     }
 }

@@ -75,7 +75,7 @@ $id = Session::getIdInfo();
             <div class="mdc-top-app-bar__row">
                 <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
                     <a class="material-icons mdc-top-app-bar__navigation-icon menu-trigger">menu</a>
-                    <span class="mdc-top-app-bar__title sumana"><?php echo htmlspecialchars(org_name); ?></span>
+                    <span class="mdc-top-app-bar__title sumana"><?php echo htmlspecialchars(org_name); ?><?php if(VotingStation::isVotingStation() && Session::hasSession()): ?> : Voting Station Session <a class="js-timer" data-timer-type="countdown" data-count-down-date="<?php echo base64_encode($_COOKIE["Current_Session"]); ?>"></a><?php endif; ?></span>
                 </section>
             </div>
         </header>
@@ -90,7 +90,7 @@ $id = Session::getIdInfo();
             <div class="mdc-drawer__content">
         <?php if(Session::hasSession()): ?>
 
-                <a class="mdc-list-item sign-out clickable">
+                <a class="mdc-list-item" href="/signout.php" >
                     <i class="material-icons mdc-list-item__graphic" aria-hidden="true">power_settings_new</i>
                     <span class="mdc-list-item__text">Sign Out</span>
                 </a>
