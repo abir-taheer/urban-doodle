@@ -46,7 +46,7 @@ case -1: ?>
                 <p class="mdl-color-text--red-500 error-text fear">There were errors with your submission:</p>
             </form>
             <div>
-                <button class="mdc-button submit-form" data-mdc-auto-init="MDCRipple">Submit</button>
+                <button class="mdc-button submit-form" >Submit</button>
             </div>
             <br><br>
         </div>
@@ -85,10 +85,13 @@ case -1: ?>
     </div>
     <?php break; ?>
 <?php case 1: ?>
+        <?php if( count($user->getElections()) === 0 ): ?>
+            <p class="mdc-layout-grid__cell--span-12">There are currently no ongoing elections for you to vote in.</p>
+        <?php endif; ?>
     <?php foreach( $user->getElections() as $e ): ?>
             <div class="mdc-card mdc-layout-grid__cell--span-4">
-                <div class="mdc-card__primary-action change-page" data-page="/vote/<?php echo htmlspecialchars($e->db_code); ?>" tabindex="0" data-mdc-auto-init="MDCRipple">
-                    <div class="mdc-card__media mdc-card__media--16-9 vote-card__media"></div>
+                <div class="mdc-card__primary-action change-page" data-page="/vote/<?php echo htmlspecialchars($e->db_code); ?>">
+                    <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(/static/img/election_covers/<?php echo $e->pic; ?>);"></div>
                     <div>
                         <h2 class="mdc-typography mdc-typography--headline6 vote-card__pad"><?php echo htmlspecialchars($e->name); ?></h2>
                     </div>
@@ -111,8 +114,8 @@ case -1: ?>
                 </div>
                 <div class="mdc-card__actions">
                     <div class="mdc-card__action-buttons">
-                        <button class="mdc-button mdc-card__action mdc-card__action--button change-page" data-page="/vote/<?php echo htmlspecialchars($e->db_code); ?>" data-mdc-auto-init="MDCRipple">Vote</button>
-                        <button class="mdc-button mdc-card__action mdc-card__action--button change-page" data-page="/candidates/<?php echo htmlspecialchars($e->db_code); ?>" data-mdc-auto-init="MDCRipple">Candidates</button>
+                        <button class="mdc-button mdc-card__action mdc-card__action--button change-page" data-page="/vote/<?php echo htmlspecialchars($e->db_code); ?>">Vote</button>
+                        <button class="mdc-button mdc-card__action mdc-card__action--button change-page" data-page="/candidates/<?php echo htmlspecialchars($e->db_code); ?>">Candidates</button>
                     </div>
                     <div class="mdc-card__action-icons">
                         <button class="mdc-icon-button share-card material-icons mdc-card__action mdc-card__action--icon--unbounded" title="Share" data-mdc-ripple-is-unbounded="true" data-share-url="<?php echo (web_ssl) ? "https://" : "http://"; echo addslashes(web_domain); ?>/vote/<?php echo addslashes($e->db_code); ?>">share</button>

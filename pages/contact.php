@@ -20,7 +20,7 @@ Web::addScript("/static/js/contact.js");
             </div>
             <br>
             <div class="flx-ctr">
-                <button class="mdc-button mdc-button--outlined" data-mdc-auto-init="MDCRipple">Submit</button>
+                <button class="mdc-button mdc-button--outlined">Submit</button>
             </div>
         </form>
         <br>

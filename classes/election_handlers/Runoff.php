@@ -6,7 +6,7 @@ class Runoff implements ElectionHandler {
         $this->election = $election;
     }
 
-    public function makeSelectionForm(): void{
+    public function makeSelectionForm(): void {
         // Get the user from the session
         // Since we can already assume that there is already a valid user if this function is being called
         $user = Session::getUser();
@@ -160,7 +160,12 @@ class Runoff implements ElectionHandler {
             $current_round++;
         }
 
+
+
+        $vote_data["total_eligible_voters"] = $this->election->numPossibleVoters();
+        $vote_data["eligible_voters_by_grade"] = $this->election->getEligibleVotersByGrade();
         $vote_data["total_votes"] = count($decoded_votes);
+        $vote_data["votes_by_grade"] = $this->election->getVotesByGrade();
         $vote_data["winner"] = $winner;
         return $vote_data;
     }

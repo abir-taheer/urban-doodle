@@ -29,7 +29,7 @@ class Image
 
     }
 
-    public function resizePfp($width, $height = -1){
+    public function resizePfp($width = -1, $height = -1){
         $this->image = imagescale ( $this->image , $width, $height);
         $this->width = imagesx($this->image);
         $this->height = imagesy($this->image);

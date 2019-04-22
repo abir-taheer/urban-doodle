@@ -46,7 +46,7 @@ $for = $user->managerOf();
                             <span class="mdc-tab-indicator">
                             <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
                         </span>
-                        <span class="mdc-tab__ripple" data-mdc-auto-init="MDCRipple"></span>
+                        <span class="mdc-tab__ripple"></span>
                     </button>
                     <button class="mdc-tab sub-page-tab sub-page-change" data-page="materials">
                         <span class="mdc-tab__content">
@@ -56,7 +56,7 @@ $for = $user->managerOf();
                             <span class="mdc-tab-indicator">
                             <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
                         </span>
-                        <span class="mdc-tab__ripple" data-mdc-auto-init="MDCRipple"></span>
+                        <span class="mdc-tab__ripple"></span>
                     </button>
                     <button class="mdc-tab sub-page-tab sub-page-change" data-page="strikes">
                         <span class="mdc-tab__content">
@@ -66,7 +66,7 @@ $for = $user->managerOf();
                         <span class="mdc-tab-indicator">
                             <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
                         </span>
-                        <span class="mdc-tab__ripple" data-mdc-auto-init="MDCRipple"></span>
+                        <span class="mdc-tab__ripple" ></span>
                     </button>
                 </div>
             </div>

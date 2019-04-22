@@ -16,7 +16,7 @@ if($form['request'] === "confirm"){
     exit;
 }
 
-$response = [];
+$response = ["status"=>"error", "message"=>[]];
 //we don't need to check if the file exists since the data associated with the tokens is controlled and any 500 errors will be the result of invalid code
 if( count($form) > 1 ){
     //retrieve the file associated with the form function

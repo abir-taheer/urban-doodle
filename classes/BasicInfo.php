@@ -14,7 +14,7 @@ class BasicInfo {
     public function getEncodedContent(){
         switch($this->type){
             case "website":
-                $content = "<a href=\"//".addslashes($this->content)."\" target=\"_blank\"'>".$this->content."</a>";
+                $content = "<a href=\"http://".addslashes($this->content)."\" target=\"_blank\"'>".$this->content."</a>";
                 break;
             default:
                 $content = htmlspecialchars($this->content);

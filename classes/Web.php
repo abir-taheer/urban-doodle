@@ -26,12 +26,12 @@ class Web {
             "page"=>"/elections",
             "session"=>"*"
         ],
-//        [
-//            "text"=>"Results",
-//            "icon"=>"ballot",
-//            "page"=>"/results",
-//            "session"=>"*"
-//        ],
+        [
+            "text"=>"Results",
+            "icon"=>"ballot",
+            "page"=>"/results",
+            "session"=>"*"
+        ],
         [
             "text"=>"Candidates",
             "icon"=>"people",
@@ -185,6 +185,10 @@ class Web {
             case "contact":
                 return "Contact Us | ".web_title;
                 break;
+            case "results":
+                $result = new Result($path[2]);
+                return "View Results for ".$result->name;
+                break;
             default:
                 return web_title;
         }
@@ -217,6 +221,10 @@ class Web {
             case "elections":
                 return "Choose an election to be able to vote for that election";
                 break;
+            case "results":
+                $result = new Result($path[2]);
+                return "View Results for ".$result->name;
+                break;
             case "vote":
                 try {
                     $election = new Election($path[2]);
@@ -241,7 +249,7 @@ class Web {
                 if( isset($path[2]) && $path[2] !== "" ){
                     try{
                         $election = new Election($path[2]);
-                        return "https://abir.taheer.me/resources/images/vote.jpg";
+                        return (web_ssl ? "https://" : "http://").web_domain."/static/img/election_covers/".$election->pic;
                     } catch(Exception $e){
                         // Let this just go onto the default
                     }
@@ -253,6 +261,8 @@ class Web {
                         return "/static/elections/".$candidate->db_code."/candidates/".$candidate->id.".png";
                     }
                 }
+            case "results":
+                return "https://badgerherald.com/wordpress/wp-content/uploads/2016/10/giphy-23-1.gif";
             default:
                 return app_icon;
         }

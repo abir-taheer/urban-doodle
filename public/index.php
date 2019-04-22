@@ -4,7 +4,8 @@ spl_autoload_register(function ($class_name) {
     require_once "../classes/".$class_name . ".php";
 });
 header("Content-Security-Policy: script-src *.googleapis.com apis.google.com 'nonce-".Web::getNonce()."';");
-$request = explode("/", $_SERVER["REQUEST_URI"]);
+$request = explode("/", $_SERVER["SCRIPT_URL"]);
+
 
 $id = Session::getIdInfo();
 ?>

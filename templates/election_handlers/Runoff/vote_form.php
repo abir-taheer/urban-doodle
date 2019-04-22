@@ -26,7 +26,7 @@
     <div class="mdc-chip-set non-vote-container sub-container" data-mdc-auto-init="MDCChipSet"></div>
     <br>
     <div class="sub-container">
-        <button class="mdc-button vote-submit mdc-button--unelevated" data-mdc-auto-init="MDCRipple">Submit</button>
+        <button class="mdc-button vote-submit mdc-button--unelevated">Submit</button>
     </div>
     <br>
 </div>

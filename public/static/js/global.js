@@ -4,6 +4,19 @@
 let useGoogleAnalytics = $("meta[name=use-google-analytics]").attr("content") === "true";
 let isSignedIn = $("meta[name=signed-in]").attr("content") === "true";
 let gtagTrackingID = (useGoogleAnalytics) ? $("meta[name=gtag-tracking-id]").attr("content") : "";
+
+function initializeMDC(alreadyCalled = false){
+    // Handle stuff like buttons that should automatically have ripple added
+    let ripple_stuff = document.querySelectorAll(".mdc-button, .mdc-tab__ripple, .mdc-card__primary-action");
+    for( let x = 0; x < ripple_stuff.length ; x++ ){
+        let i = ripple_stuff[x];
+        if( ! $(i).hasClass("mdc-ripple-upgraded") ){
+            mdc.ripple.MDCRipple.attachTo(i);
+        }
+    }
+    alreadyCalled ? window.mdc.autoInit(document, () => {}) : mdc.autoInit();
+}
+
 function onSignIn(googleUser) {
     let token = googleUser.getAuthResponse().id_token;
     //let profile = googleUser.getBasicProfile();
@@ -146,7 +159,8 @@ $(document).ready(() => {
     playSnackbarQueue();
 });
 // Automatically instantiate the mdc elements on the page
-mdc.autoInit();
+initializeMDC();
+
 
 function openPopup(url, platform) {
     let newpopup = window.open(url,'Share ' + platform,'height=400,width=550');
@@ -217,6 +231,9 @@ $(document.body).on("click", ".change-page", ev => {
             switch($(form).data("callback")){
                 case "reload":
                     changePage();
+                    break;
+                case "change-page":
+                    changePage($(form).data("reload-page"));
                     break;
             }
         } else {
@@ -303,7 +320,7 @@ document.body.addEventListener("content_loaded", () => {
 });
 
 $("#variable-region").on("DOMSubtreeModified", () => {
-    window.mdc.autoInit(document, () => {});
+    initializeMDC(true);
 });
 
 
@@ -320,7 +337,7 @@ if(! isSignedIn){
 }
 
 confirmDialog.listen('MDCDialog:opened', () => {
-    window.mdc.autoInit(document, () => {});
+    initializeMDC(true);
 });
 
 function showConfirmation(template = document.createElement("template"), onConfirm = ()=>{}, onReject = () => {}){
