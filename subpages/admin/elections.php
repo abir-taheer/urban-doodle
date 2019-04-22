@@ -33,7 +33,7 @@ $user = Session::getUser();
                 <input type="hidden" name="token" value="<?php echo $user->makeFormToken("create_election", "", Web::UTCDate("+1 day")); ?>">
                 <div class="mdc-layout-grid">
                     <div class="mdc-layout-grid__inner">
-                        <div class="mdc-text-field mdc-layout-grid__cell--span-4" data-mdc-auto-init="MDCTextField">
+                        <div class="mdc-text-field mdc-layout-grid__cell--span-4">
                             <input class="mdc-text-field__input" name="name">
                             <div class="mdc-line-ripple"></div>
                             <label class="mdc-floating-label">Name</label>
@@ -41,7 +41,7 @@ $user = Session::getUser();
 
                         <div class="mdc-layout-grid__cell--span-8"></div>
 
-                        <div class="mdc-select mdc-layout-grid__cell--span-4" data-mdc-auto-init="MDCSelect">
+                        <div class="mdc-select mdc-layout-grid__cell--span-4">
                             <i class="mdc-select__dropdown-icon"></i>
                             <select class="mdc-select__native-control" name="type">
                                 <option value="" disabled selected></option>
@@ -58,7 +58,7 @@ $user = Session::getUser();
 
                         <div class="mdc-layout-grid__cell--span-8"></div>
 
-                        <div class="mdc-text-field mdc-text-field--with-leading-icon mdc-layout-grid__cell--span-4" data-mdc-auto-init="MDCTextField">
+                        <div class="mdc-text-field mdc-text-field--with-leading-icon mdc-layout-grid__cell--span-4">
                             <i class="material-icons mdc-text-field__icon">event</i>
                             <input class="mdc-text-field__input" type="datetime-local" name="start">
                             <div class="mdc-line-ripple"></div>
@@ -67,7 +67,7 @@ $user = Session::getUser();
 
                         <div class="mdc-layout-grid__cell--span-8"></div>
 
-                        <div class="mdc-text-field mdc-text-field--with-leading-icon mdc-layout-grid__cell--span-4" data-mdc-auto-init="MDCTextField">
+                        <div class="mdc-text-field mdc-text-field--with-leading-icon mdc-layout-grid__cell--span-4">
                             <i class="material-icons mdc-text-field__icon">event</i>
                             <input class="mdc-text-field__input" type="datetime-local" name="end">
                             <div class="mdc-line-ripple"></div>

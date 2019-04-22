@@ -3,7 +3,7 @@
 <p class="txt-ctr small-txt sub-container">Order the candidates based on your preference by holding down and dragging. <a class="desktop-only">Click on the X to remove a candidate from your ballot</a><a class="mobile-only">Swipe on a candidate to remove them from your ballot</a>.</p>
 <form class="vote-form">
     <input type="hidden" name="election" value="<?php echo $this->election->db_code; ?>">
-    <ul class="mdc-list sub-container candidate-select" data-mdc-auto-init="MDCList">
+    <ul class="mdc-list sub-container candidate-select">
         <?php foreach( $candidates as $candidate ): ?>
             <li class="mdc-list-item">
                 <input type="hidden" name="votes[confirmed][]" value="<?php echo addslashes($candidate->id); ?>">
@@ -23,7 +23,7 @@
         <p class="txt-ctr">Removed from ballot:</p>
         <p class="txt-ctr small-txt">Click on a candidate to add them back to your ballot.</p>
     </div>
-    <div class="mdc-chip-set non-vote-container sub-container" data-mdc-auto-init="MDCChipSet"></div>
+    <div class="mdc-chip-set non-vote-container sub-container"></div>
     <br>
     <div class="sub-container">
         <button class="mdc-button vote-submit mdc-button--unelevated">Submit</button>

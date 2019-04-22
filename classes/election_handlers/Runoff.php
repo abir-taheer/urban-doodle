@@ -20,7 +20,7 @@ class Runoff implements ElectionHandler {
                 <p class=\"txt-ctr small-txt sub-container\">Order the candidates based on your preference by holding down and dragging. <b><a class=\"desktop-only\">Click on the X to remove a candidate from your ballot</a><a class=\"mobile-only\">Swipe on a candidate to remove them from your ballot</a>.</b></p>
                 <form class=\"vote-form\">
                     <input type=\"hidden\" name=\"election\" value=\"".$this->election->db_code."\">
-                    <ul class=\"mdc-list sub-container candidate-select\" data-mdc-auto-init=\"MDCList\">
+                    <ul class=\"mdc-list sub-container candidate-select\">
         ";
         $candidates = $this->election->getCandidates();
         shuffle($candidates);
@@ -46,10 +46,10 @@ class Runoff implements ElectionHandler {
                     <p class=\"txt-ctr\">Removed from ballot:</p>
                     <p class=\"txt-ctr small-txt\">Click on a candidate to add them back to your ballot.</p>
                 </div>
-                <div class=\"mdc-chip-set non-vote-container sub-container\" data-mdc-auto-init=\"MDCChipSet\"></div>
+                <div class=\"mdc-chip-set non-vote-container sub-container\"></div>
                 <br>
                 <div class=\"sub-container\">
-                    <button class=\"mdc-button vote-submit mdc-button--unelevated\" data-mdc-auto-init=\"MDCRipple\">Submit</button>
+                    <button class=\"mdc-button vote-submit mdc-button--unelevated\" >Submit</button>
                 </div>
                 <br>
             </div>
@@ -65,7 +65,7 @@ class Runoff implements ElectionHandler {
                 <p class=\"txt-ctr small-txt sub-container red-txt\">Please verify that the votes below are in the order that you previously selected.</p>
                 <form class=\"confirm-form\">
                     <input type=\"hidden\" name=\"token\" value=\"".$user->makeFormToken("submit_vote", $votes, Web::UTCDate("+1 hour"))."\">
-                    <ul class=\"mdc-list rank-candidates mdc-list--non-interactive sub-container\" data-mdc-auto-init=\"MDCList\">
+                    <ul class=\"mdc-list rank-candidates mdc-list--non-interactive sub-container\">
         ";
         $candidates = $this->decodeVotes($form["content"]);
         foreach( $candidates as $id ) {
@@ -83,9 +83,9 @@ class Runoff implements ElectionHandler {
                 </form>
                 <br>
                 <div class=\"sub-container\">
-                    <button class=\"mdc-button confirm-votes mdc-button--unelevated\" data-mdc-auto-init=\"MDCRipple\">Confirm</button>
+                    <button class=\"mdc-button confirm-votes mdc-button--unelevated\" >Confirm</button>
                     &nbsp;&nbsp;
-                    <button class=\"mdc-button cancel-confirm\" data-mdc-auto-init=\"MDCRipple\">Cancel</button>
+                    <button class=\"mdc-button cancel-confirm\">Cancel</button>
                 </div>
                 <br>
             </div>

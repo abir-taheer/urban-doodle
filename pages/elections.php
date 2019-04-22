@@ -11,14 +11,14 @@ case -1: ?>
         <h3 class="sumana txt-ctr">Email Not Recognized</h3>
         <div class="sub-container">
             <p class="txt-ctr"><a>We could not locate a user with the provided email address. Please fill out the form below to request the ability to vote and you will be notified by email when your request has been approved.</a></p>
-            <form id="unrecognized" data-action="/requests.php" data-callback="reload" data-mdc-auto-init="MDCTextField">
+            <form id="unrecognized" data-action="/requests.php" data-callback="reload">
                 <input name="token" type="hidden" value="<?php echo $user->makeFormToken("unrecognized", "submit", Web::UTCDate("+1 hour")); ?>">
                 <div class="mdc-text-field mdc-text-field--outlined">
                     <input type="text" name="full_name" class="mdc-text-field__input">
                     <label class="mdc-floating-label">Full Name</label>
                     <div class="mdc-line-ripple"></div>
                 </div><br><br>
-                <div class="mdc-select mdc-select--outlined" data-mdc-auto-init="MDCSelect">
+                <div class="mdc-select mdc-select--outlined">
                     <i class="mdc-select__dropdown-icon"></i>
                     <select class="mdc-select__native-control" name="grade">
                         <option value="" disabled selected></option>
@@ -32,7 +32,7 @@ case -1: ?>
                     <div class="mdc-line-ripple"></div>
                 </div>
                 <br><br>
-                <div class="mdc-text-field mdc-text-field--outlined" data-mdc-auto-init="MDCTextField">
+                <div class="mdc-text-field mdc-text-field--outlined">
                     <input type="text" name="osis" pattern="^\d{0,9}$" class="mdc-text-field__input">
                     <label class="mdc-floating-label">OSIS</label>
                     <div class="mdc-line-ripple"></div>

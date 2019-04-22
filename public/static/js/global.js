@@ -5,15 +5,30 @@ let useGoogleAnalytics = $("meta[name=use-google-analytics]").attr("content") ==
 let isSignedIn = $("meta[name=signed-in]").attr("content") === "true";
 let gtagTrackingID = (useGoogleAnalytics) ? $("meta[name=gtag-tracking-id]").attr("content") : "";
 
+function initializeItems(selector, mdcClass){
+    let stuff = document.querySelectorAll(selector);
+    for( let x = 0 ; x < stuff.length ; x ++ ){
+        mdcClass.attachTo(stuff[x]);
+    }
+}
+
 function initializeMDC(alreadyCalled = false){
     // Handle stuff like buttons that should automatically have ripple added
-    let ripple_stuff = document.querySelectorAll(".mdc-button, .mdc-tab__ripple, .mdc-card__primary-action");
-    for( let x = 0; x < ripple_stuff.length ; x++ ){
-        let i = ripple_stuff[x];
-        if( ! $(i).hasClass("mdc-ripple-upgraded") ){
-            mdc.ripple.MDCRipple.attachTo(i);
-        }
-    }
+
+    initializeItems(".mdc-button, .mdc-tab__ripple, .mdc-card__primary-action", mdc.ripple.MDCRipple);
+
+    initializeItems(".mdc-text-field", mdc.textField.MDCTextField);
+
+    initializeItems(".mdc-text-field-helper-text", mdc.textField.MDCTextFieldHelperText);
+
+    initializeItems(".mdc-tab-bar", mdc.tabBar.MDCTabBar);
+
+    initializeItems(".mdc-list", mdc.list.MDCList);
+
+    initializeItems(".mdc-chip-set", mdc.chips.MDCChipSet);
+
+    initializeItems(".mdc-select", mdc.select.MDCSelect);
+
     alreadyCalled ? window.mdc.autoInit(document, () => {}) : mdc.autoInit();
 }
 

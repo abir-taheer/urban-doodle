@@ -1,13 +1,14 @@
-if( typeof menus === 'undefined'){
-    var menus = document.querySelectorAll(".make-tab-menu");
+if(typeof tabs == "undefined"){
+    var tabs = document.querySelectorAll(".sub-page-tab");
 } else {
-    menus = document.querySelectorAll(".make-tab-menu");
-}
-for( let x = 0 ; x < menus.length ; x++ ){
-    let menu = menus[x];
-    let tabs = atob(menu.getAttribute("data-tabs"));
+    tabs = document.querySelectorAll(".sub-page-tab");
 }
 
-$(".mdc-tab").on("click", ev => {
-
-});
+for(let x = 0; x < tabs.length ; x++ ){
+    let i = tabs[x];
+    if( window.location.pathname.includes(i.getAttribute("data-page").slice(1)) ){
+        $(".sub-page-tab").removeClass("mdc-tab--active").find(".mdc-tab-indicator").removeClass("mdc-tab-indicator--active");
+        i.classList.add("mdc-tab--active");
+        i.querySelector(".mdc-tab-indicator").classList.add("mdc-tab-indicator--active");
+    }
+}

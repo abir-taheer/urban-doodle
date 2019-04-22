@@ -44,7 +44,55 @@ $user = Session::getUser();
         </div>
     </div>
     <?php elseif( $path[4] === "create" ): ?>
+        <?php
+            Web::addScript("/static/js/admin/create_candidate.js");
+            Web::sendDependencies();
+        ?>
 <!--    Form to make a candidate for the current election-->
+    <div class="mdc-card mdc-layout-grid__cell--span-12 mdc-card--outlined">
+        <div class="sub-container">
+            <h2 class="txt-ctr">Create Candidate: <?php echo htmlspecialchars($election->name); ?></h2>
+            <div class="sub-container">
+                <form data-action="/requests.php" data-callback="change-page" data-reload-page="/admin/candidates/<?php echo addslashes($election->db_code); ?>">
+                    <div class="mdc-text-field">
+                        <input class="mdc-text-field__input" name="name">
+                        <div class="mdc-line-ripple"></div>
+                        <label class="mdc-floating-label">Name</label>
+                    </div>
+                    <br><br>
+                    <div class="mdc-text-field">
+                        <input class="mdc-text-field__input" name="initial">
+                        <div class="mdc-line-ripple"></div>
+                        <label class="mdc-floating-label">Initials</label>
+                    </div>
+                    <div class="mdc-text-field-helper-line">
+                        <div class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent">
+                            This will be used to create the candidate's default profile photo
+                        </div>
+                    </div>
+
+                    <h3>Main Candidate Emails:</h3>
+                    <div class="all-editors-container">
+                        <div class="sub-container editor-container">
+                            <p>Editor 1:</p>
+                            <div class="mdc-text-field">
+                                <input class="mdc-text-field__input" name="editor[0][email]">
+                                <div class="mdc-line-ripple"></div>
+                                <label class="mdc-floating-label">Editor Email</label>
+                            </div>
+                            <i class="material-icons remove-editor clickable">clear</i>
+                        </div>
+                    </div>
+                    <br>
+                    <button class="mdc-button add-editor">Add Editor</button>
+
+                </form>
+                <div class="sub-container">
+                    <button class="mdc-button">Create Candidate</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php else: ?>
 <!--    Check if the candidate id exists and display relevant info for the candidate-->
     <?php endif; ?>

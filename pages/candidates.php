@@ -66,7 +66,7 @@
         <div class="mdc-card mdc-layout-grid__cell--span-12">
             <br>
             <div class="sub-container">
-                <button class="mdc-button change-page"  data-page="."><- Back To Candidates</button>
+                <button class="mdc-button change-page" data-page="."><- Back To Candidates</button>
                 <br>
                 <div class="flx-ctr">
                     <img class="candidate-photo" src="/static/elections/<?php echo addslashes($candidate->db_code)."/candidates/".addslashes($candidate->id); ?>.jpg" alt="Candidate Photo">
