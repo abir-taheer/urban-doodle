@@ -1,4 +1,5 @@
 <?php
+ob_start();
 require_once "../config.php";
 //autoload necessary classes
 spl_autoload_register(function ($class_name) {
@@ -38,6 +39,7 @@ if( isset($pages[$path[1]]) ){
 
             // Send them back to the campaign page with the hope that they get redirected to the proper
             Web::sendRedirect("/campaign");
+            ob_flush();
             exit;
         }
 
@@ -45,6 +47,7 @@ if( isset($pages[$path[1]]) ){
             // They don't have permissions to access this page.
             // Redirect them to a page that they do have permissions to access
             echo "<p class=\"mdc-layout-grid__cell--span-12\">Click on one of the tabs above.</p>";
+            ob_flush();
             exit;
         }
 
@@ -53,6 +56,7 @@ if( isset($pages[$path[1]]) ){
     if( $path[1] === "admin" ){
         if( ! isset($path[2]) || $path[2] === ""){
             echo "<a class=\"mdc-layout-grid__cell--span-12\">Select an item from the menu above</a>";
+            ob_flush();
             exit;
         }
     }
@@ -60,5 +64,6 @@ if( isset($pages[$path[1]]) ){
     if( file_exists("../subpages/". $path[1]."/".$path[$main_page["file_loc"]].".php") ){
         require_once "../subpages/". $path[1]."/".$path[$main_page["file_loc"]].".php";
         Web::sendDependencies();
+        ob_flush();
     }
 }

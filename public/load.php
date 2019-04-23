@@ -1,4 +1,5 @@
 <?php
+    ob_start();
     require_once "../config.php";
     //autoload necessary classes
     spl_autoload_register(function ($class_name) {
@@ -51,6 +52,7 @@
         require_once  "../pages/".$page.".php";
 
         Web::sendDependencies();
+        ob_flush();
 
         //We included the page that the user request, stop executing this script
         exit;
@@ -95,3 +97,4 @@
     <?php endif; ?>
     </div>
 </div>
+<?php ob_flush(); ?>

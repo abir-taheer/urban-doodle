@@ -3,6 +3,7 @@ signInRequired();
 $user = Session::getUser();
 if( ! $user->isAdmin() ){
     replyError("Not Admin", "You do not have permissions to access this page.");
+    exit;
 }
 Web::addScript("/static/js/admin.js");
 header("X-Load-Sub: True");

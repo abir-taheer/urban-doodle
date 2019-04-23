@@ -32,6 +32,7 @@ $user = Session::getUser();
 
     } catch (Exception $e){
         echo "<p class=\"mdc-layout-grid__cell--span-12\">There is no current election with the ID that was passed in the URL</p>";
+        ob_flush();
         exit;
     }
     ?>
@@ -46,7 +47,6 @@ $user = Session::getUser();
     <?php elseif( $path[4] === "create" ): ?>
         <?php
             Web::addScript("/static/js/admin/create_candidate.js");
-            Web::sendDependencies();
         ?>
 <!--    Form to make a candidate for the current election-->
     <div class="mdc-card mdc-layout-grid__cell--span-12 mdc-card--outlined">
@@ -54,14 +54,20 @@ $user = Session::getUser();
             <h2 class="txt-ctr">Create Candidate: <?php echo htmlspecialchars($election->name); ?></h2>
             <div class="sub-container">
                 <form data-action="/requests.php" data-callback="change-page" data-reload-page="/admin/candidates/<?php echo addslashes($election->db_code); ?>">
+                    <input type="hidden" name="token" value="<?php echo addslashes($user->makeFormToken("create_candidate", $election->db_code, Web::UTCDate("+1 day"))); ?>">
                     <div class="mdc-text-field">
-                        <input class="mdc-text-field__input" name="name">
+                        <input class="mdc-text-field__input" name="name" placeholder="John Smith & Marilyn Monroe">
                         <div class="mdc-line-ripple"></div>
                         <label class="mdc-floating-label">Name</label>
                     </div>
+                    <div class="mdc-text-field-helper-line">
+                        <div class="mdc-text-field-helper-text">
+                            max. 256 characters
+                        </div>
+                    </div>
                     <br><br>
                     <div class="mdc-text-field">
-                        <input class="mdc-text-field__input" name="initial">
+                        <input class="mdc-text-field__input" name="initials" placeholder="JM">
                         <div class="mdc-line-ripple"></div>
                         <label class="mdc-floating-label">Initials</label>
                     </div>
@@ -71,7 +77,8 @@ $user = Session::getUser();
                         </div>
                     </div>
 
-                    <h3>Main Candidate Emails:</h3>
+                    <h3>Main Editors:</h3>
+                    <p class="small-txt">These should be the emails of people with full control over the campaign, like the president and vice president.</p>
                     <div class="all-editors-container">
                         <div class="sub-container editor-container">
                             <p>Editor 1:</p>
@@ -84,12 +91,13 @@ $user = Session::getUser();
                         </div>
                     </div>
                     <br>
-                    <button class="mdc-button add-editor">Add Editor</button>
-
+                    <div class="sub-container">
+                        <button class="mdc-button add-editor">Add Editor</button>
+                    </div>
+                    <br>
+                    <button class="mdc-button submit-form">Create Candidate</button>
                 </form>
-                <div class="sub-container">
-                    <button class="mdc-button">Create Candidate</button>
-                </div>
+                <br>
             </div>
         </div>
     </div>

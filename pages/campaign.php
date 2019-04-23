@@ -3,6 +3,7 @@ signInRequired();
 $user = Session::getUser();
 if( ! $user->isManager() ){
     replyError("Access Denied", "You do not have sufficient permissions to view this page.");
+    exit;
 }
 $for = $user->managerOf();
 ?>
