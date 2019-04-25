@@ -3,7 +3,8 @@ app_files/
 public/static/img/candidates/
 public/static/elections/
 composer/*
-!composer/.gitkeep
+!composer/composer.json
+!composer/composer.lock
 public/static/img/election_covers/
 fpdf/*
 !fpdf/README.md
