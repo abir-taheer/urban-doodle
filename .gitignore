@@ -4,4 +4,6 @@ public/static/img/candidates/
 public/static/elections/
 composer/*
 !composer/.gitkeep
-
+public/static/img/election_covers/
+fpdf/*
+!fpdf/README.md
