@@ -24,7 +24,7 @@
 
                 <div class="mdc-card__action-icons">
 
-                    <button class="mdc-icon-button share-card material-icons mdc-card__action mdc-card__action--icon--unbounded" title="Share" data-mdc-ripple-is-unbounded="true" data-share-url="<?php echo (web_ssl) ? "https://" : "http://"; echo addslashes(web_domain); ?>/results/<?php echo addslashes($result->db_code); ?>">share</button>
+                    <button class="mdc-icon-button share-card material-icons mdc-card__action mdc-card__action--icon--unbounded" title="Share" data-mdc-ripple-is-unbounded="true" data-share-url="<?php echo (web_ssl) ? "https://" : "http://"; echo htmlspecialchars(web_domain); ?>/results/<?php echo htmlspecialchars($result->db_code); ?>">share</button>
 
                 </div>
 
@@ -50,7 +50,7 @@
             <h2 class="txt-ctr sub-container">Results: <?php echo htmlspecialchars($result->name); ?></h2>
             <div class="flx-ctr">
 
-                <a class="mdc-button" target="_blank" href="/static/elections/<?php echo addslashes($result->db_code); ?>/votes.json">Votes JSON</a>
+                <a class="mdc-button" target="_blank" href="/static/elections/<?php echo htmlspecialchars($result->db_code); ?>/votes.json">Votes JSON</a>
 
             </div>
 

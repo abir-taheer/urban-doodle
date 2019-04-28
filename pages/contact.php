@@ -8,7 +8,7 @@ Web::addScript("/static/js/contact.js");
     <div class="sub-container">
         <h3 class="txt-ctr">Contact Us:</h3>
         <form class="prevent_contact">
-            <input type="hidden" name="token" value="<?php echo addslashes($user->makeFormToken("submit_contact", "", Web::UTCDate("+1 day"))); ?>">
+            <input type="hidden" name="token" value="<?php echo htmlspecialchars($user->makeFormToken("submit_contact", "", Web::UTCDate("+1 day"))); ?>">
             <div class="flx-ctr">
                 <div class="mdc-text-field mdc-text-field--textarea mdc-text-field--no-label">
                     <textarea class="mdc-text-field__input" name="message" rows="8" cols="40" aria-label="message"></textarea>

@@ -21,7 +21,7 @@ $id = Session::getIdInfo();
         <!-- Site SEO Info -->
         <meta charset="utf-8">
         <title><?php echo htmlspecialchars(web_title); ?></title>
-        <meta name="description" content="<?php echo addslashes(web_description); ?>">
+        <meta name="description" content="<?php echo htmlspecialchars(web_description); ?>">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
         <!-- Google Sign-In Information -->
@@ -34,8 +34,8 @@ $id = Session::getIdInfo();
 
         <!-- Social Media Information -->
         <meta property="og:type" content="website">
-        <meta property="og:title" content="<?php echo addslashes(Web::getTitle($request)); ?>">
-        <meta property="og:description" content="<?php echo addslashes(Web::getDescription($request)); ?>">
+        <meta property="og:title" content="<?php echo htmlspecialchars(Web::getTitle($request)); ?>">
+        <meta property="og:description" content="<?php echo htmlspecialchars(Web::getDescription($request)); ?>">
         <meta property="og:image" content="<?php echo Web::getSocialPic($request); ?>">
 
         <!-- Favicon -->
@@ -185,10 +185,10 @@ $id = Session::getIdInfo();
                     <div class="mdc-dialog__content" id="confirm-dialog-content"></div>
                     <footer class="mdc-dialog__actions">
                         <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="no">
-                            <span class="mdc-button__label">No</span>
+                            <span class="mdc-button__label">Cancel</span>
                         </button>
                         <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="yes">
-                            <span class="mdc-button__label">Yes</span>
+                            <span class="mdc-button__label">Confirm</span>
                         </button>
                     </footer>
                 </div>

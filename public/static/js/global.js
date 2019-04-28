@@ -50,12 +50,7 @@ function onSignIn(googleUser) {
                 window.location.reload();
             } else {
                 // There was an error, read out the error in a snackbar
-                let x = 0;
-                while( x < decoded_resp.message.length ){
-                    addSnackbarQueue(decoded_resp.message[x]);
-                    x++;
-                }
-                playSnackbarQueue();
+                immediateSnackbarList(decoded_resp.message);
             }
     });
 }
@@ -355,7 +350,15 @@ confirmDialog.listen('MDCDialog:opened', () => {
     initializeMDC(true);
 });
 
-function showConfirmation(template = document.createElement("template"), onConfirm = ()=>{}, onReject = () => {}){
+function immediateSnackbarList(array) {
+    for( let x = 0 ; x < array.length ; x ++ ){
+        addSnackbarQueue(array[x]);
+    }
+    playSnackbarQueue();
+}
+
+function showConfirmation(template = document.createElement("template"), onConfirm = ()=>{}, onReject = () => {}, title = "Confirm"){
+    $(".confirm-dialog .mdc-dialog__title").html(title);
     let content = template.content.cloneNode(true);
     let dialog_content = document.getElementById("confirm-dialog-content");
     dialog_content.innerHTML = "";
@@ -364,6 +367,13 @@ function showConfirmation(template = document.createElement("template"), onConfi
     $(".confirm-dialog .mdc-dialog__button").on("click", e => {
         let confirmation = e.currentTarget.getAttribute("data-mdc-dialog-action") === "yes";
         confirmation ? onConfirm() : onReject();
+        $(".confirm-dialog .mdc-dialog__button").off();
+        $(".confirm-dialog .mdc-dialog__scrim").off();
+
+    });
+    $(".confirm-dialog .mdc-dialog__scrim").on("click", ()=> {
+        onReject();
+        $(".confirm-dialog .mdc-dialog__scrim").off();
         $(".confirm-dialog .mdc-dialog__button").off();
     });
 }

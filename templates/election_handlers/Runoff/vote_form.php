@@ -6,7 +6,7 @@
     <ul class="mdc-list sub-container candidate-select">
         <?php foreach( $candidates as $candidate ): ?>
             <li class="mdc-list-item">
-                <input type="hidden" name="votes[confirmed][]" value="<?php echo addslashes($candidate->id); ?>">
+                <input type="hidden" name="votes[confirmed][]" value="<?php echo htmlspecialchars($candidate->id); ?>">
                 <span class="mdc-list-item__text no-select">
                 <a class="candidate-name"><?php echo htmlspecialchars($candidate->name); ?></a>
                 <span class="right-icons">

@@ -273,3 +273,6 @@ h1, h2, h3, h4, .heading{
     border: solid 1px black;
     border-radius: 5px;
 }
+.draggable {
+    cursor: move;
+}

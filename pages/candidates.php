@@ -28,7 +28,7 @@
         foreach( $candidates as $candidate ): ?>
             <div class="mdc-card mdc-layout-grid__cell--span-4">
                 <div class="mdc-card__primary-action change-page" data-page="/candidates/<?php echo $e->db_code."/".$candidate->id; ?>">
-                    <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('/static/elections/<?php echo addslashes($candidate->db_code)."/candidates/".addslashes($candidate->id); ?>.jpg');"></div>
+                    <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url('/static/elections/<?php echo htmlspecialchars($candidate->db_code)."/candidates/".htmlspecialchars($candidate->id); ?>.jpg');"></div>
                     <div>
                         <h2 class="mdc-typography mdc-typography--headline6 vote-card__pad"><?php echo htmlspecialchars($candidate->name); ?></h2>
                     </div>
@@ -69,17 +69,16 @@
                 <button class="mdc-button change-page" data-page="."><- Back To Candidates</button>
                 <br>
                 <div class="flx-ctr">
-                    <img class="candidate-photo" src="/static/elections/<?php echo addslashes($candidate->db_code)."/candidates/".addslashes($candidate->id); ?>.jpg" alt="Candidate Photo">
+                    <img class="candidate-photo" src="/static/elections/<?php echo htmlspecialchars($candidate->db_code)."/candidates/".htmlspecialchars($candidate->id); ?>.jpg" alt="Candidate Photo">
                 </div>
-                <h2 class="txt-ctr"><?php echo htmlspecialchars($candidate->name); ?></h2>
-                <ul class="no-bullet">
+                <h2 class="txt-ctr muli"><?php echo htmlspecialchars($candidate->name); ?></h2>
+                <div class="mdc-layout-grid__inner">
                     <?php foreach( $candidate->getBasicInfo() as $info ): ?>
-                        <li><?php echo htmlspecialchars(ucwords($info->type)); ?>:<br>
-                            <div class="sub-container"><?php echo $info->getEncodedContent(); ?></div>
-                        </li>
-                        <br>
+                        <div class="mdc-layout-grid__cell--span-4 desktop-only" ></div>
+                        <div class="mdc-layout-grid__cell--span-2 muli"><?php echo htmlspecialchars($info->type); ?>:</div>
+                        <div class="mdc-layout-grid__cell--span-6 muli"><?php echo $info->getEncodedContent(); ?></div>
                     <?php endforeach; ?>
-                </ul>
+                </div>
             </div>
             <br>
         </div>

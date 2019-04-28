@@ -1,8 +1,10 @@
 {
     "require": {
         "phpmailer/phpmailer": "^6.0",
-      "ext-json": "*",
-      "ext-gd": "*",
-      "ext-exif": "*"
+        "setasign/fpdi-fpdf": "^2.0",
+        "ext-json": "*",
+        "ext-gd": "*",
+        "ext-exif": "*",
+        "ext-curl": "*"
     }
 }

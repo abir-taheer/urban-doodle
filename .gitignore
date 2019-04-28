@@ -8,3 +8,4 @@ composer/*
 public/static/img/election_covers/
 fpdf/*
 !fpdf/README.md
+*test.*

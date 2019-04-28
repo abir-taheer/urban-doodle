@@ -19,7 +19,7 @@ Class Candidate{
     }
 
     public function getBasicInfo(){
-        $data = Database::secureQuery("SELECT * FROM `basic_info` WHERE `id` = :id", array(":id"=>$this->id), null);
+        $data = Database::secureQuery("SELECT * FROM `basic_info` WHERE `candidate_id` = :id ORDER BY `order`", array(":id"=>$this->id), null);
         $response = [];
         foreach( $data as $info ){
             $response[] = new BasicInfo($info["track"]);

@@ -53,8 +53,8 @@ $user = Session::getUser();
         <div class="sub-container">
             <h2 class="txt-ctr">Create Candidate: <?php echo htmlspecialchars($election->name); ?></h2>
             <div class="sub-container">
-                <form data-action="/requests.php" data-callback="change-page" data-reload-page="/admin/candidates/<?php echo addslashes($election->db_code); ?>">
-                    <input type="hidden" name="token" value="<?php echo addslashes($user->makeFormToken("create_candidate", $election->db_code, Web::UTCDate("+1 day"))); ?>">
+                <form data-action="/requests.php" data-callback="change-page" data-reload-page="/admin/candidates/<?php echo htmlspecialchars($election->db_code); ?>">
+                    <input type="hidden" name="token" value="<?php echo htmlspecialchars($user->makeFormToken("create_candidate", $election->db_code, Web::UTCDate("+1 day"))); ?>">
                     <div class="mdc-text-field">
                         <input class="mdc-text-field__input" name="name" placeholder="John Smith & Marilyn Monroe">
                         <div class="mdc-line-ripple"></div>

@@ -30,6 +30,12 @@ if( isset($pages[$path[1]]) ){
     $main_page = $pages[$path[1]];
 
     if( $path[1] === "campaign" ){
+        if( ! Session::hasSession() || ! Session::getUser()->isManager()){
+            echo "<p class=\"mdc-layout-grid__cell--span-12\">You do not have permission to access this page</p>";
+            ob_flush();
+            exit;
+        }
+
         $candidate = new Candidate($path[2]);
         $user = Session::getUser();
         $path[3] = $path[3] === "" || ! isset($path[3])  ? "profile" : $path[3];
@@ -54,6 +60,12 @@ if( isset($pages[$path[1]]) ){
     }
 
     if( $path[1] === "admin" ){
+        if( ! Session::hasSession() || ! Session::getUser()->isAdmin()){
+            echo "<p class=\"mdc-layout-grid__cell--span-12\">You do not have permission to access this page</p>";
+            ob_flush();
+            exit;
+        }
+
         if( ! isset($path[2]) || $path[2] === ""){
             echo "<a class=\"mdc-layout-grid__cell--span-12\">Select an item from the menu above</a>";
             ob_flush();

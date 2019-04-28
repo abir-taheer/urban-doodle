@@ -1,2 +1,2 @@
 <?php
-echo "hi there";
+print_r($candidate);

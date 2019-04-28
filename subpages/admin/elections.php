@@ -47,7 +47,7 @@ $user = Session::getUser();
                                 <option value="" disabled selected></option>
                                 <?php foreach( scandir(app_root."/classes/election_handlers/") as $type ): ?>
                                     <?php if( in_array($type, [".", ".."]) ){ continue; } ?>
-                                    <option value="<?php echo addslashes(substr($type, 0, strlen($type) - 4)); ?>">
+                                    <option value="<?php echo htmlspecialchars(substr($type, 0, strlen($type) - 4)); ?>">
                                         <?php echo htmlspecialchars(substr($type, 0, strlen($type) - 4)); ?>
                                     </option>
                                 <?php endforeach; ?>
@@ -82,7 +82,7 @@ $user = Session::getUser();
                             <?php foreach (range(9,12) as $grade): ?>
                                 <div class="mdc-form-field mdc-layout-grid__cell--span-3" data-mdc-auto-init="MDCFormField">
                                     <div class="mdc-checkbox" data-mdc-auto-init="MDCCheckbox">
-                                        <input type="checkbox" class="mdc-checkbox__native-control" name="grade[<?php echo addslashes($grade); ?>]"/>
+                                        <input type="checkbox" class="mdc-checkbox__native-control" name="grade[<?php echo htmlspecialchars($grade); ?>]"/>
                                         <div class="mdc-checkbox__background">
                                             <svg class="mdc-checkbox__checkmark" viewBox="0 0 24 24">
                                                 <path class="mdc-checkbox__checkmark-path" fill="none" d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
@@ -143,6 +143,7 @@ $user = Session::getUser();
     </div>
 <?php else: ?>
     <?php
+        // TODO MOVE THE RESULTS GENERATION TO THE ELECTION HANDLER CLASS
         Web::addScript("/static/js/admin/election.js");
         try{
             $election = new Election($path[3]);
@@ -183,7 +184,9 @@ $user = Session::getUser();
                 </ul>
                 <br>
             <?php endforeach; ?>
-            <h3>Winner: <a class="green-txt"><?php echo htmlspecialchars($results["candidates"][$results["winner"]]); ?></a></h3>
+            <h3>Winner: <a class="green-txt"><?php
+                    echo $results["winner"] !== "Tie / No Winner" ? htmlspecialchars($results["candidates"][$results["winner"]]) : "Tie / No Winner";
+                    ?></a></h3>
             <br><br>
         </div>
     </div>

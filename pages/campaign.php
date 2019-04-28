@@ -16,7 +16,7 @@ $for = $user->managerOf();
         <h3 class="txt-ctr">Select A Candidate To Manage:</h3>
         <div class="sub-container">
             <?php foreach($for as $candidate): ?>
-                <p class="change-page txt-ctr clickable click-hover linkish" data-page="/campaign/<?php echo addslashes($candidate->id); ?>"><?php echo htmlspecialchars($candidate->name); ?></p>
+                <p class="change-page txt-ctr clickable click-hover linkish" data-page="/campaign/<?php echo htmlspecialchars($candidate->id); ?>"><?php echo htmlspecialchars($candidate->name); ?></p>
             <?php endforeach; ?>
         </div>
     </div>
