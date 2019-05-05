@@ -38,7 +38,7 @@ $user = Session::getUser();
     ?>
     <?php if( ! isset($path[4]) || $path[4] === "" ): ?>
 <!--    A page with an overview of all of the candidates for this election-->
-    <div class="mdc-card mdc-layout-grid__cell--span-12 mdc-card--outlined">
+    <div class="mdc-card mdc-layout-grid__cell--span-12">
         <div class="sub-container">
             <h2 class="txt-ctr">Candidates: <?php echo htmlspecialchars($election->name); ?></h2>
 
@@ -49,7 +49,7 @@ $user = Session::getUser();
             Web::addScript("/static/js/admin/create_candidate.js");
         ?>
 <!--    Form to make a candidate for the current election-->
-    <div class="mdc-card mdc-layout-grid__cell--span-12 mdc-card--outlined">
+    <div class="mdc-card mdc-layout-grid__cell--span-12">
         <div class="sub-container">
             <h2 class="txt-ctr">Create Candidate: <?php echo htmlspecialchars($election->name); ?></h2>
             <div class="sub-container">

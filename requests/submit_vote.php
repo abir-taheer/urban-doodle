@@ -8,7 +8,7 @@ try {
     $e = new Election($vote_data["db_code"]);
     if( $e->electionState() === 0 && ! $user->hasVoted($vote_data["db_code"]) ){
         $verification = hash("sha256", $vote_data["db_code"].$user->u_id);
-        Database::secureQuery("INSERT INTO `votes` (`db_code`, `content`, `verification_hash`) VALUES (:d, :c, :v)", array(":d"=>$vote_data["db_code"], ":c"=>$vote_data["content"], ":v"=>$verification), null );
+        Database::secureQuery("INSERT INTO `votes` (`db_code`, `content`, `verification_hash`, `grade`) VALUES (:d, :c, :v, :g)", array(":d"=>$vote_data["db_code"], ":c"=>$vote_data["content"], ":v"=>$verification, ":g"=>$user->grade), null );
         $response["status"] = "success";
     } else {
         $response["status"] = "error";

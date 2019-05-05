@@ -3,6 +3,9 @@ if(typeof slipLoaded === 'undefined'){
 }
 
 (() => {
+    if( document.querySelector(".full-item") === null ){
+        return;
+    }
     let list = document.querySelector(".full-item").parentElement;
     list.addEventListener("slip:beforewait", e => {
         if (e.target.classList.contains("draggable")) e.preventDefault();
@@ -103,7 +106,7 @@ $(".delete-info").on("click", ev => {
 });
 
 $(".edit-info").on("click", ev => {
-    let type = ev.currentTarget.parentElement.parentElement.querySelector(".info-type").innerHTML;
+    let type = ev.currentTarget.parentElement.parentElement.querySelector(".info-type").getAttribute("data-actual-type");
     let content = ev.currentTarget.parentElement.parentElement.querySelector(".info-content").getAttribute("data-actual-content");
     showConfirmation(document.querySelector("#new-basic-info"), () => {
         // Send the post request to delete it.

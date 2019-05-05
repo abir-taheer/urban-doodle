@@ -74,6 +74,16 @@ interface ElectionHandler {
     public function hasAnalysisMethod() : bool;
 
 
-    //TODO make an analysis class that provides insights about the election
-    //public static function analyzeElection();
+
+    /**
+     * Outputs html code to be rendered by the client that displays the results of that type of election
+     * Assume that the results of all elections are stored in the following path: public/static/elections/<election db_code>/results.json
+     * Assume that data containing the votes, grades, and timestamps of votes ara available at this path: public/static/elections/<election db_code>/votes.json
+     * Results may also be generated on the client side using the information above and a script
+     * @param array $results_data - An array containing an array resembling one that would have been returned by the countVotes function
+     * @param string $type - User that the results are being generated for. Either "admin" or "client"
+     * If being generated for "admin", do not assume that results.json or votes.json exists
+     */
+    public static function displayResults($results_data, $type) : void;
+
 }

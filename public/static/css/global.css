@@ -276,3 +276,6 @@ h1, h2, h3, h4, .heading{
 .draggable {
     cursor: move;
 }
+.mdc-drawer {
+    border-color: rgba(0, 0, 0, 0);
+}

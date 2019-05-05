@@ -41,7 +41,7 @@ $user = Session::getUser();
             <?php foreach( $candidate->getBasicInfo() as $info ): ?>
             <div class="mdc-layout-grid__inner mdc-layout-grid__cell--span-12 full-item">
                 <input type="hidden" name="item[]" value="<?php echo htmlspecialchars($info->track); ?>">
-                <div class="mdc-layout-grid__cell--span-3-desktop info-type mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-2-tablet"><?php echo htmlspecialchars($info->type); ?>:</div>
+                <div class="mdc-layout-grid__cell--span-3-desktop info-type mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-2-tablet" data-actual-type="<?php echo htmlspecialchars($info->type); ?>"><?php echo htmlspecialchars($info->type); ?>:</div>
                 <div class="mdc-layout-grid__cell--span-6-desktop info-content mdc-layout-grid__cell--span-4-phone mdc-layout-grid__cell--span-4-tablet muli" data-actual-content="<?php echo htmlspecialchars($info->content); ?>"><?php echo $info->getEncodedContent(); ?></div>
 
 <!--                Icons at the right-->

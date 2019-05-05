@@ -26,7 +26,7 @@ $user = Session::getUser();
     Web::sendDependencies();
     ?>
 <!--A form to make a new election-->
-    <div class="mdc-card mdc-layout-grid__cell--span-12 mdc-card--outlined">
+    <div class="mdc-card mdc-layout-grid__cell--span-12">
         <h2 class="txt-ctr">Create Election:</h2>
         <div class="sub-container">
             <form data-action="/requests.php" data-callback="change-page" data-reload-page="/admin/elections">
@@ -160,7 +160,7 @@ $user = Session::getUser();
         }
     ?>
 <!--Show an overview of the election data with the ability to edit as well as see live outcome-->
-    <div class="mdc-card mdc-layout-grid__cell--span-12 mdc-card--outlined">
+    <div class="mdc-card mdc-layout-grid__cell--span-12">
         <div class="sub-container">
             <h2 class="txt-ctr"><?php echo htmlspecialchars($election->name); ?></h2>
 

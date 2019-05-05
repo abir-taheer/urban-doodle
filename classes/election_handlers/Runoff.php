@@ -15,7 +15,7 @@ class Runoff implements ElectionHandler {
 
         // TODO move this to a template file
         $response = "
-            <div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12 instant\">
+            <div class=\"mdc-card mdc-layout-grid__cell--span-12 instant\">
                 <h3 class=\"txt-ctr\">".$this->election->name."</h3>
                 <p class=\"txt-ctr small-txt sub-container\">Order the candidates based on your preference by holding down and dragging. <b><a class=\"desktop-only\">Click on the X to remove a candidate from your ballot</a><a class=\"mobile-only\">Swipe on a candidate to remove them from your ballot</a>.</b></p>
                 <form class=\"vote-form\">
@@ -60,7 +60,7 @@ class Runoff implements ElectionHandler {
         $user = Session::getUser();
         $form = $user->getConfirmationData($votes);
         $response = "
-            <div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12 instant\">
+            <div class=\"mdc-card mdc-layout-grid__cell--span-12 instant\">
                 <h3 class=\"txt-ctr\">Confirm Selection: ".$this->election->name."</h3>
                 <p class=\"txt-ctr small-txt sub-container red-txt\">Please verify that the votes below are in the order that you previously selected.</p>
                 <form class=\"confirm-form\">
@@ -180,5 +180,15 @@ class Runoff implements ElectionHandler {
     public function decodeVotes($str): array
     {
         return explode(",", $str);
+    }
+
+    public static function displayResults($results_data, $type): void
+    {
+        switch($type){
+            case "admin":
+                break;
+            default:
+
+        }
     }
 }

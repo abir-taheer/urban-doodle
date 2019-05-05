@@ -8,7 +8,7 @@
 
     function replyError($heading, $error, $image_src = "/static/img/sad-cat.png", $image_alt = "sad-cat", $image_class = "cat-404"){
         echo
-            "<div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12\">
+            "<div class=\"mdc-card mdc-layout-grid__cell--span-12\">
             <div class=\"card-expand-default\"></div>
             <h3 class=\"txt-ctr\">".$heading."</h3>
             <div class=\"sub-container\"></div>
@@ -28,7 +28,7 @@
             echo "
                 <!-- Script tag doesn't need nonce because apis.google.com is a trusted whitelisted source -->
                 <script src='https://apis.google.com/js/platform.js'></script>
-                <div class=\"mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12\">
+                <div class=\"mdc-card mdc-layout-grid__cell--span-12\">
                     <div class=\"card-expand-default\"></div>
                     <h2 class=\"txt-ctr\">Sign In Required</h2>
                     <p class='txt-ctr'>You need to be signed in to access this page!</p>
@@ -80,7 +80,7 @@
    }
 ?>
 <?php //The part below is only sent in case the page could not be found ?>
-<div class="mdc-card mdc-card--outlined mdc-layout-grid__cell--span-12">
+<div class="mdc-card mdc-layout-grid__cell--span-12">
     <div class="card-expand-default"></div>
         <h3 class="sumana txt-ctr">Error:</h3>
         <div class="sub-container">

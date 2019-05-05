@@ -496,6 +496,7 @@ let countdowns = setInterval(() => {
                 break;
             case "current":
                 let timeFormat = $(i).data("time-format");
+                let twelve_hours = (currentTime.getHours() % 12).toString().padStart(2, '0');
                 let times = {
                     "d":currentTime.getDate().toString().padStart(2, '0'),
                     "D":short_days[currentTime.getDay()],
@@ -510,7 +511,7 @@ let countdowns = setInterval(() => {
                     "Y":currentTime.getFullYear(),
                     "y":currentTime.getFullYear() % 100,
                     "a": ( currentTime.getHours() >= 12 ) ? "pm" : "am",
-                    "h":(currentTime.getHours() % 12).toString().padStart(2, '0'),
+                    "h": (twelve_hours === "00" ? "12" : twelve_hours),
                     "H":currentTime.getHours().toString().padStart(2, "0"),
                     "i":currentTime.getMinutes().toString().padStart(2, '0'),
                     "s":currentTime.getSeconds().toString().padStart(2, '0')

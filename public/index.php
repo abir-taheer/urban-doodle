@@ -72,7 +72,7 @@ $id = Session::getIdInfo();
     </head>
     <body>
         <!-- Top Nav Bar -->
-        <header class="mdc-top-app-bar mdc-top-app-bar--fixed mdc-elevation--z1" id="app-bar" data-mdc-auto-init="MDCTopAppBar">
+        <header class="mdc-top-app-bar mdc-top-app-bar--fixed" id="app-bar" data-mdc-auto-init="MDCTopAppBar">
             <div class="mdc-top-app-bar__row">
                 <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
                     <a class="material-icons mdc-top-app-bar__navigation-icon menu-trigger">menu</a>

@@ -44,7 +44,7 @@
             $result_data = json_decode(file_get_contents(app_root."/public/static/elections/".$result->db_code."/results.json"), true);
         ?>
 
-        <div class="mdc-card mdc-layout-grid__cell--span-12 mdc-card--outlined muli">
+        <div class="mdc-card mdc-layout-grid__cell--span-12 muli">
 
             <br>
             <h2 class="txt-ctr sub-container">Results: <?php echo htmlspecialchars($result->name); ?></h2>
