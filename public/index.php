@@ -50,6 +50,7 @@ $id = Session::getIdInfo();
         <!-- Necessary Page Setup Scripts -->
         <script nonce="<?php echo Web::getNonce(); ?>" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script nonce="<?php echo Web::getNonce(); ?>" src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <script nonce="<?php echo Web::getNonce(); ?>" src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js" async></script>
 
         <!-- Information for use in scripts -->
         <meta name="signed-in" content="<?php echo (Session::hasSession()) ? "true" : "false" ; ?>">
@@ -137,7 +138,7 @@ $id = Session::getIdInfo();
             <!-- Actual page content. Everything must be contained using an mdc grid! -->
             <main class="main-content" id="main-content">
                 <div class="mdc-layout-grid">
-                    <div id="variable-region" class="mdc-layout-grid__inner roboto-slab"></div>
+                    <div id="variable-region" class="mdc-layout-grid__inner muli"></div>
                 </div>
             </main>
         </div>

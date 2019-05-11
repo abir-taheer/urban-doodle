@@ -12,6 +12,10 @@ function initializeItems(selector, mdcClass){
     }
 }
 
+function replaceAll(string, search, replacement) {
+    return string.replace(new RegExp(search, 'g'), replacement);
+}
+
 function initializeMDC(alreadyCalled = false){
     // Handle stuff like buttons that should automatically have ripple added
 
@@ -126,7 +130,8 @@ function addSources(c){
         let node = document.createElement("link");
         node.setAttribute("nonce", nce);
         node.setAttribute("rel", "stylesheet");
-        node.setAttribute("href", new_src.css[x]);
+        node.setAttribute("type", "text/css");
+        node.setAttribute("href", new_src.css[y]);
         vr.appendChild(node);
     }
 }
@@ -390,6 +395,49 @@ $(window).resize(() => {
         $("#variable-region").fadeIn();
     }
 });
+
+function customMarkDownParser(markdown){
+    // Escape any html tags
+    let converter = new showdown.Converter();
+    converter.setFlavor('github');
+    converter.setOption("emoji", true);
+    converter.setOption("encodeEmails", true);
+    converter.setOption("openLinksInNewWindow", true);
+    converter.setOption("tables", true);
+    converter.setOption("tasklists", true);
+
+    markdown = replaceAll(markdown, /&/, "&amp;");
+    markdown = replaceAll(markdown,/</, "&lt;");
+
+    let converted = converter.makeHtml(markdown);
+
+    let color_presets = {
+        "red": "#d63031",
+        "blue": "#0984e3",
+        "purple": "#6c5ce7",
+        "green": "#00b894",
+        "yellow": "#fdcb6e",
+        "pink": "#fd79a8",
+        "teal": "#00cec9",
+        "grey": "#636e72"
+    };
+    let color_regex = /(?:{(.*?)}\((.*?)\))/;
+    let htmlString = replaceAll(converted, color_regex, (match, value, color) => {
+        color = replaceAll(color,/\W/, "");
+        if( color === "rainbow" ){
+            return "<a class='rainbow'>" + value + "</a>";
+        }
+        color = ( typeof color_presets[color] !== 'undefined' ) ? color_presets[color] : "#" + color;
+        return "<a style='color: " + color + "'>" + value + "</a>";
+    });
+
+    let center_regex = /(?:\(C\)(.*?)\(\/C\))/;
+    htmlString = replaceAll(htmlString, center_regex, (match, content) => {
+        return "<div class='flx-ctr'>" + content + "</div>";
+    });
+
+    return htmlString;
+}
 
 snackbar.listen("MDCSnackbar:closed", () => {
     playSnackbarQueue();
