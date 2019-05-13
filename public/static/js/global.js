@@ -33,6 +33,8 @@ function initializeMDC(alreadyCalled = false){
 
     initializeItems(".mdc-select", mdc.select.MDCSelect);
 
+    initializeItems(".mdc-text-field-character-counter", mdc.textField.MDCTextFieldCharacterCounter);
+
     alreadyCalled ? window.mdc.autoInit(document, () => {}) : mdc.autoInit();
 }
 
@@ -310,8 +312,20 @@ $(document.body).on("click", ".change-page", ev => {
     return false;
 });
 
-function sendForm(){
-
+function dependencySetup(setup, trial_wait = 500, max_num_tries = 20){
+    let num_tries = 0;
+    let attempts = setInterval(() => {
+        try {
+            num_tries += 1;
+            setup();
+            clearInterval(attempts);
+        } catch(e){
+            if( num_tries >= max_num_tries ){
+                immediateSnackbarList(["This page could not be sucessfully setup. Please reload the page. If this keeps happening, please contact us <a href='/contact'> here</a>"]);
+                clearInterval(attempts);
+            }
+        }
+    }, 500);
 }
 
 window.addEventListener("message", receiveMessage, false);
@@ -396,6 +410,26 @@ $(window).resize(() => {
     }
 });
 
+function getNthOccurence(string, search, n){
+    let matches = 0;
+    for( let x = 0; x < string.length - search.length; x++ ){
+        let subString = string.substring(x, x + search.length);
+        if( subString === search ){
+            matches += 1;
+        }
+        if( matches === n ){
+            return x;
+        }
+    }
+    return -1;
+}
+
+function escapeHtml(htmlString){
+    let newString = replaceAll(htmlString, /&/, "&amp;");
+    newString = replaceAll(newString,/</, "&lt;");
+    return newString;
+}
+
 function customMarkDownParser(markdown){
     // Escape any html tags
     let converter = new showdown.Converter();
@@ -405,11 +439,9 @@ function customMarkDownParser(markdown){
     converter.setOption("openLinksInNewWindow", true);
     converter.setOption("tables", true);
     converter.setOption("tasklists", true);
+    converter.setOption("headerLevelStart", 2);
 
-    markdown = replaceAll(markdown, /&/, "&amp;");
-    markdown = replaceAll(markdown,/</, "&lt;");
-
-    let converted = converter.makeHtml(markdown);
+    markdown = escapeHtml(markdown);
 
     let color_presets = {
         "red": "#d63031",
@@ -421,8 +453,10 @@ function customMarkDownParser(markdown){
         "teal": "#00cec9",
         "grey": "#636e72"
     };
-    let color_regex = /(?:{(.*?)}\((.*?)\))/;
-    let htmlString = replaceAll(converted, color_regex, (match, value, color) => {
+
+    // Looks for cases of the color syntax that aren't preceded by an escape token
+    let color_regex = new RegExp(/(?:{([\s\S]*?)}\((.*?)\))(?!`)/m);
+    markdown = replaceAll(String.raw`${markdown}`, color_regex, (match, value, color) => {
         color = replaceAll(color,/\W/, "");
         if( color === "rainbow" ){
             return "<a class='rainbow'>" + value + "</a>";
@@ -431,8 +465,11 @@ function customMarkDownParser(markdown){
         return "<a style='color: " + color + "'>" + value + "</a>";
     });
 
-    let center_regex = /(?:\(C\)(.*?)\(\/C\))/;
-    htmlString = replaceAll(htmlString, center_regex, (match, content) => {
+    let converted = converter.makeHtml(markdown);
+
+
+    let center_regex = new RegExp(/(?:\(C\)(.*?)\(\/C\))/g);
+    let htmlString = replaceAll(converted, center_regex, (match, content) => {
         return "<div class='flx-ctr'>" + content + "</div>";
     });
 
