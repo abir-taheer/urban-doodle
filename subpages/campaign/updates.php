@@ -60,7 +60,7 @@ psst, this preview updates automatically as you write. Isn't that {awesome}(rain
                     </div>
                     <div class="mdc-layout-grid__cell--span-6 muli">
                         <p>Preview</p>
-                        <div class="markdown-preview"></div>
+                        <div class="markdown-preview markdown-content"></div>
                     </div>
                 </div>
             </div>

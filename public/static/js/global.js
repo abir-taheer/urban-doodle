@@ -36,6 +36,18 @@ function initializeMDC(alreadyCalled = false){
     initializeItems(".mdc-text-field-character-counter", mdc.textField.MDCTextFieldCharacterCounter);
 
     alreadyCalled ? window.mdc.autoInit(document, () => {}) : mdc.autoInit();
+
+    if( document.querySelectorAll(".markdown-content-unready").length > 0 ){
+        readyMarkdown();
+    }
+}
+
+function readyMarkdown() {
+    let markdowns = document.querySelectorAll(".markdown-content-unready");
+    for( let x = 0; x < markdowns.length ; x++ ){
+        markdowns[x].innerHTML = customMarkDownParser(atob(markdowns[x].innerHTML));
+        markdowns[x].classList.remove("markdown-content-unready");
+    }
 }
 
 function onSignIn(googleUser) {
@@ -65,6 +77,7 @@ function onSignIn(googleUser) {
 let manDrawTrig = false;
 
 function changePage(path = null){
+
     let vr = document.getElementById("variable-region");
     let pld = document.querySelector(".page-loader");
     $(pld).removeClass("mdc-linear-progress--closed");
@@ -219,6 +232,9 @@ if( window.innerWidth > 1250 ){
 window.onpopstate = function (){changePage()};
 
 $(document.body).on("click", ".change-page", ev => {
+    if( ev.ctrlKey ){
+        return window.open($(ev.currentTarget).data("page"));
+    }
     changePage($(ev.currentTarget).data("page"));
     if(window.innerWidth <= 1250){
         drawer.open = false;
@@ -310,6 +326,10 @@ $(document.body).on("click", ".change-page", ev => {
     // TODO ADD SERVER REPORTING OF ERROR
     console.log("Unexpected case: " + i);
     return false;
+}).on("click", ".markdown-content a", ev => {
+    if( ev.currentTarget.getAttribute("href") !== null ){
+        return confirm("The link you clicked on is taking you to: "+ ev.currentTarget.getAttribute("href") + ". Are you sure you want to continue?");
+    }
 });
 
 function dependencySetup(setup, trial_wait = 500, max_num_tries = 20){
@@ -430,6 +450,12 @@ function escapeHtml(htmlString){
     return newString;
 }
 
+function htmlEntities(str) {
+    return replaceAll(str, /(.)/g, (match, letter) => {
+       return "&#" + letter.charCodeAt(0) + ";";
+    });
+}
+
 function customMarkDownParser(markdown){
     // Escape any html tags
     let converter = new showdown.Converter();
@@ -440,33 +466,99 @@ function customMarkDownParser(markdown){
     converter.setOption("tables", true);
     converter.setOption("tasklists", true);
     converter.setOption("headerLevelStart", 2);
+    converter.setOption("simpleLineBreaks", true);
 
     markdown = escapeHtml(markdown);
 
-    let color_presets = {
-        "red": "#d63031",
-        "blue": "#0984e3",
-        "purple": "#6c5ce7",
-        "green": "#00b894",
-        "yellow": "#fdcb6e",
-        "pink": "#fd79a8",
-        "teal": "#00cec9",
-        "grey": "#636e72"
+    let addColor = str => {
+        let color_presets = {
+            "red": "d63031",
+            "blue": "0984e3",
+            "purple": "6c5ce7",
+            "green": "00b894",
+            "yellow": "fdcb6e",
+            "pink": "fd79a8",
+            "teal": "00cec9",
+            "grey": "636e72"
+        };
+        let content_start = -1;
+        let content_end = -1;
+        let color_start = -1;
+        let color_end = -1;
+        let num_backticks = 0;
+        let is_code = false;
+
+        for(let x = 0 ; x < str.length ; x++){
+            let letter = str[x];
+            if( letter === "`" && ! is_code ){
+                num_backticks++;
+                continue;
+            }
+            if( num_backticks > 0 && ! is_code){
+                if( num_backticks === 1){
+                    num_backticks++;
+                }
+                if( str.substring(x).indexOf("`".repeat(num_backticks)) !== -1 || str.substring(x).indexOf("`".repeat(num_backticks - 1)) !== -1 ){
+                    is_code = true;
+                } else {
+                    num_backticks = 0;
+                }
+            }
+            if( is_code ){
+                if( str.substring(x, x + (num_backticks - 1) ) === "`".repeat(num_backticks - 1) ){
+                    x += (str[x + (num_backticks - 1) ] !== "`") ? num_backticks - 1 : num_backticks;
+                    is_code = false;
+                    num_backticks = 0;
+                } else {
+                    continue;
+                }
+            }
+
+            if( letter === "\\" ){
+                x = x + 2;
+            }
+
+            if( content_start !== -1){
+                if(color_start !== -1){
+                    if(letter === ")"){
+                        color_end = x;
+                        let color = replaceAll(str.substring(color_start + 1, color_end) ,/\W/, "");
+                        if( typeof color_presets[color] !== 'undefined' && color !== "rainbow"){
+                            color = color_presets[color];
+                        }
+
+                        let content = str.substring(content_start + 1, content_end);
+                        let tag = (color !== "rainbow") ? "<a style='color: #"+ color +"'>"  + content + "</a>": "<a class='rainbow'>" + content + "</a>";
+                        str = str.substring(0, content_start) + tag + str.substring(color_end + 1);
+                        content_start = -1;
+                        content_end = -1;
+                        color_start = -1;
+                        color_end = -1;
+                        x = 0;
+                    }
+                } else {
+                    if( str.substring(x, x + 2) === "}(" ){
+                        content_end = x;
+                        color_start = x + 1;
+                    }
+                }
+            } else {
+                if(letter === "{"){
+                    content_start = x;
+                }
+            }
+        }
+        return str;
     };
 
-    // Looks for cases of the color syntax that aren't preceded by an escape token
-    let color_regex = new RegExp(/(?:{([\s\S]*?)}\((.*?)\))(?!`)/m);
-    markdown = replaceAll(String.raw`${markdown}`, color_regex, (match, value, color) => {
-        color = replaceAll(color,/\W/, "");
-        if( color === "rainbow" ){
-            return "<a class='rainbow'>" + value + "</a>";
-        }
-        color = ( typeof color_presets[color] !== 'undefined' ) ? color_presets[color] : "#" + color;
-        return "<a style='color: " + color + "'>" + value + "</a>";
-    });
+    markdown = addColor(markdown);
+
+    // while(markdown.indexOf("\\") !== -1){
+    //     let index = markdown.indexOf("\\");
+    //     markdown = markdown.substring(0, index) + htmlEntities(markdown[index + 1]) + markdown.substring(index + 2);
+    // }
 
     let converted = converter.makeHtml(markdown);
-
 
     let center_regex = new RegExp(/(?:\(C\)(.*?)\(\/C\))/g);
     let htmlString = replaceAll(converted, center_regex, (match, content) => {
@@ -475,6 +567,7 @@ function customMarkDownParser(markdown){
 
     return htmlString;
 }
+
 
 snackbar.listen("MDCSnackbar:closed", () => {
     playSnackbarQueue();

@@ -1,6 +1,6 @@
 <?php
 class Database {
-    public static function secureQuery($query, $parameters, $data) {
+    public static function secureQuery($query, $parameters = [], $data = null) {
         //Use PDO to make a secure, all purpose query function that returns a associative array
         $conn = new PDO("mysql:host=". db_host .";dbname=". db_name , db_username, db_password);
         $stmt = $conn->prepare($query);

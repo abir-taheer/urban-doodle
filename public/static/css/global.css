@@ -320,8 +320,8 @@ h1, h2, h3, h4, .heading{
 }
 
 blockquote {
-    background: #f9f9f9;
-    border-left: 10px solid #ccc;
+    background: #f8f7f7;
+    border-left: 10px solid #fdcb6eab;
     margin: 1.5em 10px;
     padding: 0.5em 10px;
     quotes: "\201C""\201D""\2018""\2019";
@@ -331,12 +331,12 @@ blockquote p {
     display: inline;
 }
 code {
-    background-color: #eee;
+    background-color: #f4f4f4;
     padding: 5px;
     border-radius: 5px;
 }
 pre code {
-    background-color: #eee;
+    background-color: #f4f4f4;
     border: 1px solid #999;
     display: block;
     padding: 15px;
@@ -344,3 +344,43 @@ pre code {
 .full-width-txt-field {
     min-width: 100%;
 }
+.markdown-content p {
+    font-size: 14px;
+    line-height: 25px;
+}
+.markdown-content table {
+    display: inline-block;
+    vertical-align: top;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.markdown-content td:first-child, .markdown-content tbody tr:first-child {
+       background-image: linear-gradient(to right, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+       background-repeat: no-repeat;
+       background-size: 20px 100%;
+}
+
+.markdown-content td:last-child, .markdown-content tbody tr:last-child {
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+    background-repeat: no-repeat;
+    background-position: 100% 0;
+    background-size: 20px 100%;
+}
+
+.markdown-content th {
+    font-size: 11px;
+    text-align: left;
+    text-transform: uppercase;
+    background: #f2f0e6;
+}
+
+.markdown-content th, .markdown-content td {
+    padding: 6px 12px;
+    border: 1px solid #d9d7ce;
+}
+
+
