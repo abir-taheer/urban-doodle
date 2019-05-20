@@ -30,9 +30,9 @@ $user = Session::getUser();
     <h2 class="txt-ctr muli"><?php echo htmlspecialchars($candidate->name); ?></h2>
     <h3 class="muli txt-ctr">Basic Information:</h3>
     <div class="flx-ctr">
-        <button class="mdc-button new-info" data-form-token="<?php
+        <button class="mdc-button mdc-button--outlined new-info" data-form-token="<?php
             echo htmlspecialchars($user->makeFormToken("create_basic_info", $candidate->id, Web::UTCDate("+1 day")));
-        ?>">New Info</button>
+        ?>">+ New Info</button>
     </div>
     <br>
     <div class="sub-container">

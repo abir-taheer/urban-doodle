@@ -405,6 +405,9 @@ pre code {
 .txt-icon {
     vertical-align: middle;
 }
+.page-loader {
+    position: fixed;
+}
 .boxed {
     border-radius: 5px;
     border: 1px solid grey;
@@ -412,4 +415,8 @@ pre code {
 .red-blockquote {
     border-left: 10px solid #fd6e6eab;
 }
-
+.pdf-preview-iframe {
+    width: 100%;
+    height: 500px;
+    margin-bottom: 40px;
+}

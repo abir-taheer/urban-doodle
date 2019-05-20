@@ -137,5 +137,20 @@ dependencySetup(() => {
 
     txtArea.on("keyup change input", updatePreview);
     title.on("keyup change input", updatePreview);
+
+    $(".pre-confirm").on("click", ev => {
+        ev.currentTarget.setAttribute("disabled", true);
+        $(".page-loader").removeClass("mdc-linear-progress--closed");
+        setTimeout(() => {
+            $(".page-loader").addClass("mdc-linear-progress--closed");
+            ev.currentTarget.removeAttribute("disabled");
+            $(ev.currentTarget).addClass("fear");
+            $(".full-confirm").removeClass("fear");
+            $(".cancel-update-confirm").off().on("click", () => {
+               $(".full-confirm").addClass("fear");
+               $(ev.currentTarget).removeClass("fear");
+            });
+        }, 1500);
+    })
 });
 

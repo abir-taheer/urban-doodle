@@ -114,10 +114,12 @@ psst, this preview updates automatically as you write. Isn't that {awesome}(rain
                     </div>
                 </div>
             </form>
-            <div>
-                <button class="mdc-button mdc-button--raised submit-form">Submit Post</button>
-                <br><br>
+            <button class="mdc-button mdc-button--raised pre-confirm">Submit Post</button>
+            <div class="full-confirm fear">
+                <button class="mdc-button mdc-button--raised submit-form">Confirm</button>
+                <button class="mdc-button mdc-button--raised cancel-update-confirm">Cancel</button>
             </div>
+            <br><br>
         </div>
     </div>
 <?php else:

@@ -89,6 +89,7 @@ if( count($errors) === 0 ){
     );
     mkdir(app_root."/public/static/elections/".$db_code);
     mkdir(app_root."/public/static/elections/".$db_code."/candidates");
+    mkdir(app_root."/public/static/elections/".$db_code."/materials");
     $response["status"] = "success";
 } else {
     $response["status"] = "error";

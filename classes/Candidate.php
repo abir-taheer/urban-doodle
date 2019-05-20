@@ -26,4 +26,29 @@ Class Candidate{
         }
         return $response;
     }
+
+    public function getApprovedMaterials(){
+        $data = Database::secureQuery("SELECT * FROM `materials` WHERE `candidate_id` = :cand_id AND `status` = 1", [":cand_id"=>$this->id]);
+        $materials = [];
+        foreach($data as $material){
+            $materials[] = new Material($material["track"]);
+        }
+        return $materials;
+    }
+    public function getDeniedMaterials(){
+        $data = Database::secureQuery("SELECT * FROM `materials` WHERE `candidate_id` = :cand_id AND `status` = -1", [":cand_id"=>$this->id]);
+        $materials = [];
+        foreach($data as $material){
+            $materials[] = new Material($material["track"]);
+        }
+        return $materials;
+    }
+    public function getPendingMaterials(){
+        $data = Database::secureQuery("SELECT * FROM `materials` WHERE `candidate_id` = :cand_id AND `status` = 0", [":cand_id"=>$this->id]);
+        $materials = [];
+        foreach($data as $material){
+            $materials[] = new Material($material["track"]);
+        }
+        return $materials;
+    }
 }
