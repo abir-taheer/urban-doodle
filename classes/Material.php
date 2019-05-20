@@ -18,14 +18,29 @@ class Material {
     }
 
     public static function getDeniedMaterials(){
-
+        $data = Database::secureQuery("SELECT * FROM `materials` WHERE `status` = -1");
+        $materials = [];
+        foreach($data as $material){
+            $materials[] = new Material($material["track"]);
+        }
+        return $materials;
     }
 
     public static function getApprovedMaterials(){
-
+        $data = Database::secureQuery("SELECT * FROM `materials` WHERE `status` = 1");
+        $materials = [];
+        foreach($data as $material){
+            $materials[] = new Material($material["track"]);
+        }
+        return $materials;
     }
 
     public static function getPendingMaterials(){
-
+        $data = Database::secureQuery("SELECT * FROM `materials` WHERE `status` = 0");
+        $materials = [];
+        foreach($data as $material){
+            $materials[] = new Material($material["track"]);
+        }
+        return $materials;
     }
 }

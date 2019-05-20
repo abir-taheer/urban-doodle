@@ -51,4 +51,13 @@ Class Candidate{
         }
         return $materials;
     }
+
+    public function getManagerEmails(){
+        $emails = [];
+        $data = Database::secureQuery("SELECT `email` FROM `roles` WHERE `association` = :cand_id", [":cand_id"=>$this->id]);
+        foreach( $data as $email ){
+            $emails[] = $email["email"];
+        }
+        return $emails;
+    }
 }

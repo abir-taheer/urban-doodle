@@ -139,21 +139,19 @@
             <h3 class="txt-ctr mdc-typography--headline4">View Update:</h3>
             <?php if( $material->constructed ): ?>
                 <?php
+                $source_path = "/poster.php?track=".$material->track;
                 switch( $material->status ){
                     case -1:
                         $approval_status = "Denied";
                         $approval_color = "red-txt";
-                        $source_path = "/static/elections/".htmlspecialchars($candidate->db_code)."/materials/".htmlspecialchars($material->track).".pdf";
                         break;
                     case 0:
                         $approval_status = "Pending";
                         $approval_color = "grey-txt";
-                        $source_path = "/static/elections/".htmlspecialchars($candidate->db_code)."/materials/".htmlspecialchars($material->track).".pdf";
                         break;
                     case 1:
                         $approval_status = "Approved";
                         $approval_color = "green-txt";
-                        $source_path = "/static/elections/".htmlspecialchars($candidate->db_code)."/materials/approved_".htmlspecialchars($material->track).".pdf";
                         break;
                 }
                 ?>
@@ -183,7 +181,7 @@
                 <?php endif; ?>
             <?php else: ?>
                 <div class="sub-container">
-                    <p class="txt-ctr">That update could not be found</p>
+                    <p class="txt-ctr">That material could not be found</p>
                 </div>
             <?php endif; ?>
             <br><br>

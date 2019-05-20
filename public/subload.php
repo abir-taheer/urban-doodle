@@ -60,7 +60,8 @@ if( isset($pages[$path[1]]) ){
     }
 
     if( $path[1] === "admin" ){
-        if( ! Session::hasSession() || ! Session::getUser()->isAdmin()){
+        $user = Session::getUser();
+        if( ! Session::hasSession() || ! $user->isAdmin()){
             echo "<p class=\"mdc-layout-grid__cell--span-12\">You do not have permission to access this page</p>";
             ob_flush();
             exit;

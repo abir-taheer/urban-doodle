@@ -34,10 +34,10 @@ header("X-Load-Sub: True");
                         </span>
                     <span class="mdc-tab__ripple"></span>
                 </button>
-                <button class="mdc-tab sub-page-tab sub-page-change" data-page="/admin/live_results">
+                <button class="mdc-tab sub-page-tab sub-page-change" data-page="/admin/materials">
                         <span class="mdc-tab__content">
-                            <span class="mdc-tab__icon material-icons" aria-hidden="true">attach_money</span>
-                            <span class="mdc-tab__text-label">Incomplete</span>
+                            <span class="mdc-tab__icon material-icons" aria-hidden="true">format_shapes</span>
+                            <span class="mdc-tab__text-label">Materials</span>
                         </span>
                     <span class="mdc-tab-indicator">
                             <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
