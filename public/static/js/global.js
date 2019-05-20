@@ -201,6 +201,8 @@ function openPopup(url, platform) {
 }
 
 function loadSubPage(path = null){
+    let pld = document.querySelector(".page-loader");
+    $(pld).removeClass("mdc-linear-progress--closed");
     if(path !== null){
         history.pushState({}, null, path);
     }
@@ -213,6 +215,7 @@ function loadSubPage(path = null){
         if( c.getResponseHeader("X-Fetch-New-Sources") === "true" ){
             addSources(c);
         }
+        $(pld).addClass("mdc-linear-progress--closed");
     });
 }
 
@@ -257,9 +260,7 @@ $(document.body).on("click", ".change-page", ev => {
     $.post($(form).data("action"), $(form).serialize(), (a, b, c) => {
         // TODO Add more callback options
         let resp = JSON.parse(a);
-        for( let x = 0 ; x < resp.message.length ; x++ ){
-            addSnackbarQueue(resp.message[x]);
-        }
+        immediateSnackbarList(resp.message);
         if( resp.status === "success" ){
             switch($(form).data("callback")){
                 case "reload":
@@ -271,8 +272,11 @@ $(document.body).on("click", ".change-page", ev => {
             }
         } else {
             button.removeAttribute("disabled");
-            playSnackbarQueue();
         }
+    }).fail(ev => {
+        button.removeAttribute("disabled");
+        console.log(ev);
+        immediateSnackbarList(["There was an error submitting the form: " + ev.statusText, "Contact us if this continues"]);
     });
 
 }).on("click", ".sign-out", () => {
@@ -330,6 +334,8 @@ $(document.body).on("click", ".change-page", ev => {
     if( ev.currentTarget.getAttribute("href") !== null ){
         return confirm("The link you clicked on is taking you to: "+ ev.currentTarget.getAttribute("href") + ". Are you sure you want to continue?");
     }
+}).on("submit", ".no-submit", ev => {
+    ev.preventDefault();
 });
 
 function dependencySetup(setup, trial_wait = 500, max_num_tries = 20){
@@ -518,6 +524,14 @@ function customMarkDownParser(markdown){
                 x = x + 2;
             }
 
+            if( letter === "\n" ){
+                content_start = -1;
+                content_end = -1;
+                color_start = -1;
+                color_end = -1;
+                x++;
+            }
+
             if( content_start !== -1){
                 if(color_start !== -1){
                     if(letter === ")"){
@@ -647,6 +661,43 @@ let countdowns = setInterval(() => {
 
     // Get all elements on page that require the time to be updated
     let counters = document.getElementsByClassName("js-timer");
+    let getTimes = dateObject => {
+        let twelve_hours = (dateObject.getHours() % 12).toString().padStart(2, '0');
+        return {
+            "d":dateObject.getDate().toString().padStart(2, '0'),
+            "D":short_days[dateObject.getDay()],
+            "j":dateObject.getDate(),
+            "l":long_days[dateObject.getDay()],
+            "S":getDateEnding(dateObject.getDate()),
+            "w":dateObject.getDay() + 1,
+            "F":long_months[dateObject.getMonth()],
+            "m":(dateObject.getMonth() + 1).toString().padStart(2, "0"),
+            "M":short_months[dateObject.getMonth()],
+            "n":dateObject.getMonth() + 1,
+            "Y":dateObject.getFullYear(),
+            "y":dateObject.getFullYear() % 100,
+            "a": ( dateObject.getHours() >= 12 ) ? "pm" : "am",
+            "h": (twelve_hours === "00" ? "12" : twelve_hours),
+            "H":dateObject.getHours().toString().padStart(2, "0"),
+            "i":dateObject.getMinutes().toString().padStart(2, '0'),
+            "s":dateObject.getSeconds().toString().padStart(2, '0')
+        };
+    };
+    let formatTimeString = (timeFormat, datetime = currentTime) => {
+        let times = getTimes(datetime);
+        let dateString = "";
+        let escape = false;
+        for( let a = 0; a < timeFormat.length ; a++ ){
+            if( ! escape && timeFormat[a] === "\\" ){
+                escape = true;
+                continue;
+            }
+            dateString += ( timeFormat[a] in times && ! escape ) ? times[timeFormat[a]] : timeFormat[a];
+            escape = false;
+        }
+        return dateString;
+    };
+    let remove_timer = [];
     for( let x = 0; x < counters.length ; x++ ){
         let i = counters[x];
         let countType = $(i).data("timer-type");
@@ -668,44 +719,21 @@ let countdowns = setInterval(() => {
                 }
                 if( dist < 0 ){
                     countDownTxt = "0s";
-                    $(i).removeClass("js-timer");
+                    remove_timer.push(i);
                 }
                 i.innerHTML = countDownTxt;
                 break;
             case "current":
-                let timeFormat = $(i).data("time-format");
-                let twelve_hours = (currentTime.getHours() % 12).toString().padStart(2, '0');
-                let times = {
-                    "d":currentTime.getDate().toString().padStart(2, '0'),
-                    "D":short_days[currentTime.getDay()],
-                    "j":currentTime.getDate(),
-                    "l":long_days[currentTime.getDay()],
-                    "S":getDateEnding(currentTime.getDate()),
-                    "w":currentTime.getDay() + 1,
-                    "F":long_months[currentTime.getMonth()],
-                    "m":(currentTime.getMonth() + 1).toString().padStart(2, "0"),
-                    "M":short_months[currentTime.getMonth()],
-                    "n":currentTime.getMonth() + 1,
-                    "Y":currentTime.getFullYear(),
-                    "y":currentTime.getFullYear() % 100,
-                    "a": ( currentTime.getHours() >= 12 ) ? "pm" : "am",
-                    "h": (twelve_hours === "00" ? "12" : twelve_hours),
-                    "H":currentTime.getHours().toString().padStart(2, "0"),
-                    "i":currentTime.getMinutes().toString().padStart(2, '0'),
-                    "s":currentTime.getSeconds().toString().padStart(2, '0')
-                };
-                let dateString = "";
-                let escape = false;
-                for( let a = 0; a < timeFormat.length ; a++ ){
-                    if( ! escape && timeFormat[a] === "\\" ){
-                        escape = true;
-                        continue;
-                    }
-                    dateString += ( timeFormat[a] in times && ! escape ) ? times[timeFormat[a]] : timeFormat[a];
-                    escape = false;
-                }
-                $(i).html(dateString);
+                $(i).html(formatTimeString($(i).data("time-format")));
+                break;
+            case "to-local-time":
+                let local_time_display = (i.hasAttribute("data-show-local")) ? new Date().toLocaleTimeString('en-us',{timeZoneName:'short'}).split(' ')[2] : "";
+                $(i).html(formatTimeString($(i).data("time-format"), new Date(atob($(i).data("time-date")))) + " " + local_time_display);
+                remove_timer.push(i);
                 break;
         }
+    }
+    for( let x = 0 ; x < remove_timer.length ; x++ ){
+        $(remove_timer[x]).removeClass("js-timer");
     }
 }, 1000);

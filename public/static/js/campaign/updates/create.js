@@ -127,7 +127,10 @@ dependencySetup(() => {
         setTimeout(() => {
             titleContent = "<h1>"+ escapeHtml(title.val()) +"</h1>";
             htmlContent = customMarkDownParser(txtArea.val());
-            $("#markdown-editor .markdown-preview").html(titleContent + htmlContent);
+            let preview = document.querySelector("#markdown-editor .markdown-preview");
+            let scroll_pos = [preview.scrollLeft, preview.scrollTop];
+            $(preview).html(titleContent + htmlContent);
+            preview.scrollTo(scroll_pos[0], scroll_pos[1]);
             is_waiting = false;
         }, 500);
     };

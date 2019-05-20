@@ -80,16 +80,6 @@ $for = $user->managerOf();
                         </span>
                         <span class="mdc-tab__ripple" ></span>
                     </button>
-                    <button class="mdc-tab sub-page-tab sub-page-change" data-page="roles">
-                            <span class="mdc-tab__content">
-                                <span class="mdc-tab__icon material-icons" aria-hidden="true">group_add</span>
-                                <span class="mdc-tab__text-label">Roles</span>
-                            </span>
-                      <span class="mdc-tab-indicator">
-                                <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                            </span>
-                      <span class="mdc-tab__ripple"></span>
-                    </button>
                 </div>
             </div>
         </div>

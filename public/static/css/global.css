@@ -110,6 +110,9 @@ body {
 .green-txt {
     color: #00b894;
 }
+.grey-txt {
+    color: #636e72;
+}
 h1, h2, h3, h4, .heading{
     font-family: Roboto, sans-serif;
     font-weight: 600;
@@ -140,7 +143,7 @@ h1, h2, h3, h4, .heading{
     cursor: pointer;
 }
 .small-txt{
-    font-size: 12px;
+    font-size: 14px;
 }
 .candidate-select li {
     margin-bottom: 2px;
@@ -178,6 +181,15 @@ h1, h2, h3, h4, .heading{
 .linkish {
     color: #0984e3;
     text-decoration: underline;
+}
+.uline {
+    text-decoration: underline;
+}
+.no-bot-marg {
+    margin-bottom: 0;
+}
+.no-top-pad {
+    padding-top: 0;
 }
 .mdc-dialog__actions .mdc-icon-button {
     border-radius: 50%;
@@ -340,6 +352,7 @@ pre code {
     border: 1px solid #999;
     display: block;
     padding: 15px;
+    overflow-x: auto;
 }
 .full-width-txt-field {
     min-width: 100%;
@@ -377,10 +390,26 @@ pre code {
     text-transform: uppercase;
     background: #f2f0e6;
 }
+.markdown-content img {
+    max-width: 100%;
+}
+
+.width-class {
+    width: 300px;
+}
 
 .markdown-content th, .markdown-content td {
     padding: 6px 12px;
     border: 1px solid #d9d7ce;
 }
-
+.txt-icon {
+    vertical-align: middle;
+}
+.boxed {
+    border-radius: 5px;
+    border: 1px solid grey;
+}
+.red-blockquote {
+    border-left: 10px solid #fd6e6eab;
+}
 

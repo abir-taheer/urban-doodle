@@ -23,7 +23,7 @@ if( count($form) > 1 ){
     require_once "../requests/".$form['request'].".php";
 } else {
     $response["status"] = "error";
-    $response["message"][] = "Invalid form token. Please contact developer if this continues.";
+    $response["message"][] = "Invalid form token, try reloading the page. Please contact developer if this continues.";
 }
 
 echo json_encode($response);

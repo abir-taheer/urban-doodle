@@ -13,84 +13,85 @@ class Runoff implements ElectionHandler {
         Web::addScript("/static/js/runoff.js");
         Web::sendDependencies();
 
-        // TODO move this to a template file
-        $response = "
-            <div class=\"mdc-card mdc-layout-grid__cell--span-12 instant\">
-                <h3 class=\"txt-ctr\">".$this->election->name."</h3>
-                <p class=\"txt-ctr small-txt sub-container\">Order the candidates based on your preference by holding down and dragging. <b><a class=\"desktop-only\">Click on the X to remove a candidate from your ballot</a><a class=\"mobile-only\">Swipe on a candidate to remove them from your ballot</a>.</b></p>
-                <form class=\"vote-form\">
-                    <input type=\"hidden\" name=\"election\" value=\"".$this->election->db_code."\">
-                    <ul class=\"mdc-list sub-container candidate-select\">
-        ";
+        $candidate_items = "";
         $candidates = $this->election->getCandidates();
         shuffle($candidates);
         foreach( $candidates as $candidate ) {
-            $response.= "
-                <li class=\"mdc-list-item\">
-                    <input type=\"hidden\" name=\"votes[confirmed][]\" value=\"".$candidate->id."\">
-                    <span class=\"mdc-list-item__text no-select\">
-                        <a class=\"candidate-name\">".$candidate->name."</a>
-                        <span class=\"right-icons\">
-                            <i class=\"material-icons candidate-lower\">arrow_downward</i>
-                            <i class=\"material-icons candidate-remove desktop-only\">clear</i>
-                            <i class=\"material-icons drag-icon\">drag_indicator</i>
+            $escaped_candidate_name = htmlspecialchars($candidate->name);
+            $candidate_items.= <<< HTML
+                <li class="mdc-list-item">
+                    <input type="hidden" name="votes[confirmed][]" value="{$candidate->id}">
+                    <span class="mdc-list-item__text no-select">
+                        <a class="candidate-name">{$escaped_candidate_name}</a>
+                        <span class="right-icons">
+                            <i class="material-icons candidate-lower">arrow_downward</i>
+                            <i class="material-icons candidate-remove desktop-only">clear</i>
+                            <i class="material-icons drag-icon">drag_indicator</i>
                         </span>
                     </span>
                 </li>
-            ";
+HTML;
         }
-        $response.= "
+        $escaped_election_name = htmlspecialchars($this->election->name);
+        echo <<< HTML
+            <div class="mdc-card mdc-layout-grid__cell--span-12 instant">
+                <h3 class="txt-ctr">{$escaped_election_name}</h3>
+                <p class="txt-ctr small-txt sub-container">Order the candidates based on your preference by holding down and dragging. <b><a class="desktop-only">Click on the X to remove a candidate from your ballot</a><a class="mobile-only">Swipe on a candidate to remove them from your ballot</a>.</b></p>
+                <form class="vote-form">
+                    <input type="hidden" name="election" value="{$this->election->db_code}">
+                    <ul class="mdc-list sub-container candidate-select">
+                    {$candidate_items}
                     </ul>
                 </form>
-                <div class=\"not-vote-txt fear sub-container\">
-                    <p class=\"txt-ctr\">Removed from ballot:</p>
-                    <p class=\"txt-ctr small-txt\">Click on a candidate to add them back to your ballot.</p>
+                <div class="not-vote-txt fear sub-container">
+                    <p class="txt-ctr">Removed from ballot:</p>
+                    <p class="txt-ctr small-txt">Click on a candidate to add them back to your ballot.</p>
                 </div>
-                <div class=\"mdc-chip-set non-vote-container sub-container\"></div>
+                <div class="mdc-chip-set non-vote-container sub-container"></div>
                 <br>
-                <div class=\"sub-container\">
-                    <button class=\"mdc-button vote-submit mdc-button--unelevated\" >Submit</button>
+                <div class="sub-container">
+                    <button class="mdc-button vote-submit mdc-button--unelevated" >Submit</button>
                 </div>
                 <br>
             </div>
-        ";
-        echo $response;
+HTML;
     }
     public function showConfirmation($votes): void{
         $user = Session::getUser();
         $form = $user->getConfirmationData($votes);
-        $response = "
-            <div class=\"mdc-card mdc-layout-grid__cell--span-12 instant\">
-                <h3 class=\"txt-ctr\">Confirm Selection: ".$this->election->name."</h3>
-                <p class=\"txt-ctr small-txt sub-container red-txt\">Please verify that the votes below are in the order that you previously selected.</p>
-                <form class=\"confirm-form\">
-                    <input type=\"hidden\" name=\"token\" value=\"".$user->makeFormToken("submit_vote", $votes, Web::UTCDate("+1 hour"))."\">
-                    <ul class=\"mdc-list rank-candidates mdc-list--non-interactive sub-container\">
-        ";
         $candidates = $this->decodeVotes($form["content"]);
+        $candidate_items = "";
+        $escaped_election_name = htmlspecialchars($this->election->name);
         foreach( $candidates as $id ) {
             $candidate = new Candidate($id);
-            $response.= "
-                <li class=\"mdc-list-item\">
-                    <span class=\"mdc-list-item__text no-select\">
-                        <a class=\"candidate-name\">".$candidate->name."</a>
+            $escaped_candidate_name = htmlspecialchars($candidate->name);
+            $candidate_items.= <<< HTML
+                <li class="mdc-list-item">
+                    <span class="mdc-list-item__text no-select">
+                        <a class="candidate-name">{$escaped_candidate_name}</a>
                     </span>
                 </li>
-            ";
+HTML;
         }
-        $response.= "
+        echo <<< HTML
+            <div class="mdc-card mdc-layout-grid__cell--span-12 instant">
+                <h3 class="txt-ctr">Confirm Selection: {$escaped_election_name}</h3>
+                <p class="txt-ctr small-txt sub-container red-txt">Please verify that the votes below are in the order that you previously selected.</p>
+                <form class="confirm-form">
+                    <input type="hidden" name="token" value="{$user->makeFormToken("submit_vote", $votes, Web::UTCDate("+1 hour"))}">
+                    <ul class="mdc-list rank-candidates mdc-list--non-interactive sub-container">
+                    {$candidate_items}
                     </ul>
                 </form>
                 <br>
-                <div class=\"sub-container\">
-                    <button class=\"mdc-button confirm-votes mdc-button--unelevated\" >Confirm</button>
+                <div class="sub-container">
+                    <button class="mdc-button confirm-votes mdc-button--unelevated" >Confirm</button>
                     &nbsp;&nbsp;
-                    <button class=\"mdc-button cancel-confirm\">Cancel</button>
+                    <button class="mdc-button cancel-confirm">Cancel</button>
                 </div>
                 <br>
             </div>
-        ";
-        echo $response;
+HTML;
     }
 
     public function verifyVote($vote): bool {
