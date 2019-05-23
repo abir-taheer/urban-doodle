@@ -136,7 +136,7 @@
         <div class="sub-container">
             <br>
             <button class="mdc-button sub-page-change" data-page="/campaign/<?php echo $candidate->id."/materials"; ?>"><-- Back To Materials</button>
-            <h3 class="txt-ctr mdc-typography--headline4">View Update:</h3>
+            <h3 class="txt-ctr mdc-typography--headline4">View Material:</h3>
             <?php if( $material->constructed ): ?>
                 <?php
                 $source_path = "/poster.php?track=".$material->track;

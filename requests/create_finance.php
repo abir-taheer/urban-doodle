@@ -28,7 +28,7 @@ if( count($errors) === 0){
         [
             ":track"=>$track,
             ":cand_id"=>$form["extra"],
-            ":amount"=>str_replace(".", "", $_POST["amount"]),
+            ":amount"=>strval(intval(floatval($_POST["amount"]) * 100)),
             ":title" => $_POST["title"],
             ":link"=>$_POST["link"],
             ":extra"=>$_POST["use"]

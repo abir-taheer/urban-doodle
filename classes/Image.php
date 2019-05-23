@@ -34,4 +34,19 @@ class Image
         $this->width = imagesx($this->image);
         $this->height = imagesy($this->image);
     }
+
+    public static function getMainColor($full_image){
+        // Shrinks the image to a 2x2 canvas to obtain the main color of the image
+
+        $temp_image = imagecreatetruecolor(2, 2);
+        imagealphablending($temp_image, false);
+        imagesavealpha($temp_image, true);
+        imagecopyresampled($temp_image, $full_image, 0, 0, 0, 0, 2, 2, imagesx($full_image), imagesy($full_image));
+        $rgb = imagecolorat($temp_image, 1, 1);
+        $colors = imagecolorsforindex($full_image, $rgb);
+        imagedestroy($temp_image);
+
+        return $colors;
+    }
+
 }

@@ -43,4 +43,26 @@ class Material {
         }
         return $materials;
     }
+
+    public function getWatermark($src, $font_path = app_root.'/public/static/fonts/open_sans.ttf'){
+        list($watermark_width, $watermark_height) = getimagesize($src);
+        $watermark = imagecreatefrompng($src);
+        $image = imagecreatetruecolor($watermark_width, $watermark_height + 200);
+        $transparent = imagecolorallocatealpha($image, 0, 0, 0, 127);
+        imagefill($image, 0, 0, $transparent);
+        imagealphablending($watermark, false);
+        imagesavealpha($watermark, true);
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+        imagecopyresampled($image, $watermark, 0, 0, 0, 0, $watermark_width, $watermark_height, $watermark_width, $watermark_height);
+        $image_color = Image::getMainColor($watermark);
+        $text_color = imagecolorallocate($image, $image_color["red"], $image_color["green"], $image_color["blue"]);
+
+        $candidate = new Candidate($this->candidate_id);
+        $election = $candidate->getElection();
+        $text = ($this->status === 1) ? "APPROVED POSTER\nID: ".strtoupper($this->track)."\nUNTIL: ".$election->end_time->format("M jS, Y") : "NOT APPROVED";
+        imagettftext($image, 28, 0, 20, 450, $text_color, $font_path, $text);
+        imagefilter($image, IMG_FILTER_COLORIZE, 0,0,0,127*0.3);
+        return $image;
+    }
 }
