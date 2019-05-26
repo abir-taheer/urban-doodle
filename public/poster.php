@@ -24,8 +24,8 @@
         exit;
     }
 
-    $random_filename = "temp/".bin2hex(random_bytes(4)).".png";
-    imagepng($material->getWatermark("static/img/watermark.png"), $random_filename);
+    $random_filename = app_root."/temp/".bin2hex(random_bytes(4)).".png";
+    imagepng($material->getWatermark(app_root."/app_files/watermarks/7hdksu.png", 0.8), $random_filename);
 
     $watermark_location = $random_filename;
     // Initiate FPDI to get the size of the pdf
@@ -63,5 +63,5 @@
         $pdf->Image($watermark_location, $pos_left, $pos_top,$image_xy);
     }
 
-    $pdf->Output();
+    $pdf->Output("I", $material->title);
     unlink($random_filename);
