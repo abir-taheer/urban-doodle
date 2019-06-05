@@ -10,3 +10,4 @@ fpdf/*
 !fpdf/README.md
 *test.*
 forgot.php
+temp/
