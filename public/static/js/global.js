@@ -35,6 +35,8 @@ function initializeMDC(alreadyCalled = false){
 
     initializeItems(".mdc-text-field-character-counter", mdc.textField.MDCTextFieldCharacterCounter);
 
+    initializeItems(".mdc-radio", mdc.radio.MDCRadio);
+
     alreadyCalled ? window.mdc.autoInit(document, () => {}) : mdc.autoInit();
 
     if( document.querySelectorAll(".markdown-content-unready").length > 0 ){

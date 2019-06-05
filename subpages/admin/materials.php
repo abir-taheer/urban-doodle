@@ -82,7 +82,7 @@
             <?php if( $material->constructed ): ?>
                 <?php
                 $candidate = new Candidate($material->candidate_id);
-                $source_path = "/poster.php?track=".$material->track;
+                $source_path = "/poster/".$material->track.".pdf";
                 switch( $material->status ){
                     case -1:
                         $approval_status = "Denied";

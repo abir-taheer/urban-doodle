@@ -44,7 +44,7 @@ class Material {
         return $materials;
     }
 
-    public function getWatermark($src, $font_path = app_root.'/public/static/fonts/open_sans.ttf'){
+    public function getWatermark($src, $opacity = 0.3, $recolor = null,$font_path = app_root.'/public/static/fonts/open_sans.ttf'){
         list($watermark_width, $watermark_height) = getimagesize($src);
         $watermark = imagecreatefrompng($src);
         $image = imagecreatetruecolor($watermark_width, $watermark_height + 200);
@@ -55,6 +55,7 @@ class Material {
         imagealphablending($image, false);
         imagesavealpha($image, true);
         imagecopyresampled($image, $watermark, 0, 0, 0, 0, $watermark_width, $watermark_height, $watermark_width, $watermark_height);
+
         $image_color = Image::getMainColor($watermark);
         $text_color = imagecolorallocate($image, $image_color["red"], $image_color["green"], $image_color["blue"]);
 
@@ -62,7 +63,12 @@ class Material {
         $election = $candidate->getElection();
         $text = ($this->status === 1) ? "APPROVED POSTER\nID: ".strtoupper($this->track)."\nUNTIL: ".$election->end_time->format("M jS, Y") : "NOT APPROVED";
         imagettftext($image, 28, 0, 20, 450, $text_color, $font_path, $text);
-        imagefilter($image, IMG_FILTER_COLORIZE, 0,0,0,127*0.3);
+
+        if( $recolor !== null ){
+            imagefilter($image, IMG_FILTER_COLORIZE, ($recolor["red"] ?? 0), ($recolor["green"] ?? 0), ($recolor["blue"] ?? 0) );
+        }
+
+        imagefilter($image, IMG_FILTER_COLORIZE, 0,0,0,127*(1 - $opacity));
         return $image;
     }
 }

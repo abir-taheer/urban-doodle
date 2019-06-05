@@ -16,16 +16,18 @@
         exit;
     }
 
+    header("Content-Type: application/pdf");
+
     $candidate = new Candidate($material->candidate_id);
     $election = $candidate->getElection();
     $source_file = "static/elections/".$candidate->db_code."/materials/".$material->track.".pdf";
     if( $material->status !== 1 ){
-        header("Location: ".$source_file);
+        echo file_get_contents($source_file);
         exit;
     }
 
     $random_filename = app_root."/temp/".bin2hex(random_bytes(4)).".png";
-    imagepng($material->getWatermark(app_root."/app_files/watermarks/7hdksu.png", 0.8), $random_filename);
+    imagepng($material->getWatermark(app_root."/app_files/watermarks/7hdksu.png", 0.8, ["green"=>166, "blue"=>81]), $random_filename);
 
     $watermark_location = $random_filename;
     // Initiate FPDI to get the size of the pdf
@@ -62,6 +64,6 @@
 
         $pdf->Image($watermark_location, $pos_left, $pos_top,$image_xy);
     }
-
-    $pdf->Output("I", $material->title);
+    $pdf->SetTitle($material->title);
+    $pdf->Output("I", $material->title.".pdf");
     unlink($random_filename);

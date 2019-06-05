@@ -8,7 +8,7 @@ if($_POST["type"] !== "deny" && $_POST["type"] !== "approve"){
 
 if( $_POST["type"] === "deny" ){
     if( trim($_POST["reason"]) === "" ){
-        $errors[] = "Reason cannot be left empty for denial!";
+        $errors[] = "Reason cannot be left empty for denial";
     }
     if( strlen($_POST["reason"]) > 255 ){
         $errors[] = "Denial reason must be less than 255 characters";
@@ -32,4 +32,6 @@ if( count($errors) === 0 ){
 
     }
     $response["status"] = "success";
+} else {
+    $response["message"] = $errors;
 }

@@ -2,6 +2,7 @@
 
 class Result {
     public $db_code, $type, $name, $start_time, $end_time, $pic, $constructed;
+    private $result_data;
     public function __construct($db_code)
     {
         $data = Database::secureQuery("SELECT * FROM `results` WHERE `db_code` = :d", [":d"=>$db_code], 'fetch');
@@ -24,5 +25,13 @@ class Result {
             $response[] = new Result($result["db_code"]);
         }
         return $response;
+    }
+
+    public function getResultData(){
+        // Make a separate case for admins
+        if( !isset($this->result_data) ){
+            $this->result_data = json_decode(file_get_contents(app_root."/public/static/elections/".$this->db_code."/results.json"), true);
+        }
+        return $this->result_data;
     }
 }

@@ -42,8 +42,10 @@
     <?php if( $result->constructed ): ?>
         <?php
             $result_data = json_decode(file_get_contents(app_root."/public/static/elections/".$result->db_code."/results.json"), true);
+            require_once app_root."/classes/election_handlers/".$result->type.".php";
+            $reflection = new \ReflectionClass( $result->type );
+            $handler =  $reflection->newInstanceWithoutConstructor();
         ?>
-
         <div class="mdc-card mdc-layout-grid__cell--span-12 muli">
 
             <br>
@@ -82,36 +84,7 @@
             </div>
             <hr class="sub-container">
             <div class="sub-container">
-
-                <?php foreach( $result_data["rounds"] as $round => $round_data ): ?>
-
-                    <h3>Round <?php echo ($round + 1); ?></h3>
-
-                    <p><?php echo $round_data["total_votes"]." votes this round"; ?></p>
-
-                    <ul class="mdc-list mdc-list--two-line mdc-list--non-interactive">
-
-                        <?php foreach( $round_data["votes"] as $candidate_id => $vote_count ): ?>
-                            <?php
-                            $vote_percentage =  strval((int) (($vote_count / $round_data["total_votes"]) * 10000));
-                            $vote_percentage = substr($vote_percentage, 0, strlen($vote_percentage) - 2).".".substr($vote_percentage, strlen($vote_percentage) - 2);
-                            ?>
-
-                            <li class="mdc-list-item">
-                            <span class="mdc-list-item__text">
-
-                                <span class="mdc-list-item__primary-text"><?php echo htmlspecialchars($result_data["candidates"][$candidate_id]); ?></span>
-                                <span class="mdc-list-item__secondary-text"><?php echo htmlspecialchars($vote_count)." votes - ~".$vote_percentage."%"; ?></span>
-
-                            </span>
-                            </li>
-
-                        <?php endforeach; ?>
-
-                    </ul>
-                    <br>
-                <?php endforeach; ?>
-
+                <?php $handler::displayResults($result); ?>
                 <h3>Winner: <a class="green-txt muli"><?php echo htmlspecialchars($result_data["candidates"][$result_data["winner"]]); ?></a></h3>
                 <br><br>
             </div>

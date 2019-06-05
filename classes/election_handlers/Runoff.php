@@ -183,13 +183,45 @@ HTML;
         return explode(",", $str);
     }
 
-    public static function displayResults($results_data, $type): void
-    {
-        switch($type){
-            case "admin":
-                break;
-            default:
 
+    public static function displayResults($result): void
+    {
+        $results_data = $result->getResultData();
+        $candidates = $results_data["candidates"];
+        $rounds = "";
+
+        foreach($results_data["rounds"] as $round => $round_data){
+            $votes_this_round = "";
+            foreach( $round_data["votes"] as $candidate_id => $vote_count ){
+                $vote_percentage =  strval((int) (($vote_count / $round_data["total_votes"]) * 10000));
+                $vote_percentage = substr($vote_percentage, 0, strlen($vote_percentage) - 2).".".substr($vote_percentage, strlen($vote_percentage) - 2);
+                $candidate_name = $candidates[$candidate_id];
+
+                $votes_this_round.= <<<HTML
+                            <li class="mdc-list-item">
+                            <span class="mdc-list-item__text">
+
+                                <span class="mdc-list-item__primary-text">{$candidate_name}</span>
+                                <span class="mdc-list-item__secondary-text">{$vote_count} votes - ~ {$vote_percentage}%</span>
+
+                            </span>
+                            </li>
+HTML;
+            }
+
+            $current_round = $round + 1;
+            $rounds.= <<< HTML
+                        <h3>Round {$current_round}</h3>
+                        <p>{$round_data["total_votes"]} votes this round</p>
+                        <ul class="mdc-list mdc-list--two-line mdc-list--non-interactive">
+                            {$votes_this_round}
+                        </ul>
+                        <br>
+HTML;
         }
+
+        $election_name = htmlspecialchars($result->name);
+
+        echo $rounds;
     }
 }

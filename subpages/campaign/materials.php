@@ -139,7 +139,7 @@
             <h3 class="txt-ctr mdc-typography--headline4">View Material:</h3>
             <?php if( $material->constructed ): ?>
                 <?php
-                $source_path = "/poster.php?track=".$material->track;
+                $source_path = "/poster/".$material->track.".pdf";
                 switch( $material->status ){
                     case -1:
                         $approval_status = "Denied";
