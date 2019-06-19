@@ -76,6 +76,23 @@ body {
         min-width: 800px;
     }
 }
+
+@media only print {
+    header {
+        position: absolute !important;
+        box-shadow: unset !important;
+    }
+    aside {
+        display: none !important;
+    }
+    .mdc-drawer-app-content {
+        margin-left: 0 !important;
+    }
+    .no-print {
+        display: none;
+    }
+}
+
 @media only screen and (max-width: 1000px){
     .desktop-only {
         display: none;

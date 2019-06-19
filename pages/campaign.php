@@ -26,7 +26,7 @@ $for = $user->managerOf();
     Web::addScript("/static/js/campaign.js");
     $candidate = new Candidate($path[2]);
     ?>
-    <div class="mdc-tab-bar mdc-layout-grid__cell--span-12" role="tablist" data-mdc-auto-init="MDCTabBar">
+    <div class="mdc-tab-bar mdc-layout-grid__cell--span-12 no-print" role="tablist" data-mdc-auto-init="MDCTabBar">
         <div class="mdc-tab-scroller">
             <div class="mdc-tab-scroller__scroll-area">
                 <div class="mdc-tab-scroller__scroll-content">

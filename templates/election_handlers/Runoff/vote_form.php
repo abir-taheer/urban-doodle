@@ -1,6 +1,6 @@
 <div class="mdc-card mdc-layout-grid__cell--span-12 instant">
 <h3 class="txt-ctr"><?php echo htmlspecialchars($this->election->name); ?></h3>
-<p class="txt-ctr small-txt sub-container">Order the candidates based on your preference by holding down and dragging. <a class="desktop-only">Click on the X to remove a candidate from your ballot</a><a class="mobile-only">Swipe on a candidate to remove them from your ballot</a>.</p>
+    <p class="txt-ctr small-txt sub-container">Order the candidates based on your preference by holding down and dragging. <b><a class="desktop-only">Click on the X to remove a candidate from your ballot</a><a class="mobile-only">Swipe on a candidate to remove them from your ballot</a></b>.</p>
 <form class="vote-form">
     <input type="hidden" name="election" value="<?php echo $this->election->db_code; ?>">
     <ul class="mdc-list sub-container candidate-select">

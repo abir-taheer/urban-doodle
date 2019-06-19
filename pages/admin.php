@@ -8,7 +8,7 @@ if( ! $user->isAdmin() ){
 Web::addScript("/static/js/admin.js");
 header("X-Load-Sub: True");
 ?>
-<div class="mdc-tab-bar mdc-layout-grid__cell--span-12" role="tablist" >
+<div class="mdc-tab-bar mdc-layout-grid__cell--span-12 no-print" role="tablist" >
     <div class="mdc-tab-scroller">
         <div class="mdc-tab-scroller__scroll-area">
             <div class="mdc-tab-scroller__scroll-content">

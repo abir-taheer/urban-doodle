@@ -163,31 +163,10 @@ $user = Session::getUser();
     <div class="mdc-card mdc-layout-grid__cell--span-12">
         <div class="sub-container">
             <h2 class="txt-ctr"><?php echo htmlspecialchars($election->name); ?></h2>
-
-            <h3 class="txt-ctr">Live Results</h3>
-            <?php foreach( $results["rounds"] as $round => $round_data ): ?>
-                <h4>Round <?php echo ($round + 1); ?></h4>
-                <p><?php echo $round_data["total_votes"]." votes total"; ?></p>
-                <ul class="mdc-list mdc-list--two-line mdc-list--non-interactive">
-                    <?php foreach( $round_data["votes"] as $candidate_id => $vote_count ): ?>
-                        <?php
-                        $vote_percentage =  strval((int) (($vote_count / $round_data["total_votes"]) * 10000));
-                        $vote_percentage = substr($vote_percentage, 0, strlen($vote_percentage) - 2).".".substr($vote_percentage, strlen($vote_percentage) - 2);
-                        ?>
-                        <li class="mdc-list-item">
-                            <span class="mdc-list-item__text">
-                                <span class="mdc-list-item__primary-text"><?php echo htmlspecialchars($results["candidates"][$candidate_id]); ?></span>
-                                <span class="mdc-list-item__secondary-text"><?php echo htmlspecialchars($vote_count)." votes - ~".$vote_percentage."%"; ?></span>
-                            </span>
-                        </li>
-                    <?php endforeach; ?>
-                </ul>
-                <br>
-            <?php endforeach; ?>
-            <h3>Winner: <a class="green-txt"><?php
-                    echo $results["winner"] !== "Tie / No Winner" ? htmlspecialchars($results["candidates"][$results["winner"]]) : "Tie / No Winner";
-                    ?></a></h3>
-            <br><br>
         </div>
+        <?php
+            $result = new Result($election->db_code);
+            $handler::displayResults($result);
+        ?>
     </div>
 <?php endif;?>

@@ -13,85 +13,25 @@ class Runoff implements ElectionHandler {
         Web::addScript("/static/js/runoff.js");
         Web::sendDependencies();
 
-        $candidate_items = "";
         $candidates = $this->election->getCandidates();
         shuffle($candidates);
-        foreach( $candidates as $candidate ) {
-            $escaped_candidate_name = htmlspecialchars($candidate->name);
-            $candidate_items.= <<< HTML
-                <li class="mdc-list-item">
-                    <input type="hidden" name="votes[confirmed][]" value="{$candidate->id}">
-                    <span class="mdc-list-item__text no-select">
-                        <a class="candidate-name">{$escaped_candidate_name}</a>
-                        <span class="right-icons">
-                            <i class="material-icons candidate-lower">arrow_downward</i>
-                            <i class="material-icons candidate-remove desktop-only">clear</i>
-                            <i class="material-icons drag-icon">drag_indicator</i>
-                        </span>
-                    </span>
-                </li>
-HTML;
-        }
-        $escaped_election_name = htmlspecialchars($this->election->name);
-        echo <<< HTML
-            <div class="mdc-card mdc-layout-grid__cell--span-12 instant">
-                <h3 class="txt-ctr">{$escaped_election_name}</h3>
-                <p class="txt-ctr small-txt sub-container">Order the candidates based on your preference by holding down and dragging. <b><a class="desktop-only">Click on the X to remove a candidate from your ballot</a><a class="mobile-only">Swipe on a candidate to remove them from your ballot</a>.</b></p>
-                <form class="vote-form">
-                    <input type="hidden" name="election" value="{$this->election->db_code}">
-                    <ul class="mdc-list sub-container candidate-select">
-                    {$candidate_items}
-                    </ul>
-                </form>
-                <div class="not-vote-txt fear sub-container">
-                    <p class="txt-ctr">Removed from ballot:</p>
-                    <p class="txt-ctr small-txt">Click on a candidate to add them back to your ballot.</p>
-                </div>
-                <div class="mdc-chip-set non-vote-container sub-container"></div>
-                <br>
-                <div class="sub-container">
-                    <button class="mdc-button vote-submit mdc-button--unelevated" >Submit</button>
-                </div>
-                <br>
-            </div>
-HTML;
+        ob_start();
+        require_once app_root."/templates/election_handlers/Runoff/vote_form.php";
+        $content = ob_get_contents();
+        ob_end_clean();
+        echo $content;
+
     }
     public function showConfirmation($votes): void{
         $user = Session::getUser();
         $form = $user->getConfirmationData($votes);
         $candidates = $this->decodeVotes($form["content"]);
-        $candidate_items = "";
-        $escaped_election_name = htmlspecialchars($this->election->name);
-        foreach( $candidates as $id ) {
-            $candidate = new Candidate($id);
-            $escaped_candidate_name = htmlspecialchars($candidate->name);
-            $candidate_items.= <<< HTML
-                <li class="mdc-list-item">
-                    <span class="mdc-list-item__text no-select">
-                        <a class="candidate-name">{$escaped_candidate_name}</a>
-                    </span>
-                </li>
-HTML;
-        }
-        echo <<< HTML
-            <div class="mdc-card mdc-layout-grid__cell--span-12 instant">
-                <h3 class="txt-ctr">Confirm Selection: {$escaped_election_name}</h3>
-                <p class="txt-ctr small-txt sub-container red-txt">Please verify that the votes below are in the order that you previously selected.</p>
-                <form class="confirm-form">
-                    <input type="hidden" name="token" value="{$user->makeFormToken("submit_vote", $votes, Web::UTCDate("+1 hour"))}">
-                    <ul class="mdc-list rank-candidates mdc-list--non-interactive sub-container">
-                    {$candidate_items}
-                    </ul>
-                </form>
-                <br>
-                <div class="sub-container">
-                    <button class="mdc-button confirm-votes mdc-button--unelevated" >Confirm</button>
-                    &nbsp;&nbsp;
-                    <button class="mdc-button cancel-confirm">Cancel</button>
-                </div>
-                <br>
-            </div>
-HTML;
+
+        ob_start();
+        require_once app_root."/templates/election_handlers/Runoff/confirm_form.php";
+        $content = ob_get_contents();
+        ob_end_clean();
+        echo $content;
     }
 
     public function verifyVote($vote): bool {
@@ -190,38 +130,11 @@ HTML;
         $candidates = $results_data["candidates"];
         $rounds = "";
 
-        foreach($results_data["rounds"] as $round => $round_data){
-            $votes_this_round = "";
-            foreach( $round_data["votes"] as $candidate_id => $vote_count ){
-                $vote_percentage =  strval((int) (($vote_count / $round_data["total_votes"]) * 10000));
-                $vote_percentage = substr($vote_percentage, 0, strlen($vote_percentage) - 2).".".substr($vote_percentage, strlen($vote_percentage) - 2);
-                $candidate_name = $candidates[$candidate_id];
+        ob_start();
+        require_once app_root."/templates/election_handlers/Runoff/results.php";
+        $content = ob_get_contents();
+        ob_end_clean();
+        echo $content;
 
-                $votes_this_round.= <<<HTML
-                            <li class="mdc-list-item">
-                            <span class="mdc-list-item__text">
-
-                                <span class="mdc-list-item__primary-text">{$candidate_name}</span>
-                                <span class="mdc-list-item__secondary-text">{$vote_count} votes - ~ {$vote_percentage}%</span>
-
-                            </span>
-                            </li>
-HTML;
-            }
-
-            $current_round = $round + 1;
-            $rounds.= <<< HTML
-                        <h3>Round {$current_round}</h3>
-                        <p>{$round_data["total_votes"]} votes this round</p>
-                        <ul class="mdc-list mdc-list--two-line mdc-list--non-interactive">
-                            {$votes_this_round}
-                        </ul>
-                        <br>
-HTML;
-        }
-
-        $election_name = htmlspecialchars($result->name);
-
-        echo $rounds;
     }
 }

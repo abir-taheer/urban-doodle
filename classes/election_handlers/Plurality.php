@@ -199,8 +199,48 @@ HTML;
      */
     public function countVotes(): array
     {
-        // TODO: Implement countVotes() method.
-        return array();
+        $vote_count = [];
+        foreach( $this->election->getCandidates() as $candidate ){
+            $vote_count[$candidate->id] = 0;
+        }
+        $votes = $this->election->getDecodedVotes();
+        foreach( $votes as $vote ){
+            if( ! $this->allows_duplicates ){
+                array_unique($vote["content"]);
+            }
+            foreach( $vote["content"] as $candidate_id ){
+                if( $candidate_id === "na" ) break;
+                $vote_count[$candidate_id] ++;
+            }
+        }
+
+        $max = 0;
+        $most_votes = [];
+
+        foreach( $vote_count as $candidate_id => $num_votes ){
+            if( $num_votes === $max ){
+                $most_votes[] = $candidate_id;
+            }
+
+            if( $num_votes > $max ){
+                $max = $num_votes;
+                $most_votes = [$candidate_id];
+            }
+        }
+
+        $winner = count($most_votes) === 1 ? $most_votes[0] : "Tie / No Winner";
+
+        $vote_data["results"] = $vote_count;
+        $vote_data["total_eligible_voters"] = $this->election->numPossibleVoters();
+        $vote_data["eligible_voters_by_grade"] = $this->election->getEligibleVotersByGrade();
+        $vote_data["total_votes"] = count($votes);
+        $vote_data["votes_by_grade"] = $this->election->getVotesByGrade();
+        $vote_data["candidates"] = $this->election->getCandidateAssociation();
+        $vote_data["allowed_selections"] = $this->num_choices;
+        $vote_data["count_duplicate_votes"] = $this->allows_duplicates;
+
+        $vote_data["winner"] = $winner;
+        return $vote_data;
     }
 
     /**
@@ -213,7 +253,7 @@ HTML;
     public function hasAnalysisMethod(): bool
     {
         // TODO: Implement hasAnalysisMethod() method.
-        return True;
+        return false;
     }
 
     /**
@@ -225,6 +265,10 @@ HTML;
      */
     public static function displayResults($result): void
     {
-        // TODO: Implement displayResults() method.
+        $result_data = $result->getResultData();
+        require_once app_root."/templates/election_handlers/Plurality/results.php";
+        $content = ob_get_contents();
+        ob_end_clean();
+        echo $content;
     }
 }

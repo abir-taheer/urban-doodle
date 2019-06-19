@@ -41,55 +41,36 @@
 
     <?php if( $result->constructed ): ?>
         <?php
-            $result_data = json_decode(file_get_contents(app_root."/public/static/elections/".$result->db_code."/results.json"), true);
             require_once app_root."/classes/election_handlers/".$result->type.".php";
             $reflection = new \ReflectionClass( $result->type );
             $handler =  $reflection->newInstanceWithoutConstructor();
         ?>
-        <div class="mdc-card mdc-layout-grid__cell--span-12 muli">
+<div class="mdc-card mdc-layout-grid__cell--span-12 mdc-card--outlined muli">
 
-            <br>
-            <h2 class="txt-ctr sub-container">Results: <?php echo htmlspecialchars($result->name); ?></h2>
-            <div class="flx-ctr">
+    <br>
+    <h2 class="txt-ctr sub-container">Results: <?php echo htmlspecialchars($result->name); ?></h2>
+    <p class="txt-ctr">Started: <time
+            class="js-timer"
+            data-timer-type="to-local-time"
+            data-time-format="F d, Y  h:ia"
+            data-show-local
+            data-time-date="<?php echo base64_encode($result->start_time->format(DATE_ATOM)); ?>"
+            datetime="<?php echo $result->start_time->format(DATE_ATOM); ?>"></time></p>
+    <p class="txt-ctr">Ended: <time
+            class="js-timer"
+            data-timer-type="to-local-time"
+            data-time-format="F d, Y  h:ia"
+            data-show-local
+            data-time-date="<?php echo base64_encode($result->end_time->format(DATE_ATOM)); ?>"
+            datetime="<?php echo $result->end_time->format(DATE_ATOM); ?>"></time></p>
+    <div class="flx-ctr">
 
-                <a class="mdc-button" target="_blank" href="/static/elections/<?php echo htmlspecialchars($result->db_code); ?>/votes.json">Votes JSON</a>
+        <a class="mdc-button" target="_blank" href="/static/elections/<?php echo htmlspecialchars($result->db_code); ?>/votes.json">Votes JSON</a>
 
-            </div>
-
-            <hr class="sub-container">
-            <div class="sub-container">
-
-                <p>Total Eligible Voters: <b><?php echo $result_data["total_eligible_voters"]; ?></b></p>
-                <p>Total Eligible Voters By Grade: </p>
-
-                <div class="sub-container">
-
-        <?php foreach( $result_data["eligible_voters_by_grade"] as $grade => $num_voters ): ?>
-            <p><?php echo $grade." - <b>".$num_voters."</b>"; ?></p>
-        <?php endforeach; ?>
-
-                </div>
-
-                <p>Total Votes: <b><?php echo $result_data["total_votes"]; ?></b></p>
-                <p>Votes By Grade:</p>
-
-                <div class="sub-container">
-
-                    <?php foreach( $result_data["votes_by_grade"] as $grade => $num_votes ): ?>
-                        <p><?php echo $grade." - <b>".$num_votes."</b>"; ?></p>
-                    <?php endforeach; ?>
-
-                </div>
-
-            </div>
-            <hr class="sub-container">
-            <div class="sub-container">
-                <?php $handler::displayResults($result); ?>
-                <h3>Winner: <a class="green-txt muli"><?php echo htmlspecialchars($result_data["candidates"][$result_data["winner"]]); ?></a></h3>
-                <br><br>
-            </div>
-
-        </div>
+    </div>
+    <hr class="sub-container">
+    <?php $handler::displayResults($result); ?>
+</div>
     <?php else: ?>
 
         <p class="mdc-layout-grid__cell--span-12">There is no past election with the ID passed in the url.</p>
