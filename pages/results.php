@@ -4,7 +4,7 @@
 
         <div class="mdc-card__primary-action change-page" data-page="/results/<?php echo htmlspecialchars($result->db_code); ?>">
 
-            <div class="mdc-card__media mdc-card__media--16-9 " style="background-image: url(https://badgerherald.com/wordpress/wp-content/uploads/2016/10/giphy-23-1.gif);"></div>
+            <div class="mdc-card__media mdc-card__media--16-9 " style="background-image: url(/static/img/results_covers/<?php echo $result->pic; ?>);"></div>
 
             <div>
                 <h2 class="mdc-typography mdc-typography--headline6 vote-card__pad"><?php echo htmlspecialchars($result->name); ?></h2>
@@ -46,23 +46,28 @@
             $handler =  $reflection->newInstanceWithoutConstructor();
         ?>
 <div class="mdc-card mdc-layout-grid__cell--span-12 mdc-card--outlined muli">
-
     <br>
-    <h2 class="txt-ctr sub-container">Results: <?php echo htmlspecialchars($result->name); ?></h2>
-    <p class="txt-ctr">Started: <time
-            class="js-timer"
-            data-timer-type="to-local-time"
-            data-time-format="F d, Y  h:ia"
-            data-show-local
-            data-time-date="<?php echo base64_encode($result->start_time->format(DATE_ATOM)); ?>"
-            datetime="<?php echo $result->start_time->format(DATE_ATOM); ?>"></time></p>
-    <p class="txt-ctr">Ended: <time
-            class="js-timer"
-            data-timer-type="to-local-time"
-            data-time-format="F d, Y  h:ia"
-            data-show-local
-            data-time-date="<?php echo base64_encode($result->end_time->format(DATE_ATOM)); ?>"
-            datetime="<?php echo $result->end_time->format(DATE_ATOM); ?>"></time></p>
+    <div class="sub-container">
+        <button class="mdc-button change-page" data-page="/results"><- Back To Results</button>
+
+        <h2 class="txt-ctr sub-container">Results: <?php echo htmlspecialchars($result->name); ?></h2>
+        <p class="txt-ctr">Election Type: <a class="rainbow"><?php echo $result->type; ?></a></p>
+        <p class="txt-ctr small-txt grey-txt">Started: <time
+                class="js-timer small-txt"
+                data-timer-type="to-local-time"
+                data-time-format="F d, Y  h:ia"
+                data-show-local
+                data-time-date="<?php echo base64_encode($result->start_time->format(DATE_ATOM)); ?>"
+                datetime="<?php echo $result->start_time->format(DATE_ATOM); ?>"></time></p>
+        <p class="txt-ctr small-txt no-top-marg grey-txt">Ended: <time
+                class="js-timer small-txt"
+                data-timer-type="to-local-time"
+                data-time-format="F d, Y  h:ia"
+                data-show-local
+                data-time-date="<?php echo base64_encode($result->end_time->format(DATE_ATOM)); ?>"
+                datetime="<?php echo $result->end_time->format(DATE_ATOM); ?>"></time></p>
+
+    </div>
     <div class="flx-ctr">
 
         <a class="mdc-button" target="_blank" href="/static/elections/<?php echo htmlspecialchars($result->db_code); ?>/votes.json">Votes JSON</a>

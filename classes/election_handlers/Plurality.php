@@ -232,6 +232,7 @@ HTML;
 
         $vote_data["results"] = $vote_count;
         $vote_data["total_eligible_voters"] = $this->election->numPossibleVoters();
+        $vote_data["election_type"] = "Plurality";
         $vote_data["eligible_voters_by_grade"] = $this->election->getEligibleVotersByGrade();
         $vote_data["total_votes"] = count($votes);
         $vote_data["votes_by_grade"] = $this->election->getVotesByGrade();

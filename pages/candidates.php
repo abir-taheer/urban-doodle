@@ -1,16 +1,21 @@
-<?php if( !isset($path[2]) ): ?>
-<?php foreach( Election::getAllElections() as $e ): ?>
-    <div class="mdc-card mdc-layout-grid__cell--span-4">
-        <div class="mdc-card__primary-action change-page" data-page="/candidates/<?php echo htmlspecialchars($e->db_code); ?>">
-            <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(/static/img/election_covers/<?php echo $e->pic; ?>);"></div>
-            <div>
-                <h2 class="mdc-typography mdc-typography--headline6 vote-card__pad"><?php echo htmlspecialchars($e->name); ?></h2>
+<?php if( !isset($path[2]) ):
+    $all_elections = Election::getAllElections();
+    ?>
+    <?php if( count($all_elections) === 0 ): ?>
+        <p class="mdc-layout-grid__cell--span-12">There are currently no ongoing elections.</p>
+    <?php endif; ?>
+    <?php foreach( $all_elections as $e ): ?>
+        <div class="mdc-card mdc-layout-grid__cell--span-4">
+            <div class="mdc-card__primary-action change-page" data-page="/candidates/<?php echo htmlspecialchars($e->db_code); ?>">
+                <div class="mdc-card__media mdc-card__media--16-9" style="background-image: url(/static/img/election_covers/<?php echo $e->pic; ?>);"></div>
+                <div>
+                    <h2 class="mdc-typography mdc-typography--headline6 vote-card__pad"><?php echo htmlspecialchars($e->name); ?></h2>
+                </div>
+                <div class="mdc-typography mdc-typography--body2 vote-card__pad"><a>View Candidates -></a></div>
+                <br>
             </div>
-            <div class="mdc-typography mdc-typography--body2 vote-card__pad"><a>View Candidates -></a></div>
-            <br>
         </div>
-    </div>
-<?php endforeach; ?>
+    <?php endforeach; ?>
 <?php else:?>
     <?php
     try{

@@ -107,6 +107,7 @@ class Runoff implements ElectionHandler {
         $vote_data["eligible_voters_by_grade"] = $this->election->getEligibleVotersByGrade();
         $vote_data["total_votes"] = count($decoded_votes);
         $vote_data["votes_by_grade"] = $this->election->getVotesByGrade();
+        $vote_data["election_type"] = "Runoff";
         $vote_data["winner"] = $winner;
         return $vote_data;
     }

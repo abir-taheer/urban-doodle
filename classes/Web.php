@@ -223,7 +223,10 @@ class Web {
                 break;
             case "results":
                 $result = new Result($path[2]);
-                return "View Results for ".$result->name;
+                if( $result->constructed ){
+                    return "View Results for ".$result->name;
+                }
+                return "We couldn't find the results for that election.";
                 break;
             case "vote":
                 try {
@@ -262,7 +265,11 @@ class Web {
                     }
                 }
             case "results":
-                return "https://badgerherald.com/wordpress/wp-content/uploads/2016/10/giphy-23-1.gif";
+                $result = new Result($path[2]);
+                if( $result->constructed ){
+                    return "/static/img/results_covers/".$result->pic;
+                }
+                return "/static/img/sad-cat.png";
             default:
                 return app_icon;
         }

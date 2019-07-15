@@ -205,6 +205,9 @@ h1, h2, h3, h4, .heading{
 .no-bot-marg {
     margin-bottom: 0;
 }
+.no-top-marg {
+    margin-top: 0;
+}
 .no-top-pad {
     padding-top: 0;
 }

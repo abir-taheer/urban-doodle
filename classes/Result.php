@@ -33,7 +33,7 @@ class Result {
         }
     }
     public static function getAllResults(){
-        $data = Database::secureQuery("SELECT `db_code` FROM `results`", [], null);
+        $data = Database::secureQuery("SELECT `db_code` FROM `results` ORDER BY `end_time` DESC", [], null);
         $response = [];
         foreach( $data as $result ){
             $response[] = new Result($result["db_code"]);

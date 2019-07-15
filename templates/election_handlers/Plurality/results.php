@@ -1,5 +1,10 @@
 <div class="sub-container">
+    <p>Number of Selections Allowed: <b><?php echo $result_data["allowed_selections"]; ?></b></p>
+    <?php if($result_data["allowed_selections"] > 1 ): ?>
 
+    <p>Count Duplicate Selections: <b><?php echo $result_data["count_duplicate_votes"] ? "Yes" : "No"; ?></b></p>
+
+    <?php endif; ?>
     <p>Total Eligible Voters: <b><?php echo $result_data["total_eligible_voters"]; ?></b></p>
     <p>Total Votes: <b><?php echo $result_data["total_votes"]; ?></b></p>
 

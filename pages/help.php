@@ -56,7 +56,7 @@ elseif( ! isset($path[2]) || $path[2] === ""  ): ?>
                 <div class="sub-container">
                     <button class="mdc-button change-page" data-page="/help/<?php echo htmlspecialchars($path[2]); ?>"><- Back To <?php echo htmlspecialchars(ucwords($path[2])); ?> Help</button>
                     <h1 class="txt-ctr mdc-typography--headline2"><?php echo htmlspecialchars($help->title); ?></h1>
-                    <p class="txt-ctr small-txt">Last Edited: <time datetime="<?php
+                    <p class="txt-ctr small-txt grey-txt">Last Edited: <time datetime="<?php
                             $edited_date = Web::UTCDate($help->date)->format(DATE_ATOM);
                             echo $edited_date;
                         ?>" class="js-timer" data-timer-type="to-local-time" data-time-format="F d, Y  h:ia" data-time-date="<?php
